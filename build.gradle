@@ -5,10 +5,12 @@ plugins {
 
 mainClassName = 'com.fwcd.timetable.TimeTableMain'
 
-dependencies {
-    testImplementation 'junit:junit:4.12'
-}
-
 repositories {
     jcenter()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.fwcd:Fructose:a87bf01e7efd87ddae8cf684afe2fdd1676454b6'
+    testImplementation 'junit:junit:4.12'
 }
