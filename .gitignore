@@ -1,0 +1,10 @@
+.vscode
+.idea
+.classpath
+.project
+.settings
+.gradle
+bin
+build
+target
+.DS_Store
