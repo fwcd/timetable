@@ -45,11 +45,6 @@ public class CalendarEvent {
 			return this;
 		}
 		
-		public Builder name(String name) {
-			this.name = name;
-			return this;
-		}
-		
 		public Builder location(Location location) {
 			this.location = Option.of(location);
 			return this;
