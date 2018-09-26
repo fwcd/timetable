@@ -1,16 +1,19 @@
 package com.fwcd.timetable.view;
 
+import com.fwcd.timetable.model.TimeTableAppModel;
+import com.fwcd.timetable.view.calendar.CalendarView;
 import com.fwcd.timetable.view.utils.FxView;
-import com.jibbow.fastis.WeekView;
 
 import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
 
 public class TimeTableAppView implements FxView {
-	private final Pane node;
+	private final BorderPane node;
+	private final TimeTableAppModel model = new TimeTableAppModel();
 	
 	public TimeTableAppView() {
-		node = new WeekView();
+		node = new BorderPane();
+		node.setCenter(new CalendarView(model.getCalendar()).getNode());
 	}
 	
 	@Override
