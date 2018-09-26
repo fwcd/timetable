@@ -13,12 +13,12 @@ public class LanguageParser {
 	private static final Type MAP_TYPE = new TypeToken<Map<String, String>>() {}.getType();
 	private final Gson gson = new Gson();
 	
-	public Language parseFromJson(InputStreamable source) {
+	public Language parseFromJson(String name, InputStreamable source) {
 		Map<String, String> map = source.mapStream(in -> {
 			try (Reader reader = new InputStreamReader(in)) {
 				return gson.fromJson(reader, MAP_TYPE);
 			}
 		});
-		return new Language(map);
+		return new Language(name, map);
 	}
 }

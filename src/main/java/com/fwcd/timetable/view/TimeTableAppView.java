@@ -10,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 public class TimeTableAppView implements FxView {
 	private final BorderPane node;
 	private final TimeTableAppModel model = new TimeTableAppModel();
+	private final ViewContext context = new ViewContext();
 	
 	public TimeTableAppView() {
 		node = new BorderPane();

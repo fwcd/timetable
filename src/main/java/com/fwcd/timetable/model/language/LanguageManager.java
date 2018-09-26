@@ -2,24 +2,34 @@ package com.fwcd.timetable.model.language;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.io.ResourceFile;
 
 public class LanguageManager {
 	private final Map<String, Language> languages = new HashMap<>();
 	private final LanguageParser parser = new LanguageParser();
-	private final Language language;
+	private final Observable<Language> language;
 	
 	public LanguageManager() {
-		languages.put("Deutsch", readResourceLanguage("Deutsch.json"));
-		languages.put("English", readResourceLanguage("English.json"));
+		addLanguage(readResourceLanguage("English", "English.json"));
+		addLanguage(readResourceLanguage("Deutsch", "Deutsch.json"));
 		
-		language = languages.get("English");
+		language = new Observable<>(languages.get("English"));
 	}
 	
-	public Language getLanguage() { return language; }
+	public Observable<Language> getLanguage() { return language; }
 	
-	public Language readResourceLanguage(String languageFileName) {
-		return parser.parseFromJson(new ResourceFile("/languages/" + languageFileName));
+	public void setLanguage(String key) { language.set(languages.get(key)); }
+	
+	public Set<String> getLanguageKeys() { return languages.keySet(); }
+	
+	public void addLanguage(Language language) {
+		languages.put(language.getName(), language);
+	}
+	
+	public Language readResourceLanguage(String name, String languageFileName) {
+		return parser.parseFromJson(name, new ResourceFile("/languages/" + languageFileName));
 	}
 }
