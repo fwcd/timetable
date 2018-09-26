@@ -14,7 +14,7 @@ mainClassName = 'com.fwcd.timetable.TimeTableMain'
 
 dependencies {
     implementation 'com.github.fwcd:Fructose:21d633eca40a2540d7109da920880b84b10f5653'
+    implementation 'com.github.Jibbow:FastisFX:5907d9eceef041d77533c119ca1f95ff94661c8c'
     implementation 'com.google.code.gson:gson:2.6.2'
-    implementation files("${System.properties['java.home']}/../lib/jfxrt.jar")
     testImplementation 'junit:junit:4.12'
 }
