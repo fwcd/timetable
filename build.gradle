@@ -3,15 +3,18 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'com.fwcd.timetable.TimeTableMain'
-
 repositories {
-    jcenter()
+    mavenCentral()
     maven { url 'https://jitpack.io' }
 }
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+mainClassName = 'com.fwcd.timetable.TimeTableMain'
 
 dependencies {
     implementation 'com.github.fwcd:Fructose:21d633eca40a2540d7109da920880b84b10f5653'
     implementation 'com.google.code.gson:gson:2.6.2'
+    implementation files("${System.properties['java.home']}/../lib/jfxrt.jar")
     testImplementation 'junit:junit:4.12'
 }
