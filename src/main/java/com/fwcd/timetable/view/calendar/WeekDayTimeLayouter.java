@@ -2,7 +2,7 @@ package com.fwcd.timetable.view.calendar;
 
 import java.time.LocalTime;
 
-public class WeekDayLayouter {
+public class WeekDayTimeLayouter {
 	private final double hourHeight = 40;
 	
 	public double toPixelY(LocalTime time) {

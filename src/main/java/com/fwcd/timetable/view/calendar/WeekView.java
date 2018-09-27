@@ -3,6 +3,7 @@ package com.fwcd.timetable.view.calendar;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fwcd.timetable.model.calendar.CalendarConstants;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.utils.FxView;
 
@@ -13,7 +14,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 
 public class WeekView implements FxView {
-	private static final int DAYS_OF_WEEK = 7;
 	private final GridPane node;
 	private final List<WeekDayView> days = new ArrayList<>();
 	
@@ -24,10 +24,13 @@ public class WeekView implements FxView {
 		rowConstraints.setVgrow(Priority.ALWAYS);
 		node.getRowConstraints().add(rowConstraints);
 		
-		WeekDayLayouter dayLayouter = new WeekDayLayouter();
+		WeekDayTimeLayouter dayLayouter = new WeekDayTimeLayouter();
+		ColumnConstraints timeAxisColConstraints = new ColumnConstraints();
+		timeAxisColConstraints.setHgrow(Priority.NEVER);
 		node.addColumn(0, new WeekTimeAxisView(dayLayouter).getNode());
+		node.getColumnConstraints().add(timeAxisColConstraints);
 		
-		for (int i=0; i<DAYS_OF_WEEK; i++) {
+		for (int i=0; i<CalendarConstants.DAYS_OF_WEEK; i++) {
 			WeekDayView day = new WeekDayView(dayLayouter, calendar, i);
 			ColumnConstraints colConstraints = new ColumnConstraints();
 			colConstraints.setHgrow(Priority.ALWAYS);
