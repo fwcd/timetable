@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 
 import com.fwcd.fructose.Option;
 
-public class CalendarEvent {
+public class Appointment {
 	private final String type;
 	private final String name;
 	private final Option<Location> location;
 	private final LocalDateTime start;
 	private final LocalDateTime end;
 	
-	private CalendarEvent(String type, String name, Option<Location> location, LocalDateTime start, LocalDateTime end) {
+	private Appointment(String type, String name, Option<Location> location, LocalDateTime start, LocalDateTime end) {
 		this.type = type;
 		this.name = name;
 		this.location = location;
@@ -31,7 +31,7 @@ public class CalendarEvent {
 	
 	public static class Builder {
 		private final String name;
-		private String type = "Event";
+		private String type = "Appointment";
 		private Option<Location> location = Option.empty();
 		private LocalDateTime start = LocalDateTime.now();
 		private LocalDateTime end = LocalDateTime.now();
@@ -60,8 +60,8 @@ public class CalendarEvent {
 			return this;
 		}
 		
-		public CalendarEvent build() {
-			return new CalendarEvent(type, name, location, start, end);
+		public Appointment build() {
+			return new Appointment(type, name, location, start, end);
 		}
 	}
 }
