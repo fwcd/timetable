@@ -24,13 +24,16 @@ public class WeekView implements FxView {
 		rowConstraints.setVgrow(Priority.ALWAYS);
 		node.getRowConstraints().add(rowConstraints);
 		
+		WeekDayLayouter dayLayouter = new WeekDayLayouter();
+		node.addColumn(0, new WeekTimeAxisView(dayLayouter).getNode());
+		
 		for (int i=0; i<DAYS_OF_WEEK; i++) {
-			WeekDayView day = new WeekDayView(calendar, i);
+			WeekDayView day = new WeekDayView(dayLayouter, calendar, i);
 			ColumnConstraints colConstraints = new ColumnConstraints();
 			colConstraints.setHgrow(Priority.ALWAYS);
 			node.getColumnConstraints().add(colConstraints);
 			days.add(day);
-			node.addColumn(i, day.getNode());
+			node.addColumn(i + 1, day.getNode());
 		}
 	}
 	

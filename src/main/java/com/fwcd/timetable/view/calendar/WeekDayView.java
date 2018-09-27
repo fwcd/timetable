@@ -12,20 +12,20 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class WeekDayView implements FxView {
 	private static final Color BORDER_COLOR = new Color(0.9, 0.9, 0.9, 1);
-	private final StackPane node;
+	private final Pane node;
+	
 	private final int dayOffset;
 	private Option<LocalDate> weekStart = Option.empty();
 	
-	public WeekDayView(CalendarModel calendar, int dayOffset) {
-		node = new StackPane();
+	public WeekDayView(WeekDayLayouter layouter, CalendarModel calendar, int dayOffset) {
 		this.dayOffset = dayOffset;
 		
-		node.getChildren().add(new WeekDayAppointmentsOverlay().getNode());
+		node = new Pane();
 		node.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0, 1, 0, 1))));
 	}
 	
