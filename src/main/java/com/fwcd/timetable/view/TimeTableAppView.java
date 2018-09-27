@@ -2,12 +2,12 @@ package com.fwcd.timetable.view;
 
 import com.fwcd.timetable.model.TimeTableAppModel;
 import com.fwcd.timetable.view.calendar.CalendarView;
-import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.view.utils.FxParentView;
 
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 
-public class TimeTableAppView implements FxView {
+public class TimeTableAppView implements FxParentView {
 	private final BorderPane node;
 	private final TimeTableAppModel model = new TimeTableAppModel();
 	private final ViewContext context = new ViewContext();

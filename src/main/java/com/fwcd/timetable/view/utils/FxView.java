@@ -1,10 +1,10 @@
 package com.fwcd.timetable.view.utils;
 
-import javafx.scene.Parent;
+import javafx.scene.Node;
 
 /**
  * A JavaFX view class.
  */
 public interface FxView {
-	Parent getNode();
+	Node getNode();
 }

@@ -3,16 +3,17 @@ package com.fwcd.timetable.view.calendar;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.utils.FxView;
 
-import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
+import javafx.scene.Node;
 
 public class CalendarView implements FxView {
-	private final Pane node;
+	private final Node node;
+	private final WeekView week;
 	
 	public CalendarView(CalendarModel model) {
-		node = new Pane();
+		week = new WeekView(model);
+		node = week.getNode();
 	}
 	
 	@Override
-	public Parent getNode() { return node; }
+	public Node getNode() { return node; }
 }

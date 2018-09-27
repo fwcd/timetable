@@ -1,7 +1,7 @@
 package com.fwcd.timetable;
 
 import com.fwcd.timetable.view.TimeTableAppView;
-import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.view.utils.FxParentView;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -13,7 +13,7 @@ public class TimeTableMain extends Application {
 	
 	@Override
 	public void start(Stage stage) {
-		FxView appView = new TimeTableAppView();
+		FxParentView appView = new TimeTableAppView();
 		Scene scene = new Scene(appView.getNode(), 640, 480);
 		
 		stage.setTitle(TITLE + " " + VERSION);
