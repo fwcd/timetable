@@ -30,9 +30,9 @@ public class WeekDayAppointmentsView implements FxView {
 	}
 	
 	private void push(AppointmentModel appointment) {
-		AppointmentView view = new AppointmentView(layouter, appointment);
-		appointment.getStart().listenAndFire(start -> AnchorPane.setTopAnchor(view.getNode(), layouter.toPixelY(start.toLocalTime())));
-		node.getChildren().add(new AnchorPane(view.getNode()));
+		Node view = new AppointmentView(layouter, appointment).getNode();
+		appointment.getStart().listenAndFire(start -> AnchorPane.setTopAnchor(view, layouter.toPixelY(start.toLocalTime())));
+		node.getChildren().add(new AnchorPane(view));
 	}
 	
 	private void clear() {

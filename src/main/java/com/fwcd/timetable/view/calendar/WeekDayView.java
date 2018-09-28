@@ -44,6 +44,8 @@ public class WeekDayView implements FxView {
 		
 		appointments = new WeekDayAppointmentsView(layouter, calendar);
 		
+		// Add layered nodes
+		
 		addHourMarks();
 		node.getChildren().add(appointments.getNode());
 		addTimeIndicator();
