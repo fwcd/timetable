@@ -11,7 +11,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 public class CurrentTimeIndicator implements FxView {
-	private static final int CIRCLE_RADIUS = 5;
+	private static final double CIRCLE_RADIUS = 5;
 	private final StackPane node;
 	
 	public CurrentTimeIndicator() {

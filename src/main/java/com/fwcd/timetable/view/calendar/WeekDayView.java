@@ -91,7 +91,7 @@ public class WeekDayView implements FxView {
 	}
 	
 	private void updateIndicatorY(Node indicator) {
-		AnchorPane.setTopAnchor(indicator, layouter.toPixelY(LocalTime.now()));
+		AnchorPane.setTopAnchor(indicator, layouter.toPixelY(LocalTime.now()) - (indicator.getBoundsInParent().getHeight() / 2));
 	}
 	
 	public void setWeekStart(LocalDate weekStart) {
