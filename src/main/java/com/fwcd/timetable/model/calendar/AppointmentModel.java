@@ -1,22 +1,24 @@
 package com.fwcd.timetable.model.calendar;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
+import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
 
 public class AppointmentModel {
 	private final String type;
 	private final String name;
 	private final Option<Location> location;
-	private final LocalDateTime start;
-	private final LocalDateTime end;
+	private final Observable<LocalDateTime> start;
+	private final Observable<LocalDateTime> end;
 	
 	private AppointmentModel(String type, String name, Option<Location> location, LocalDateTime start, LocalDateTime end) {
 		this.type = type;
 		this.name = name;
 		this.location = location;
-		this.start = start;
-		this.end = end;
+		this.start = new Observable<>(start);
+		this.end = new Observable<>(end);
 	}
 	
 	public String getType() { return type; }
@@ -25,9 +27,9 @@ public class AppointmentModel {
 	
 	public Option<Location> getLocation() { return location; }
 	
-	public LocalDateTime getStart() { return start; }
+	public Observable<LocalDateTime> getStart() { return start; }
 	
-	public LocalDateTime getEnd() { return end; }
+	public Observable<LocalDateTime> getEnd() { return end; }
 	
 	public static class Builder {
 		private final String name;
