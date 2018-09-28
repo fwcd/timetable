@@ -3,7 +3,7 @@ package com.fwcd.timetable.model.calendar;
 import com.fwcd.fructose.structs.ObservableList;
 
 public class CalendarModel {
-	private final ObservableList<Appointment> appointments = new ObservableList<>();
+	private final ObservableList<AppointmentModel> appointments = new ObservableList<>();
 	
-	public ObservableList<Appointment> getAppointments() { return appointments; }
+	public ObservableList<AppointmentModel> getAppointments() { return appointments; }
 }

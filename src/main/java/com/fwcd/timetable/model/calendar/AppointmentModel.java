@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 
 import com.fwcd.fructose.Option;
 
-public class Appointment {
+public class AppointmentModel {
 	private final String type;
 	private final String name;
 	private final Option<Location> location;
 	private final LocalDateTime start;
 	private final LocalDateTime end;
 	
-	private Appointment(String type, String name, Option<Location> location, LocalDateTime start, LocalDateTime end) {
+	private AppointmentModel(String type, String name, Option<Location> location, LocalDateTime start, LocalDateTime end) {
 		this.type = type;
 		this.name = name;
 		this.location = location;
@@ -60,8 +60,8 @@ public class Appointment {
 			return this;
 		}
 		
-		public Appointment build() {
-			return new Appointment(type, name, location, start, end);
+		public AppointmentModel build() {
+			return new AppointmentModel(type, name, location, start, end);
 		}
 	}
 }
