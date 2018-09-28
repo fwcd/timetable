@@ -35,7 +35,7 @@ public class WeekView implements FxView {
 		
 		LocalDate weekStart = LocalDate.now().with(ChronoField.DAY_OF_WEEK, DayOfWeek.MONDAY.getValue());
 		
-		for (int i=0; i<CalendarConstants.DAYS_OF_WEEK; i++) {
+		for (int i = 0; i < CalendarConstants.DAYS_OF_WEEK; i++) {
 			WeekDayView day = new WeekDayView(dayLayouter, calendar, i);
 			ColumnConstraints colConstraints = new ColumnConstraints();
 			

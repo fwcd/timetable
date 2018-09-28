@@ -10,7 +10,7 @@ public class TimeTableAppModel {
 	
 	{
 		// DEBUG:
-		for (int i=0; i<24; i++) {
+		for (int i = 0; i < 24; i++) {
 			calendar.getAppointments().add(new AppointmentModel.Builder("Test")
 				.start(LocalDateTime.now().plusHours(i))
 				.end(LocalDateTime.now().plusHours(i + 1))

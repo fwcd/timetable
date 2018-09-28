@@ -20,7 +20,7 @@ public class WeekTimeAxisView implements FxView {
 		pane = new StackPane();
 		pane.setPadding(new Insets(5, 5, 5, 5));
 		
-		for (int hour=0; hour<CalendarConstants.HOURS_OF_DAY; hour++) {
+		for (int hour = 0; hour < CalendarConstants.HOURS_OF_DAY; hour++) {
 			LocalTime time = LocalTime.of(hour, 0);
 			Label label = new Label(time.format(formatter));
 			AnchorPane.setTopAnchor(label, layouter.toPixelY(time));
