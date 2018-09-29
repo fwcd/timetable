@@ -25,13 +25,13 @@ public class WeekDayAppointmentsView implements FxView {
 		clear();
 		
 		calendar.getAppointments().stream()
-			.filter(it -> it.getStart().get().toLocalDate().equals(date))
+			.filter(it -> it.occursOn(date))
 			.forEach(this::push);
 	}
 	
 	private void push(AppointmentModel appointment) {
-		Node view = new AppointmentView(layouter, appointment).getNode();
-		appointment.getStart().listenAndFire(start -> AnchorPane.setTopAnchor(view, layouter.toPixelY(start.toLocalTime())));
+		Node view = new CalendarEventView(layouter, appointment).getNode();
+		appointment.getStartTime().listenAndFire(start -> AnchorPane.setTopAnchor(view, layouter.toPixelY(start)));
 		node.getChildren().add(new AnchorPane(view));
 	}
 	
