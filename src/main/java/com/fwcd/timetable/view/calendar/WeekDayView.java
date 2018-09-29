@@ -29,7 +29,7 @@ import javafx.util.Duration;
 public class WeekDayView implements FxView {
 	private static final Color BORDER_COLOR = new Color(0.9, 0.9, 0.9, 1);
 	private final StackPane node;
-	private final WeekDayAppointmentsView appointments;
+	private final WeekDayEventsView events;
 	private final WeekDayTimeLayouter layouter;
 	
 	private final int dayOffset;
@@ -42,12 +42,12 @@ public class WeekDayView implements FxView {
 		node = new StackPane();
 		node.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0, 1, 0, 1))));
 		
-		appointments = new WeekDayAppointmentsView(layouter, calendar);
+		events = new WeekDayEventsView(layouter, calendar);
 		
 		// Add layered nodes
 		
 		addHourMarks();
-		node.getChildren().add(appointments.getNode());
+		node.getChildren().add(events.getNode());
 		addTimeIndicator();
 	}
 	
@@ -102,7 +102,7 @@ public class WeekDayView implements FxView {
 	
 	private void setDate(LocalDate date) {
 		currentDate.set(Option.of(date));
-		appointments.setDate(date);
+		events.setDate(date);
 	}
 
 	@Override

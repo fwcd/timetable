@@ -10,12 +10,12 @@ import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
-public class WeekDayAppointmentsView implements FxView {
+public class WeekDayEventsView implements FxView {
 	private final WeekDayTimeLayouter layouter;
 	private final Pane node;
 	private final CalendarModel calendar;
 	
-	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, CalendarModel calendar) {
+	public WeekDayEventsView(WeekDayTimeLayouter layouter, CalendarModel calendar) {
 		this.calendar = calendar;
 		this.layouter = layouter;
 		node = new Pane();
