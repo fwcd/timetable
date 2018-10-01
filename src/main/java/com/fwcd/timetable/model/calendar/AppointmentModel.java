@@ -2,72 +2,54 @@ package com.fwcd.timetable.model.calendar;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
+import com.fwcd.fructose.time.LocalDateInterval;
+import com.fwcd.fructose.time.LocalTimeInterval;
 
 public class AppointmentModel implements CalendarEventModel {
-	private final String type;
 	private final String name;
 	private final Option<Location> location;
-	private final Observable<LocalTime> startTime;
-	private final Observable<LocalTime> endTime;
-	private final Observable<LocalDate> startDate;
-	private final Observable<LocalDate> endDate;
+	private final Observable<LocalDateInterval> dateInterval;
+	private final Observable<LocalTimeInterval> timeInterval;
 	
-	private AppointmentModel(String type, String name, Option<Location> location, LocalDateTime start, LocalDateTime end) {
-		this.type = type;
+	private AppointmentModel(String name, Option<Location> location, LocalDateTime startInclusive, LocalDateTime endExclusive) {
 		this.name = name;
 		this.location = location;
-		startTime = new Observable<>(start.toLocalTime());
-		endTime = new Observable<>(end.toLocalTime());
-		startDate = new Observable<>(start.toLocalDate());
-		endDate = new Observable<>(end.toLocalDate());
+		dateInterval = new Observable<>(new LocalDateInterval(startInclusive.toLocalDate(), endExclusive.toLocalDate().plusDays(1)));
+		timeInterval = new Observable<>(new LocalTimeInterval(startInclusive.toLocalTime(), endExclusive.toLocalTime()));
 	}
 	
 	@Override
-	public String getType() { return type; }
+	public String getType() { return CommonEventType.APPOINTMENT; }
 	
 	@Override
 	public String getName() { return name; }
 	
+	@Override
 	public Option<Location> getLocation() { return location; }
 	
-	public LocalDateTime getStart() { return LocalDateTime.of(startDate.get(), startTime.get()); }
+	public LocalDateTime getStart() { return LocalDateTime.of(dateInterval.get().getStart(), timeInterval.get().getStart()); }
 	
-	public LocalDateTime getEnd() { return LocalDateTime.of(endDate.get(), endTime.get()); }
-	
-	public Observable<LocalDate> getStartDate() { return startDate; }
-	
-	public Observable<LocalDate> getEndDate() { return endDate; }
+	public LocalDateTime getEnd() { return LocalDateTime.of(dateInterval.get().getEnd(), timeInterval.get().getEnd()); }
 	
 	@Override
-	public Observable<LocalTime> getStartTime() { return startTime; }
+	public Observable<LocalTimeInterval> getTimeInterval() { return timeInterval; }
+	
+	public Observable<LocalDateInterval> getDateInterval() { return dateInterval; }
 	
 	@Override
-	public Observable<LocalTime> getEndTime() { return endTime; }
-	
-	@Override
-	public boolean occursOn(LocalDate date) {
-		return (date.compareTo(startDate.get()) >= 0)
-			&& (date.compareTo(endDate.get()) <= 0);
-	}
+	public boolean occursOn(LocalDate date) { return dateInterval.get().contains(date); }
 	
 	public static class Builder {
 		private final String name;
-		private String type = "Appointment";
 		private Option<Location> location = Option.empty();
 		private LocalDateTime start = LocalDateTime.now();
 		private LocalDateTime end = LocalDateTime.now();
 		
 		public Builder(String name) {
 			this.name = name;
-		}
-		
-		public Builder type(String type) {
-			this.type = type;
-			return this;
 		}
 		
 		public Builder location(Location location) {
@@ -86,7 +68,7 @@ public class AppointmentModel implements CalendarEventModel {
 		}
 		
 		public AppointmentModel build() {
-			return new AppointmentModel(type, name, location, start, end);
+			return new AppointmentModel(name, location, start, end);
 		}
 	}
 }
