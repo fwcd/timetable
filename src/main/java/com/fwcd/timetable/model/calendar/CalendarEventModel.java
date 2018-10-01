@@ -16,4 +16,8 @@ public interface CalendarEventModel {
 	Observable<LocalTimeInterval> getTimeInterval();
 	
 	boolean occursOn(LocalDate date);
+	
+	boolean beginsOn(LocalDate date);
+	
+	boolean endsOn(LocalDate date);
 }

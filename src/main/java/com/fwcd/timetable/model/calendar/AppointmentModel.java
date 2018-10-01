@@ -45,6 +45,14 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	@Override
 	public int compareTo(AppointmentModel o) { return getStart().compareTo(o.getStart()); }
 	
+	public boolean overlaps(AppointmentModel other) { return (getStart().compareTo(other.getEnd()) <= 0) && (getEnd().compareTo(other.getStart()) <= 0); }
+	
+	@Override
+	public boolean beginsOn(LocalDate date) { return date.equals(dateInterval.get().getStart()); }
+	
+	@Override
+	public boolean endsOn(LocalDate date) { return date.equals(dateInterval.get().getLastDate()); }
+	
 	public static class Builder {
 		private final String name;
 		private Option<Location> location = Option.empty();

@@ -1,5 +1,6 @@
 package com.fwcd.timetable.model.calendar;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import com.fwcd.fructose.Observable;
@@ -11,12 +12,14 @@ public class TimeTableEntryModel implements CalendarEventModel {
 	private final String name;
 	private final Option<Location> location;
 	private final Observable<LocalTimeInterval> timeInterval;
+	private final DayOfWeek weekDay;
 	
-	TimeTableEntryModel(TimeTableContext context, String name, Option<Location> location, LocalTimeInterval timeInterval) {
+	TimeTableEntryModel(TimeTableContext context, String name, Option<Location> location, LocalTimeInterval timeInterval, DayOfWeek weekDay) {
 		this.context = context;
 		this.name = name;
 		this.location = location;
 		this.timeInterval = new Observable<>(timeInterval);
+		this.weekDay = weekDay;
 	}
 	
 	@Override
@@ -32,5 +35,13 @@ public class TimeTableEntryModel implements CalendarEventModel {
 	public String getType() { return CommonEventType.TIME_TABLE_ENTRY; }
 
 	@Override
-	public boolean occursOn(LocalDate date) { return context.getDateInterval().get().contains(date); }
+	public boolean occursOn(LocalDate date) { return context.getDateInterval().get().contains(date) && date.getDayOfWeek().equals(weekDay); }
+	
+	@Override
+	public boolean beginsOn(LocalDate date) { return occursOn(date); }
+	
+	@Override
+	public boolean endsOn(LocalDate date) { return occursOn(date); }
+	
+	public DayOfWeek getWeekDay() { return weekDay; }
 }
