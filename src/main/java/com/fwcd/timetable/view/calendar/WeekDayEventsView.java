@@ -57,9 +57,7 @@ public class WeekDayEventsView implements FxView {
 			}
 		});
 		
-		// FIXME: Handle multi-day-events properly (getTimeInterval() is not accurate for multi-day-events)
-		
-		LocalTimeInterval eventInterval = event.getTimeInterval().get();
+		LocalTimeInterval eventInterval = event.getTimeIntervalOn(viewedDate);
 		HBox overlappingBox = null;
 		int overlapBoxCount = overlapBoxes.size();
 		
