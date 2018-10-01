@@ -13,14 +13,11 @@ import javafx.scene.control.MenuItem;
 
 public class MenuBarView implements FxView {
 	private final MenuBar node;
-	private final TimeTableAppContext context;
 	
 	public MenuBarView(TimeTableAppContext context) {
-		this.context = context;
 		node = new MenuBar(
 			menuOf(context.localized("filemenu")),
 			menuOf(context.localized("editmenu")),
-			menuOf(context.localized("querymenu")),
 			menuOf(context.localized("languagemenu"),
 				context.getLanguageManager().getLanguageKeys().stream()
 					.map(key -> itemOf(key, () -> context.getLanguageManager().setLanguage(key)))
