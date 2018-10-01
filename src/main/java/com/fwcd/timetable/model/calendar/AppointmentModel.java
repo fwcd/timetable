@@ -8,7 +8,7 @@ import com.fwcd.fructose.Option;
 import com.fwcd.fructose.time.LocalDateInterval;
 import com.fwcd.fructose.time.LocalTimeInterval;
 
-public class AppointmentModel implements CalendarEventModel {
+public class AppointmentModel implements CalendarEventModel, Comparable<AppointmentModel> {
 	private final String name;
 	private final Option<Location> location;
 	private final Observable<LocalDateInterval> dateInterval;
@@ -41,6 +41,9 @@ public class AppointmentModel implements CalendarEventModel {
 	
 	@Override
 	public boolean occursOn(LocalDate date) { return dateInterval.get().contains(date); }
+	
+	@Override
+	public int compareTo(AppointmentModel o) { return getStart().compareTo(o.getStart()); }
 	
 	public static class Builder {
 		private final String name;

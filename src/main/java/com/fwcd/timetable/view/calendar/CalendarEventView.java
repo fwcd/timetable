@@ -1,13 +1,11 @@
 package com.fwcd.timetable.view.calendar;
 
-import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 
 import com.fwcd.timetable.model.calendar.CalendarEventModel;
 import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -33,12 +31,10 @@ public class CalendarEventView implements FxView {
 		
 		Label timeLabel = new Label();
 		timeLabel.setFont(Font.font(11));
-		timeLabel.setText(formatter.format(model.getStartTime().get()) + " - " + formatter.format(model.getEndTime().get()));
+		timeLabel.setText(formatter.format(model.getTimeInterval().get().getStart()) + " - " + formatter.format(model.getTimeInterval().get().getEnd()));
 		node.getChildren().add(timeLabel);
-		
-		model.getEndTime().listenAndFire(end -> node.setPrefHeight(layouter.toPixelHeight(Duration.between(model.getStartTime().get(), end))));
 	}
 	
 	@Override
-	public Node getNode() { return node; }
+	public Pane getNode() { return node; }
 }
