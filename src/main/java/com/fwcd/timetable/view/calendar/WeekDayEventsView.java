@@ -37,24 +37,10 @@ public class WeekDayEventsView implements FxView {
 	private void addEvent(CalendarEventModel event, LocalDate viewedDate) {
 		Pane child = new CalendarEventView(layouter, event).getNode();
 		
-		event.getTimeInterval().listenAndFire(timeInterval -> {
-			boolean isFirstDate = event.beginsOn(viewedDate);
-			boolean isLastDate = event.endsOn(viewedDate);
-			AnchorPane.clearConstraints(child);
-			
-			if (isFirstDate && isLastDate) {
-				AnchorPane.setTopAnchor(child, layouter.toPixelY(timeInterval.getStart()));
-				child.setPrefHeight(layouter.toPixelHeight(timeInterval.getDuration()));
-			} else if (isFirstDate) {
-				AnchorPane.setTopAnchor(child, layouter.toPixelY(timeInterval.getStart()));
-				AnchorPane.setBottomAnchor(child, 0D);
-			} else if (isLastDate) {
-				AnchorPane.setTopAnchor(child, 0D);
-				child.setPrefHeight(layouter.toPixelY(timeInterval.getEnd()));
-			} else {
-				AnchorPane.setTopAnchor(child, 0D);
-				AnchorPane.setBottomAnchor(child, 0D);
-			}
+		event.getTimeInterval().listenAndFire(t -> {
+			LocalTimeInterval interval = event.getTimeIntervalOn(viewedDate);
+			AnchorPane.setTopAnchor(child, layouter.toPixelY(interval.getStart()));
+			child.setPrefHeight(layouter.toPixelHeight(interval.getDuration()));
 		});
 		
 		LocalTimeInterval eventInterval = event.getTimeIntervalOn(viewedDate);
