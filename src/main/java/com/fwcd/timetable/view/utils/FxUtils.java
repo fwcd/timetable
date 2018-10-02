@@ -1,7 +1,12 @@
 package com.fwcd.timetable.view.utils;
 
+import com.fwcd.fructose.Observable;
+import com.fwcd.fructose.ReadOnlyObservable;
+
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 
 public final class FxUtils {
 	private FxUtils() {}
@@ -15,5 +20,44 @@ public final class FxUtils {
 			double vvalue = pane.getVvalue();
 			pane.setVvalue(vvalue - (dy / width));
 		});
+	}
+	
+	/**
+	 * Creates a button with the provided action and an unidirectional
+	 * data binding supplying the label.
+	 */
+	public static Button buttonOf(ReadOnlyObservable<String> label, Runnable action) {
+		Button button = new Button();
+		label.listenAndFire(button::setText);
+		button.setOnAction(e -> action.run());
+		return button;
+	}
+	
+	private static class Flag {
+		boolean value = false;
+	}
+	
+	/**
+	 * Creates a text field with a bidirectional data binding
+	 * to the provided {@link Observable}.
+	 */
+	public static TextField textFieldOf(Observable<String> text) {
+		Flag updating = new Flag();
+		TextField textField = new TextField();
+		text.listenAndFire(it -> {
+			if (!updating.value) {
+				updating.value = true;
+				textField.setText(it);
+				updating.value = false;
+			}
+		});
+		textField.textProperty().addListener((obs, old, newValue) -> {
+			if (!updating.value) {
+				updating.value = true;
+				text.set(newValue);
+				updating.value = false;
+			}
+		});
+		return textField;
 	}
 }

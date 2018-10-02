@@ -1,16 +1,13 @@
 package com.fwcd.timetable.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fwcd.timetable.model.calendar.CalendarModel;
-import com.fwcd.timetable.model.tasks.TaskListModel;
+import com.fwcd.timetable.model.tasks.TaskCrateModel;
 
 public class TimeTableAppModel {
 	private final CalendarModel calendar = new CalendarModel();
-	private final List<TaskListModel> taskLists = new ArrayList<>();
+	private final TaskCrateModel taskCrate = new TaskCrateModel();
 	
 	public CalendarModel getCalendar() { return calendar; }
 	
-	public List<TaskListModel> getTaskLists() { return taskLists; }
+	public TaskCrateModel getTaskCrate() { return taskCrate; }
 }
