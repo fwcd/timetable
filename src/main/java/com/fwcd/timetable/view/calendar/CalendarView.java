@@ -19,7 +19,12 @@ public class CalendarView implements FxView {
 		
 		FxUtils.setVerticalScrollSpeed(node, 2);
 		node.setFitToWidth(true);
-		node.setVvalue(week.getDayLayouter().toPixelY(LocalTime.now()));
+		
+		WeekDayTimeLayouter layouter = week.getDayLayouter();
+		double vmax = node.getVmax();
+		double vmin = node.getVmin();
+		double normalizedValue = layouter.toPixelY(LocalTime.now()) / layouter.toPixelY(LocalTime.MAX);
+		node.setVvalue((normalizedValue * (vmax - vmin)) + vmin);
 	}
 	
 	@Override
