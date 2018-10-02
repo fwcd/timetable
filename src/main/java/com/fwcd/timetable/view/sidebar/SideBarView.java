@@ -10,6 +10,7 @@ public class SideBarView implements FxView {
 	
 	public SideBarView() {
 		pane = new Pane();
+		pane.setPrefWidth(200);
 	}
 	
 	@Override

@@ -19,6 +19,7 @@ import javafx.scene.layout.RowConstraints;
 public class WeekView implements FxView {
 	private final GridPane node;
 	private final List<WeekDayView> days = new ArrayList<>();
+	private final WeekDayTimeLayouter dayLayouter = new WeekDayTimeLayouter();
 	
 	public WeekView(CalendarModel calendar) {
 		node = new GridPane();
@@ -27,7 +28,6 @@ public class WeekView implements FxView {
 		rowConstraints.setVgrow(Priority.ALWAYS);
 		node.getRowConstraints().add(rowConstraints);
 		
-		WeekDayTimeLayouter dayLayouter = new WeekDayTimeLayouter();
 		ColumnConstraints timeAxisColConstraints = new ColumnConstraints();
 		timeAxisColConstraints.setHgrow(Priority.NEVER);
 		node.addColumn(0, new WeekTimeAxisView(dayLayouter).getNode());
@@ -46,6 +46,8 @@ public class WeekView implements FxView {
 			node.addColumn(i + 1, day.getNode());
 		}
 	}
+	
+	public WeekDayTimeLayouter getDayLayouter() { return dayLayouter; }
 	
 	@Override
 	public Node getNode() { return node; }

@@ -68,26 +68,27 @@ public class WeekDayView implements FxView {
 	}
 	
 	private void addTimeIndicator() {
+		CurrentTimeIndicator indicator = new CurrentTimeIndicator();
+		Node indicatorNode = indicator.getNode();
 		AnchorPane anchor = new AnchorPane();
-		Node indicator = new CurrentTimeIndicator().getNode();
-		Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), e -> updateIndicatorY(indicator)));
+		Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), e -> updateIndicatorY(indicatorNode)));
 		
-		updateIndicatorY(indicator);
+		updateIndicatorY(indicatorNode);
 		
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
 		
 		currentDate.listenAndFire(d -> {
 			if (currentDate.get().filter(LocalDate.now()::equals).isPresent()) {
-				anchor.getChildren().add(indicator);
+				anchor.getChildren().add(indicatorNode);
 			} else {
 				anchor.getChildren().clear();
 			}
 		});
 		
 		GridPane.setFillWidth(anchor, true);
-		AnchorPane.setLeftAnchor(indicator, 0D);
-		AnchorPane.setRightAnchor(indicator, 0D);
+		AnchorPane.setLeftAnchor(indicatorNode, 0D);
+		AnchorPane.setRightAnchor(indicatorNode, 0D);
 		
 		node.getChildren().add(anchor);
 	}
