@@ -6,6 +6,7 @@ import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.HideableView;
 
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.TitledPane;
@@ -30,10 +31,13 @@ public class TaskCrateView implements FxView {
 		hideableNewTaskView.hide();
 		newTaskView.getAddedTaskListeners().add(hideableNewTaskView::hide);
 		
-		node.setTop(new VBox(
+		VBox top = new VBox(
 			FxUtils.buttonOf(context.localized("newtask"), hideableNewTaskView::toggle),
 			hideableNewTaskView.getNode()
-		)); 
+		);
+		top.setPadding(new Insets(4, 4, 4, 4));
+		
+		node.setTop(top);
 		node.setCenter(listsView);
 	}
 	

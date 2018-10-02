@@ -6,8 +6,8 @@ import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 
+import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -26,9 +26,10 @@ public class NewTaskView implements FxView {
 		
 		editedTask = newEmptyTask();
 		node = new VBox(
-			new HBox(new Label("Name: "), FxUtils.textFieldOf(editedTask.getName())),
+			new HBox(FxUtils.labelOf(context.localized("name"), ": "), FxUtils.textFieldOf(editedTask.getName())),
 			FxUtils.buttonOf(context.localized("addtaskbutton"), this::addTaskToList)
 		);
+		node.setPadding(new Insets(6, 6, 6, 6));
 	}
 	
 	private void addTaskToList() {

@@ -19,7 +19,7 @@ public class Language {
 	public String localize(String key) {
 		String localized = mappings.get(key);
 		if (localized == null) {
-			throw new NoSuchElementException("Could not find language key " + key + " in language " + name);
+			throw new NoSuchElementException("Could not find language key '" + key + "' in language '" + name + "'");
 		}
 		return localized;
 	}

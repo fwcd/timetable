@@ -5,6 +5,7 @@ import com.fwcd.fructose.ReadOnlyObservable;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 
@@ -31,6 +32,20 @@ public final class FxUtils {
 		label.listenAndFire(button::setText);
 		button.setOnAction(e -> action.run());
 		return button;
+	}
+	
+	public static Label labelOf(ReadOnlyObservable<String> text) {
+		return labelOf(text, "");
+	}
+	
+	/**
+	 * Creates a label with an unidirectional data binding
+	 * to the provided {@link ReadOnlyObservable}.
+	 */
+	public static Label labelOf(ReadOnlyObservable<String> text, String appended) {
+		Label label = new Label();
+		text.listenAndFire(it -> label.setText(it + appended));
+		return label;
 	}
 	
 	private static class Flag {
