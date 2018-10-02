@@ -26,12 +26,12 @@ public class CalendarEventView implements FxView {
 		
 		Label nameLabel = new Label();
 		nameLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
-		nameLabel.setText(model.getName());
+		model.getName().listenAndFire(nameLabel::setText);
 		node.getChildren().add(nameLabel);
 		
 		Label timeLabel = new Label();
 		timeLabel.setFont(Font.font(11));
-		timeLabel.setText(formatter.format(model.getTimeInterval().get().getStart()) + " - " + formatter.format(model.getTimeInterval().get().getEnd()));
+		model.getTimeInterval().listenAndFire(it -> timeLabel.setText(formatter.format(it.getStart()) + " - " + formatter.format(it.getEnd())));
 		node.getChildren().add(timeLabel);
 	}
 	

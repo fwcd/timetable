@@ -9,13 +9,13 @@ import com.fwcd.fructose.time.LocalDateInterval;
 import com.fwcd.fructose.time.LocalTimeInterval;
 
 public class AppointmentModel implements CalendarEventModel, Comparable<AppointmentModel> {
-	private final String name;
+	private final Observable<String> name;
 	private final Option<Location> location;
 	private final Observable<LocalDateInterval> dateInterval;
 	private final Observable<LocalTimeInterval> timeInterval;
 	
 	private AppointmentModel(String name, Option<Location> location, LocalDateTime startInclusive, LocalDateTime endExclusive) {
-		this.name = name;
+		this.name = new Observable<>(name);
 		this.location = location;
 		dateInterval = new Observable<>(new LocalDateInterval(startInclusive.toLocalDate(), endExclusive.toLocalDate().plusDays(1)));
 		timeInterval = new Observable<>(new LocalTimeInterval(startInclusive.toLocalTime(), endExclusive.toLocalTime()));
@@ -25,7 +25,7 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	public String getType() { return CommonEventType.APPOINTMENT; }
 	
 	@Override
-	public String getName() { return name; }
+	public Observable<String> getName() { return name; }
 	
 	@Override
 	public Option<Location> getLocation() { return location; }

@@ -9,21 +9,21 @@ import com.fwcd.fructose.time.LocalTimeInterval;
 
 public class TimeTableEntryModel implements CalendarEventModel {
 	private final TimeTableContext context;
-	private final String name;
+	private final Observable<String> name;
 	private final Option<Location> location;
 	private final Observable<LocalTimeInterval> timeInterval;
 	private final DayOfWeek weekDay;
 	
 	TimeTableEntryModel(TimeTableContext context, String name, Option<Location> location, LocalTimeInterval timeInterval, DayOfWeek weekDay) {
 		this.context = context;
-		this.name = name;
+		this.name = new Observable<>(name);
 		this.location = location;
 		this.timeInterval = new Observable<>(timeInterval);
 		this.weekDay = weekDay;
 	}
 	
 	@Override
-	public String getName() { return name; }
+	public Observable<String> getName() { return name; }
 	
 	@Override
 	public Option<Location> getLocation() { return location; }

@@ -14,7 +14,7 @@ import com.fwcd.fructose.time.LocalTimeInterval;
 public interface CalendarEventModel {
 	String getType();
 	
-	String getName();
+	Observable<String> getName();
 	
 	Option<Location> getLocation();
 	
