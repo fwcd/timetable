@@ -2,7 +2,7 @@
 	"filemenu": "Datei",
 	"editmenu": "Bearbeiten",
 	"languagemenu": "Sprache",
-	"taskstab": "Aufgaben",
+	"tasks": "Aufgaben",
 	"newtask": "Neue Aufgabe",
 	"name": "Name",
 	"addtaskbutton": "Zur Liste hinzufügen"

@@ -15,7 +15,7 @@ public class SideBarView implements FxView {
 	
 	public SideBarView(TimeTableAppContext context, TimeTableAppModel model) {
 		node = new TabPane(
-			tabOf(context.localized("taskstab"), new TaskCrateView(context, model.getTaskCrate()))
+			tabOf(context.localized("tasks"), new TaskCrateView(context, model.getTaskCrate()))
 		);
 	}
 	

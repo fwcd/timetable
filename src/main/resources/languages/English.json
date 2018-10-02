@@ -2,7 +2,7 @@
 	"filemenu": "File",
 	"editmenu": "Edit",
 	"languagemenu": "Language",
-	"taskstab": "Tasks",
+	"tasks": "Tasks",
 	"newtask": "New Task",
 	"name": "Name",
 	"addtaskbutton": "Add to List"
