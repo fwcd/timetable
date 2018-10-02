@@ -1,5 +1,6 @@
 {
 	"filemenu": "File",
 	"editmenu": "Edit",
-	"languagemenu": "Language"
+	"languagemenu": "Language",
+	"taskstab": "Tasks"
 }
