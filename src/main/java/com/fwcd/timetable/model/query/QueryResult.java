@@ -1,9 +1,7 @@
 package com.fwcd.timetable.model.query;
 
-import java.util.List;
-
-import com.fwcd.timetable.model.calendar.AppointmentModel;
+import com.fwcd.timetable.model.calendar.CalendarModel;
 
 public interface QueryResult {
-	List<AppointmentModel> getAppointments();
+	CalendarModel getCalendar();
 }
