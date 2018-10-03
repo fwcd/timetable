@@ -14,13 +14,15 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	private final Option<Location> location;
 	private final Observable<LocalDateInterval> dateInterval;
 	private final Observable<LocalTimeInterval> timeInterval;
+	private final Observable<Boolean> allDay;
 	
-	private AppointmentModel(String name, String type, Option<Location> location, LocalDateTime startInclusive, LocalDateTime endExclusive) {
+	private AppointmentModel(String name, String type, Option<Location> location, LocalDateTime startInclusive, LocalDateTime endExclusive, boolean allDay) {
 		this.name = new Observable<>(name);
 		this.type = new Observable<>(type);
 		this.location = location;
 		dateInterval = new Observable<>(new LocalDateInterval(startInclusive.toLocalDate(), endExclusive.toLocalDate().plusDays(1)));
 		timeInterval = new Observable<>(new LocalTimeInterval(startInclusive.toLocalTime(), endExclusive.toLocalTime()));
+		this.allDay = new Observable<>(allDay);
 	}
 	
 	@Override
@@ -55,12 +57,15 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	@Override
 	public boolean endsOn(LocalDate date) { return date.equals(dateInterval.get().getLastDate()); }
 	
+	public Observable<Boolean> isAllDay() { return allDay; }
+	
 	public static class Builder {
 		private final String name;
 		private String type;
 		private Option<Location> location = Option.empty();
 		private LocalDateTime start = LocalDateTime.now();
 		private LocalDateTime end = LocalDateTime.now();
+		private boolean allDay = false;
 		
 		public Builder(String name) {
 			this.name = name;
@@ -81,8 +86,13 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 			return this;
 		}
 		
+		public Builder allDay(boolean allDay) {
+			this.allDay = allDay;
+			return this;
+		}
+		
 		public AppointmentModel build() {
-			return new AppointmentModel(name, type, location, start, end);
+			return new AppointmentModel(name, type, location, start, end, allDay);
 		}
 	}
 }
