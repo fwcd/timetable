@@ -1,10 +1,16 @@
 package com.fwcd.timetable.view.utils;
 
+import java.util.List;
+
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
+import com.fwcd.fructose.structs.ObservableList;
 
+import javafx.beans.property.Property;
+import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -21,6 +27,12 @@ public final class FxUtils {
 			double vvalue = pane.getVvalue();
 			pane.setVvalue(vvalue - (dy / width));
 		});
+	}
+	
+	public static Button buttonOf(String label, Runnable action) {
+		Button button = new Button(label);
+		button.setOnAction(e -> action.run());
+		return button;
 	}
 	
 	/**
@@ -57,22 +69,37 @@ public final class FxUtils {
 	 * to the provided {@link Observable}.
 	 */
 	public static TextField textFieldOf(Observable<String> text) {
-		Flag updating = new Flag();
 		TextField textField = new TextField();
-		text.listenAndFire(it -> {
-			if (!updating.value) {
-				updating.value = true;
-				textField.setText(it);
-				updating.value = false;
-			}
-		});
-		textField.textProperty().addListener((obs, old, newValue) -> {
-			if (!updating.value) {
-				updating.value = true;
-				text.set(newValue);
-				updating.value = false;
-			}
-		});
+		bindBidirectionally(text, textField.textProperty());
 		return textField;
+	}
+	
+	public static <T> void bindBidirectionally(Observable<T> fructoseObservable, Property<T> fxProperty) {
+		Flag updating = new Flag();
+		fructoseObservable.listenAndFire(it -> {
+			if (!updating.value) {
+				updating.value = true;
+				fxProperty.setValue(it);
+				updating.value = false;
+			}
+		});
+		fxProperty.addListener((obs, old, newValue) -> {
+			if (!updating.value) {
+				updating.value = true;
+				fructoseObservable.set(newValue);
+				updating.value = false;
+			}
+		});
+	}
+	
+	public static <T> ComboBox<T> comboBoxOf(List<T> values) {
+		ComboBox<T> box = new ComboBox<>(FXCollections.observableList(values));
+		return box;
+	}
+	
+	public static <T> ComboBox<T> comboBoxOfObservable(ObservableList<T> values) {
+		ComboBox<T> box = new ComboBox<>();
+		values.listen(box.getItems()::setAll);
+		return box;
 	}
 }
