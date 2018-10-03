@@ -2,6 +2,7 @@ package com.fwcd.timetable.view.calendar;
 
 import java.time.format.DateTimeFormatter;
 
+import com.fwcd.fructose.ReadOnlyObservable;
 import com.fwcd.timetable.model.calendar.CalendarEventModel;
 import com.fwcd.timetable.model.calendar.CommonEventType;
 import com.fwcd.timetable.view.utils.FxView;
@@ -23,7 +24,7 @@ public class CalendarEventView implements FxView {
 	
 	public CalendarEventView(WeekDayTimeLayouter layouter, CalendarEventModel model) {
 		node = new VBox();
-		node.setBackground(new Background(new BackgroundFill(colorOf(model), new CornerRadii(3), Insets.EMPTY)));
+		colorOf(model).listenAndFire(it -> node.setBackground(new Background(new BackgroundFill(it, new CornerRadii(3), Insets.EMPTY))));
 		
 		Label nameLabel = new Label();
 		nameLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
@@ -36,12 +37,14 @@ public class CalendarEventView implements FxView {
 		node.getChildren().add(timeLabel);
 	}
 	
-	private Color colorOf(CalendarEventModel model) {
-		switch (model.getType()) {
-			case CommonEventType.APPOINTMENT: return Color.LIGHTSALMON;
-			case CommonEventType.TIME_TABLE_ENTRY: return Color.AQUA;
-			default: return Color.LIGHTGRAY;
-		}
+	private ReadOnlyObservable<Color> colorOf(CalendarEventModel model) {
+		return model.getType().mapStrongly(type -> {
+			switch (type) {
+				case CommonEventType.APPOINTMENT: return Color.LIGHTSALMON;
+				case CommonEventType.TIME_TABLE_ENTRY: return Color.AQUA;
+				default: return Color.LIGHTGRAY;
+			}
+		});
 	}
 	
 	@Override
