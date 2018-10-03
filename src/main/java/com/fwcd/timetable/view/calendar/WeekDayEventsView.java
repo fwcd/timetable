@@ -1,6 +1,7 @@
 package com.fwcd.timetable.view.calendar;
 
 import java.time.LocalDate;
+import java.util.stream.Stream;
 
 import com.fwcd.fructose.structs.ArrayBiList;
 import com.fwcd.fructose.structs.BiList;
@@ -29,7 +30,11 @@ public class WeekDayEventsView implements FxView {
 	
 	public void setDate(LocalDate date) {
 		clear();
-		calendar.getAppointments().stream()
+		Stream.concat(
+			calendar.getAppointments().stream(),
+			calendar.getTimeTables().stream()
+				.flatMap(it -> it.getEntries().stream())
+		)
 			.filter(it -> it.occursOn(date))
 			.forEach(it -> addEvent(it, date));
 	}

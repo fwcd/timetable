@@ -107,7 +107,7 @@ public class WeekDayView implements FxView {
 	}
 
 	@Override
-	public Node getNode() {
+	public Pane getNode() {
 		return node;
 	}
 }
