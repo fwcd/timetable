@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
-import com.fwcd.fructose.structs.ObservableList;
+import com.fwcd.fructose.structs.ReadOnlyObservableList;
 
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
@@ -97,9 +97,15 @@ public final class FxUtils {
 		return box;
 	}
 	
-	public static <T> ComboBox<T> comboBoxOfObservable(ObservableList<T> values) {
+	public static <T> ComboBox<T> comboBoxOfObservable(ReadOnlyObservable<List<T>> values) {
 		ComboBox<T> box = new ComboBox<>();
-		values.listen(box.getItems()::setAll);
+		values.listenAndFire(box.getItems()::setAll);
+		return box;
+	}
+	
+	public static <T> ComboBox<T> comboBoxOfObservable(ReadOnlyObservableList<T> values) {
+		ComboBox<T> box = new ComboBox<>();
+		values.listenAndFire(box.getItems()::setAll);
 		return box;
 	}
 }
