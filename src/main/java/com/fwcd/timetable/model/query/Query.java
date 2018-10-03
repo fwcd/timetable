@@ -1,7 +1,7 @@
 package com.fwcd.timetable.model.query;
 
-import com.fwcd.fructose.Result;
+import java.io.IOException;
 
 public interface Query {
-	Result<? extends QueryResult, Exception> perform();
+	QueryResult perform() throws IOException;
 }
