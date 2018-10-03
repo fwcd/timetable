@@ -29,7 +29,10 @@ public class TaskCrateView implements FxView {
 		hideableNewTaskView.hide();
 		
 		VBox top = new VBox(
-			FxUtils.buttonOf(context.localized("newtask"), hideableNewTaskView::toggle),
+			FxUtils.buttonOf(context.localized("newtask"), () -> {
+				hideableNewTaskView.toggle();
+				newTaskView.focus();
+			}),
 			hideableNewTaskView.getNode()
 		);
 		top.setPadding(new Insets(4, 4, 4, 4));
