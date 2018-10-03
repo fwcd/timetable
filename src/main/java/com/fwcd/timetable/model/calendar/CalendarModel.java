@@ -16,19 +16,15 @@ import com.fwcd.timetable.model.utils.ArrayUtils;
 
 public class CalendarModel {
 	private final ObservableList<AppointmentModel> appointments = new ObservableList<>();
-	private final ObservableList<PlainEntryModel> plainEntries = new ObservableList<>();
 	private final ObservableList<TimeTableModel> timeTables = new ObservableList<>();
 	
 	public ObservableList<AppointmentModel> getAppointments() { return appointments; }
-	
-	public ObservableList<PlainEntryModel> getPlainEntries() { return plainEntries; }
 	
 	public ObservableList<TimeTableModel> getTimeTables() { return timeTables; }
 	
 	public Stream<CalendarEventModel> streamEvents() {
 		return StreamUtils.merge(
 			appointments.stream(),
-			plainEntries.stream(),
 			timeTables.stream().flatMap(it -> it.getEntries().stream())
 		);
 	}

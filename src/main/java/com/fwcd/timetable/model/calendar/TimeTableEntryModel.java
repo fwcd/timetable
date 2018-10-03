@@ -11,14 +11,14 @@ public class TimeTableEntryModel implements CalendarEventModel {
 	private final TimeTableContext context;
 	private final Observable<String> name;
 	private final Observable<String> type = new Observable<>(CommonEventType.TIME_TABLE_ENTRY);
-	private final Option<Location> location;
+	private final Observable<Option<Location>> location;
 	private final Observable<LocalTimeInterval> timeInterval;
 	private final DayOfWeek weekDay;
 	
 	TimeTableEntryModel(TimeTableContext context, String name, Option<Location> location, LocalTimeInterval timeInterval, DayOfWeek weekDay) {
 		this.context = context;
 		this.name = new Observable<>(name);
-		this.location = location;
+		this.location = new Observable<>(location);
 		this.timeInterval = new Observable<>(timeInterval);
 		this.weekDay = weekDay;
 	}
@@ -27,7 +27,7 @@ public class TimeTableEntryModel implements CalendarEventModel {
 	public Observable<String> getName() { return name; }
 	
 	@Override
-	public Option<Location> getLocation() { return location; }
+	public Observable<Option<Location>> getLocation() { return location; }
 	
 	@Override
 	public Observable<LocalTimeInterval> getTimeInterval() { return timeInterval; }

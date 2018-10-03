@@ -11,18 +11,31 @@ import com.fwcd.fructose.time.LocalTimeInterval;
 public class AppointmentModel implements CalendarEventModel, Comparable<AppointmentModel> {
 	private final Observable<String> name;
 	private final Observable<String> type;
-	private final Option<Location> location;
+	private final Observable<Option<Location>> location;
 	private final Observable<LocalDateInterval> dateInterval;
 	private final Observable<LocalTimeInterval> timeInterval;
 	private final Observable<Boolean> allDay;
+	private final Observable<Boolean> ignoreDate;
+	private final Observable<Boolean> ignoreTime;
 	
-	private AppointmentModel(String name, String type, Option<Location> location, LocalDateTime startInclusive, LocalDateTime endExclusive, boolean allDay) {
+	private AppointmentModel(
+		String name,
+		String type,
+		Option<Location> location,
+		LocalDateTime startInclusive,
+		LocalDateTime endExclusive,
+		boolean allDay,
+		boolean ignoreDate,
+		boolean ignoreTime
+	) {
 		this.name = new Observable<>(name);
 		this.type = new Observable<>(type);
-		this.location = location;
+		this.location = new Observable<>(location);
 		dateInterval = new Observable<>(new LocalDateInterval(startInclusive.toLocalDate(), endExclusive.toLocalDate().plusDays(1)));
 		timeInterval = new Observable<>(new LocalTimeInterval(startInclusive.toLocalTime(), endExclusive.toLocalTime()));
 		this.allDay = new Observable<>(allDay);
+		this.ignoreDate = new Observable<>(ignoreDate);
+		this.ignoreTime = new Observable<>(ignoreTime);
 	}
 	
 	@Override
@@ -32,7 +45,7 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	public Observable<String> getName() { return name; }
 	
 	@Override
-	public Option<Location> getLocation() { return location; }
+	public Observable<Option<Location>> getLocation() { return location; }
 	
 	public LocalDateTime getStart() { return LocalDateTime.of(dateInterval.get().getStart(), timeInterval.get().getStart()); }
 	
@@ -44,7 +57,7 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	public Observable<LocalDateInterval> getDateInterval() { return dateInterval; }
 	
 	@Override
-	public boolean occursOn(LocalDate date) { return dateInterval.get().contains(date); }
+	public boolean occursOn(LocalDate date) { return ignoreDate.get() ? false : dateInterval.get().contains(date); }
 	
 	@Override
 	public int compareTo(AppointmentModel o) { return getStart().compareTo(o.getStart()); }
@@ -52,12 +65,16 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	public boolean overlaps(AppointmentModel other) { return (getStart().compareTo(other.getEnd()) <= 0) && (getEnd().compareTo(other.getStart()) <= 0); }
 	
 	@Override
-	public boolean beginsOn(LocalDate date) { return date.equals(dateInterval.get().getStart()); }
+	public boolean beginsOn(LocalDate date) { return ignoreDate.get() ? false : date.equals(dateInterval.get().getStart()); }
 	
 	@Override
-	public boolean endsOn(LocalDate date) { return date.equals(dateInterval.get().getLastDate()); }
+	public boolean endsOn(LocalDate date) { return ignoreDate.get() ? false : date.equals(dateInterval.get().getLastDate()); }
 	
 	public Observable<Boolean> isAllDay() { return allDay; }
+	
+	public Observable<Boolean> ignoresDate() { return ignoreDate; }
+	
+	public Observable<Boolean> ignoresTime() { return ignoreTime; }
 	
 	public static class Builder {
 		private final String name;
@@ -66,6 +83,8 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 		private LocalDateTime start = LocalDateTime.now();
 		private LocalDateTime end = LocalDateTime.now();
 		private boolean allDay = false;
+		private boolean ignoreDate = false;
+		private boolean ignoreTime = false;
 		
 		public Builder(String name) {
 			this.name = name;
@@ -91,8 +110,18 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 			return this;
 		}
 		
+		public Builder ignoreDate(boolean ignoreDate) {
+			this.ignoreDate = ignoreDate;
+			return this;
+		}
+		
+		public Builder ignoreTime(boolean ignoreTime) {
+			this.ignoreTime = ignoreTime;
+			return this;
+		}
+		
 		public AppointmentModel build() {
-			return new AppointmentModel(name, type, location, start, end, allDay);
+			return new AppointmentModel(name, type, location, start, end, allDay, ignoreDate, ignoreTime);
 		}
 	}
 }

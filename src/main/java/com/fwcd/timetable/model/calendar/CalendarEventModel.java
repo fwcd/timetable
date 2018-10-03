@@ -16,7 +16,7 @@ public interface CalendarEventModel {
 	
 	Observable<String> getName();
 	
-	Option<Location> getLocation();
+	Observable<Option<Location>> getLocation();
 	
 	/**
 	 * Fetches the time interval of this calendar
