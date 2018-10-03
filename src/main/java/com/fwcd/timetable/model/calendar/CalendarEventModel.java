@@ -12,7 +12,7 @@ import com.fwcd.fructose.time.LocalTimeInterval;
  * appointment, a time table entry, a recurring event, ...)
  */
 public interface CalendarEventModel {
-	String getType();
+	Observable<String> getType();
 	
 	Observable<String> getName();
 	

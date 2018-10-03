@@ -10,6 +10,7 @@ import com.fwcd.fructose.time.LocalTimeInterval;
 public class TimeTableEntryModel implements CalendarEventModel {
 	private final TimeTableContext context;
 	private final Observable<String> name;
+	private final Observable<String> type = new Observable<>(CommonEventType.TIME_TABLE_ENTRY);
 	private final Option<Location> location;
 	private final Observable<LocalTimeInterval> timeInterval;
 	private final DayOfWeek weekDay;
@@ -32,7 +33,7 @@ public class TimeTableEntryModel implements CalendarEventModel {
 	public Observable<LocalTimeInterval> getTimeInterval() { return timeInterval; }
 	
 	@Override
-	public String getType() { return CommonEventType.TIME_TABLE_ENTRY; }
+	public Observable<String> getType() { return type; }
 
 	@Override
 	public boolean occursOn(LocalDate date) { return context.getDateInterval().get().contains(date) && date.getDayOfWeek().equals(weekDay); }
