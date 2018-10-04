@@ -6,4 +6,8 @@ public interface CalendarEntryModel {
 	String getType();
 	
 	Observable<String> getName();
+	
+	Observable<String> getDescription();
+	
+	void accept(CalendarEntryVisitor visitor);
 }

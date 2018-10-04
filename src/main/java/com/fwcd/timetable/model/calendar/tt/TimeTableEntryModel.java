@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.time.LocalTimeInterval;
+import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import com.fwcd.timetable.model.calendar.CalendarEventModel;
 import com.fwcd.timetable.model.calendar.CommonEntryType;
 import com.fwcd.timetable.model.calendar.Location;
@@ -13,6 +14,7 @@ import com.fwcd.timetable.model.calendar.Location;
 public class TimeTableEntryModel implements CalendarEventModel {
 	private final TimeTableContext context;
 	private final Observable<String> name;
+	private final Observable<String> description = new Observable<>("");
 	private final Observable<Option<Location>> location;
 	private final Observable<LocalTimeInterval> timeInterval;
 	private final DayOfWeek weekDay;
@@ -26,7 +28,13 @@ public class TimeTableEntryModel implements CalendarEventModel {
 	}
 	
 	@Override
+	public void accept(CalendarEntryVisitor visitor) { visitor.visitTimeTableEntry(this); }
+	
+	@Override
 	public Observable<String> getName() { return name; }
+	
+	@Override
+	public Observable<String> getDescription() { return description; }
 	
 	@Override
 	public Observable<Option<Location>> getLocation() { return location; }
