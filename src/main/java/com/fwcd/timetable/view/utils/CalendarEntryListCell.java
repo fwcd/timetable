@@ -40,10 +40,11 @@ public class CalendarEntryListCell extends ListCell<CalendarEntryModel> {
 			
 			itemSubscriptions.offer(item.getName().subscribeAndFire(name -> titleLabel.setText(titlePrefixOf(item) + name)));
 			itemSubscriptions.offer(infoProvider.getInfo().subscribeAndFire(info -> {
+				subtitleLabel.setText(info);
 				if (info.isEmpty()) {
-					node.getChildren().remove(subtitleLabel);
+					node.getChildren().setAll(titleLabel);
 				} else {
-					node.getChildren().add(subtitleLabel);
+					node.getChildren().setAll(titleLabel, subtitleLabel);
 				}
 			}));
 			infoProvider.getSubscriptions().forEach(itemSubscriptions::offer);

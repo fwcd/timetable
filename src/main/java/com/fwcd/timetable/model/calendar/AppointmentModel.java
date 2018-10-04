@@ -14,7 +14,6 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	private final Observable<LocalDateInterval> dateInterval;
 	private final Observable<LocalTimeInterval> timeInterval;
 	private final Observable<String> description;
-	private final Observable<Boolean> allDay;
 	private final Observable<Boolean> ignoreDate;
 	private final Observable<Boolean> ignoreTime;
 	
@@ -24,7 +23,6 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 		LocalDateTime startInclusive,
 		LocalDateTime endExclusive,
 		String description,
-		boolean allDay,
 		boolean ignoreDate,
 		boolean ignoreTime
 	) {
@@ -33,7 +31,6 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 		dateInterval = new Observable<>(new LocalDateInterval(startInclusive.toLocalDate(), endExclusive.toLocalDate().plusDays(1)));
 		timeInterval = new Observable<>(new LocalTimeInterval(startInclusive.toLocalTime(), endExclusive.toLocalTime()));
 		this.description = new Observable<>(description);
-		this.allDay = new Observable<>(allDay);
 		this.ignoreDate = new Observable<>(ignoreDate);
 		this.ignoreTime = new Observable<>(ignoreTime);
 	}
@@ -76,8 +73,6 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	@Override
 	public boolean endsOn(LocalDate date) { return ignoreDate.get() ? false : date.equals(dateInterval.get().getLastDate()); }
 	
-	public Observable<Boolean> isAllDay() { return allDay; }
-	
 	public Observable<Boolean> ignoresDate() { return ignoreDate; }
 	
 	public Observable<Boolean> ignoresTime() { return ignoreTime; }
@@ -88,7 +83,6 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 		private LocalDateTime start = LocalDateTime.now();
 		private LocalDateTime end = LocalDateTime.now();
 		private String description = "";
-		private boolean allDay = false;
 		private boolean ignoreDate = false;
 		private boolean ignoreTime = false;
 		
@@ -111,11 +105,6 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 			return this;
 		}
 		
-		public Builder allDay(boolean allDay) {
-			this.allDay = allDay;
-			return this;
-		}
-		
 		public Builder ignoreDate(boolean ignoreDate) {
 			this.ignoreDate = ignoreDate;
 			return this;
@@ -132,7 +121,7 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 		}
 		
 		public AppointmentModel build() {
-			return new AppointmentModel(name, location, start, end, description, allDay, ignoreDate, ignoreTime);
+			return new AppointmentModel(name, location, start, end, description, ignoreDate, ignoreTime);
 		}
 	}
 }
