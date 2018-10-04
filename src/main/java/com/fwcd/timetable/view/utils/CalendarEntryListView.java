@@ -2,7 +2,6 @@ package com.fwcd.timetable.view.utils;
 
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 
-import javafx.scene.Node;
 import javafx.scene.control.ListView;
 
 public class CalendarEntryListView implements FxView {
@@ -14,5 +13,5 @@ public class CalendarEntryListView implements FxView {
 	}
 	
 	@Override
-	public Node getNode() { return node; }
+	public ListView<CalendarEntryModel> getNode() { return node; }
 }

@@ -15,19 +15,15 @@ import javafx.scene.text.FontWeight;
 public class CalendarEntryListCell extends ListCell<CalendarEntryModel> {
 	private final Label titleLabel = new Label();
 	private final Label subtitleLabel = new Label();
-	private final Label descriptionLabel = new Label();
+	private final VBox node;
 	private final Queue<Subscription> itemSubscriptions = new ArrayDeque<>();
 	
 	public CalendarEntryListCell() {
 		titleLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
 		subtitleLabel.setFont(Font.font(12));
-		descriptionLabel.setFont(Font.font(12));
 		
-		getChildren().add(new VBox(
-			titleLabel,
-			subtitleLabel,
-			descriptionLabel
-		));
+		node = new VBox(titleLabel);
+		setGraphic(node);
 	}
 	
 	@Override
@@ -38,11 +34,23 @@ public class CalendarEntryListCell extends ListCell<CalendarEntryModel> {
 			itemSubscriptions.poll().unsubscribe();
 		}
 		
-		CalendarEntryInfoProvider infoProvider = new CalendarEntryInfoProvider();
-		
-		itemSubscriptions.offer(item.getName().subscribeAndFire(titleLabel::setText));
-		itemSubscriptions.offer(infoProvider.getInfo().subscribeAndFire(subtitleLabel::setText));
-		itemSubscriptions.offer(item.getDescription().subscribeAndFire(descriptionLabel::setText));
-		infoProvider.getSubscriptions().forEach(itemSubscriptions::offer);
+		if (item != null) {
+			CalendarEntryInfoProvider infoProvider = new CalendarEntryInfoProvider();
+			item.accept(infoProvider);
+			
+			itemSubscriptions.offer(item.getName().subscribeAndFire(name -> titleLabel.setText(titlePrefixOf(item) + name)));
+			itemSubscriptions.offer(infoProvider.getInfo().subscribeAndFire(info -> {
+				if (info.isEmpty()) {
+					node.getChildren().remove(subtitleLabel);
+				} else {
+					node.getChildren().add(subtitleLabel);
+				}
+			}));
+			infoProvider.getSubscriptions().forEach(itemSubscriptions::offer);
+		}
+	}
+	
+	private String titlePrefixOf(CalendarEntryModel entry) {
+		return "";
 	}
 }
