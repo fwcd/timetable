@@ -11,11 +11,7 @@ import com.fwcd.fructose.time.LocalTimeInterval;
  * Common interface for a calendar entry (e.g. an
  * appointment, a time table entry, a recurring event, ...)
  */
-public interface CalendarEventModel {
-	Observable<String> getType();
-	
-	Observable<String> getName();
-	
+public interface CalendarEventModel extends CalendarEntryModel {
 	Observable<Option<Location>> getLocation();
 	
 	/**

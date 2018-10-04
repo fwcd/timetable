@@ -1,7 +1,7 @@
-package com.fwcd.timetable.view.sidebar.tasks;
+package com.fwcd.timetable.view.sidebar.task;
 
-import com.fwcd.timetable.model.tasks.TaskCrateModel;
-import com.fwcd.timetable.model.tasks.TaskListModel;
+import com.fwcd.timetable.model.calendar.task.TaskCrateModel;
+import com.fwcd.timetable.model.calendar.task.TaskListModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;

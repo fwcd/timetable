@@ -1,9 +1,9 @@
-package com.fwcd.timetable.view.sidebar.tasks;
+package com.fwcd.timetable.view.sidebar.task;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
-import com.fwcd.timetable.model.tasks.TaskCrateModel;
-import com.fwcd.timetable.model.tasks.TaskListModel;
+import com.fwcd.timetable.model.calendar.task.TaskCrateModel;
+import com.fwcd.timetable.model.calendar.task.TaskListModel;
 
 public class TaskCrateViewModel {
 	private final TaskCrateModel model;

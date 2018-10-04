@@ -1,8 +1,8 @@
-package com.fwcd.timetable.view.sidebar.tasks;
+package com.fwcd.timetable.view.sidebar.task;
 
 import com.fwcd.fructose.ListenerList;
 import com.fwcd.fructose.Observable;
-import com.fwcd.timetable.model.tasks.TaskModel;
+import com.fwcd.timetable.model.calendar.task.TaskModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;

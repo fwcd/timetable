@@ -1,4 +1,4 @@
-package com.fwcd.timetable.model.calendar;
+package com.fwcd.timetable.model.calendar.tt;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.time.LocalDateInterval;

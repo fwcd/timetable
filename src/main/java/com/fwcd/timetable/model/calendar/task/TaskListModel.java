@@ -1,4 +1,4 @@
-package com.fwcd.timetable.model.tasks;
+package com.fwcd.timetable.model.calendar.task;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.structs.ObservableList;

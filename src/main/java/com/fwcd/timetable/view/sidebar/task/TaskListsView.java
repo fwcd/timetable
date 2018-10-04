@@ -1,8 +1,8 @@
-package com.fwcd.timetable.view.sidebar.tasks;
+package com.fwcd.timetable.view.sidebar.task;
 
 import java.util.List;
 
-import com.fwcd.timetable.model.tasks.TaskListModel;
+import com.fwcd.timetable.model.calendar.task.TaskListModel;
 import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.scene.Node;

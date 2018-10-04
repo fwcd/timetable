@@ -10,7 +10,6 @@ import com.fwcd.fructose.time.LocalTimeInterval;
 
 public class AppointmentModel implements CalendarEventModel, Comparable<AppointmentModel> {
 	private final Observable<String> name;
-	private final Observable<String> type;
 	private final Observable<Option<Location>> location;
 	private final Observable<LocalDateInterval> dateInterval;
 	private final Observable<LocalTimeInterval> timeInterval;
@@ -20,7 +19,6 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	
 	private AppointmentModel(
 		String name,
-		String type,
 		Option<Location> location,
 		LocalDateTime startInclusive,
 		LocalDateTime endExclusive,
@@ -29,7 +27,6 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 		boolean ignoreTime
 	) {
 		this.name = new Observable<>(name);
-		this.type = new Observable<>(type);
 		this.location = new Observable<>(location);
 		dateInterval = new Observable<>(new LocalDateInterval(startInclusive.toLocalDate(), endExclusive.toLocalDate().plusDays(1)));
 		timeInterval = new Observable<>(new LocalTimeInterval(startInclusive.toLocalTime(), endExclusive.toLocalTime()));
@@ -39,7 +36,7 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	}
 	
 	@Override
-	public Observable<String> getType() { return type; }
+	public String getType() { return CommonEntryType.APPOINTMENT; }
 	
 	@Override
 	public Observable<String> getName() { return name; }
@@ -78,7 +75,6 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 	
 	public static class Builder {
 		private final String name;
-		private String type;
 		private Option<Location> location = Option.empty();
 		private LocalDateTime start = LocalDateTime.now();
 		private LocalDateTime end = LocalDateTime.now();
@@ -121,7 +117,7 @@ public class AppointmentModel implements CalendarEventModel, Comparable<Appointm
 		}
 		
 		public AppointmentModel build() {
-			return new AppointmentModel(name, type, location, start, end, allDay, ignoreDate, ignoreTime);
+			return new AppointmentModel(name, location, start, end, allDay, ignoreDate, ignoreTime);
 		}
 	}
 }

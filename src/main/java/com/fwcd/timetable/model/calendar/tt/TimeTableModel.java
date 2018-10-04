@@ -1,4 +1,4 @@
-package com.fwcd.timetable.model.calendar;
+package com.fwcd.timetable.model.calendar.tt;
 
 import java.time.DayOfWeek;
 
@@ -6,6 +6,7 @@ import com.fwcd.fructose.Option;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.fructose.time.LocalDateInterval;
 import com.fwcd.fructose.time.LocalTimeInterval;
+import com.fwcd.timetable.model.calendar.Location;
 
 public class TimeTableModel {
 	private final ObservableList<TimeTableEntryModel> entries = new ObservableList<>();

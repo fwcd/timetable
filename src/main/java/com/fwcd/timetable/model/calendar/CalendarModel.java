@@ -12,15 +12,20 @@ import com.fwcd.fructose.StreamUtils;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.fructose.time.LocalDateInterval;
 import com.fwcd.fructose.time.LocalTimeInterval;
+import com.fwcd.timetable.model.calendar.task.TaskCrateModel;
+import com.fwcd.timetable.model.calendar.tt.TimeTableModel;
 import com.fwcd.timetable.model.utils.ArrayUtils;
 
 public class CalendarModel {
 	private final ObservableList<AppointmentModel> appointments = new ObservableList<>();
 	private final ObservableList<TimeTableModel> timeTables = new ObservableList<>();
+	private final TaskCrateModel taskCrate = new TaskCrateModel();
 	
 	public ObservableList<AppointmentModel> getAppointments() { return appointments; }
 	
 	public ObservableList<TimeTableModel> getTimeTables() { return timeTables; }
+	
+	public TaskCrateModel getTaskCrate() { return taskCrate; }
 	
 	public Stream<CalendarEventModel> streamEvents() {
 		return StreamUtils.merge(
