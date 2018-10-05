@@ -8,6 +8,7 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.fructose.time.LocalTimeInterval;
+import com.fwcd.timetable.model.calendar.recurrence.ParsedRecurrence;
 
 public class AppointmentModel implements CalendarEntryModel, Comparable<AppointmentModel> {
 	private final Observable<String> name;

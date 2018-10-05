@@ -1,4 +1,4 @@
-package com.fwcd.timetable.model.calendar;
+package com.fwcd.timetable.model.calendar.recurrence;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
