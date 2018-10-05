@@ -144,6 +144,26 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 			return this;
 		}
 		
+		public Builder startDate(LocalDate start) {
+			this.start = LocalDateTime.of(start, this.start.toLocalTime());
+			return this;
+		}
+		
+		public Builder endDate(LocalDate end) {
+			this.end = LocalDateTime.of(end, this.end.toLocalTime());
+			return this;
+		}
+		
+		public Builder startTime(LocalTime start) {
+			this.start = LocalDateTime.of(this.start.toLocalDate(), start);
+			return this;
+		}
+		
+		public Builder endTime(LocalTime end) {
+			this.end = LocalDateTime.of(this.end.toLocalDate(), end);
+			return this;
+		}
+		
 		public Builder ignoreDate(boolean ignoreDate) {
 			this.ignoreDate = ignoreDate;
 			return this;
