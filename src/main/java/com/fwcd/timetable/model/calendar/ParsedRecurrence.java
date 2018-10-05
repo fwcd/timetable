@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.ReadOnlyObservable;
-import com.fwcd.fructose.time.LocalDateInterval;
+import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.timetable.model.utils.ObservableUtils;
 
 /**
@@ -39,9 +39,9 @@ public class ParsedRecurrence {
 	private final Observable<String> raw = new Observable<>("");
 	private final Observable<Option<Recurrence>> parsed = new Observable<>(Option.empty());
 	
-	public ParsedRecurrence(ReadOnlyObservable<LocalDateInterval> dateInterval) {
-		ObservableUtils.dualListen(dateInterval, raw, (dates, str) -> {
-			parsed.set(parse(dates.getStart(), str));
+	public ParsedRecurrence(ReadOnlyObservable<LocalDateTimeInterval> dateTimeInterval) {
+		ObservableUtils.dualListen(dateTimeInterval, raw, (dates, str) -> {
+			parsed.set(parse(dates.getStart().toLocalDate(), str));
 		});
 	}
 	
@@ -50,7 +50,7 @@ public class ParsedRecurrence {
 		if (matcher.find()) {
 			String modechar = matcher.group(1);
 			int distance = Integer.parseInt(matcher.group(2));
-			Option<String> args = Option.ofNullable(matcher.group(matcher.group(3)));
+			Option<String> args = Option.ofNullable(matcher.group(3));
 			switch (modechar) {
 				case "d": return Option.of(new DailyRecurrence(start, distance));
 				case "w": return args.flatMap(it -> parseWeeklyRecurrence(start, it, distance));

@@ -37,7 +37,7 @@ public class WeekDayAppointmentsView implements FxView {
 	private void addEvent(AppointmentModel event, LocalDate viewedDate) {
 		Pane child = new AppointmentView(layouter, event).getNode();
 		
-		event.getTimeInterval().listenAndFire(t -> {
+		event.getDateTimeInterval().listenAndFire(t -> {
 			LocalTimeInterval interval = event.getTimeIntervalOn(viewedDate);
 			AnchorPane.setTopAnchor(child, layouter.toPixelY(interval.getStart()));
 			child.setPrefHeight(layouter.toPixelHeight(interval.getDuration()));

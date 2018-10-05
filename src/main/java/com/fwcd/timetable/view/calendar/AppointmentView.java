@@ -18,7 +18,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class AppointmentView implements FxView {
-	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm"); 
+	private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm"); 
 	private final Pane node;
 	
 	public AppointmentView(WeekDayTimeLayouter layouter, AppointmentModel model) {
@@ -32,7 +32,7 @@ public class AppointmentView implements FxView {
 		
 		Label timeLabel = new Label();
 		timeLabel.setFont(Font.font(11));
-		model.getTimeInterval().listenAndFire(it -> timeLabel.setText(formatter.format(it.getStart()) + " - " + formatter.format(it.getEnd())));
+		model.getDateTimeInterval().listenAndFire(it -> timeLabel.setText(TIME_FORMATTER.format(it.getStart()) + " - " + TIME_FORMATTER.format(it.getEnd())));
 		node.getChildren().add(timeLabel);
 	}
 	

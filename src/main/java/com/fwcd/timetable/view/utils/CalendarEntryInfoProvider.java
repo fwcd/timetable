@@ -7,8 +7,6 @@ import java.util.HashSet;
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
 import com.fwcd.fructose.function.Subscription;
-import com.fwcd.fructose.time.LocalDateInterval;
-import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 
@@ -24,8 +22,7 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 	public void visitAppointment(AppointmentModel appointment) {
 		Runnable updater = () -> info.set(getAppointmentInfo(appointment));
 		
-		subscriptions.add(appointment.getDateInterval().subscribe(v -> updater.run()));
-		subscriptions.add(appointment.getTimeInterval().subscribe(v -> updater.run()));
+		subscriptions.add(appointment.getDateTimeInterval().subscribe(v -> updater.run()));
 		subscriptions.add(appointment.getLocation().subscribe(v -> updater.run()));
 		subscriptions.add(appointment.ignoresDate().subscribe(v -> updater.run()));
 		subscriptions.add(appointment.ignoresTime().subscribe(v -> updater.run()));
@@ -43,15 +40,13 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 				.append(" - ")
 				.append(DT_FORMATTER.format(appointment.getEnd()));
 		} else if (!ignoreDate) {
-			LocalDateInterval dateInterval = appointment.getDateInterval().get();
-			str.append(DATE_FORMATTER.format(dateInterval.getStart()))
+			str.append(DATE_FORMATTER.format(appointment.getStartDate()))
 				.append(" - ")
-				.append(DATE_FORMATTER.format(dateInterval.getEnd()));
+				.append(DATE_FORMATTER.format(appointment.getLastDate()));
 		} else if (!ignoreTime) {
-			LocalTimeInterval timeInterval = appointment.getTimeInterval().get();
-			str.append(TIME_FORMATTER.format(timeInterval.getStart()))
+			str.append(TIME_FORMATTER.format(appointment.getStartTime()))
 				.append(" - ")
-				.append(TIME_FORMATTER.format(timeInterval.getEnd()));
+				.append(TIME_FORMATTER.format(appointment.getEndTime()));
 		}
 		
 		appointment.getLocation().get().ifPresent(location -> {
