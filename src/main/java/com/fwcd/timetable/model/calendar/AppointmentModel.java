@@ -17,6 +17,7 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	private final Observable<Boolean> ignoreDate;
 	private final Observable<Boolean> ignoreTime;
 	private final ParsedRecurrence recurrence;
+	private final Observable<Option<LocalDate>> recurrenceEnd;
 	
 	private AppointmentModel(
 		String name,
@@ -26,7 +27,8 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 		String description,
 		boolean ignoreDate,
 		boolean ignoreTime,
-		String rawRecurrence
+		String rawRecurrence,
+		Option<LocalDate> recurrenceEnd
 	) {
 		this.name = new Observable<>(name);
 		this.location = new Observable<>(location);
@@ -34,7 +36,8 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 		this.description = new Observable<>(description);
 		this.ignoreDate = new Observable<>(ignoreDate);
 		this.ignoreTime = new Observable<>(ignoreTime);
-		recurrence = new ParsedRecurrence(dateTimeInterval);
+		this.recurrenceEnd = new Observable<>(recurrenceEnd);
+		recurrence = new ParsedRecurrence(dateTimeInterval, this.recurrenceEnd);
 		recurrence.getRaw().set(rawRecurrence);
 	}
 	
@@ -70,6 +73,8 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	public LocalTime getEndTime() { return getEnd().toLocalTime(); }
 	
 	public ParsedRecurrence getRecurrence() { return recurrence; }
+	
+	public Observable<Option<LocalDate>> getRecurrenceEnd() { return recurrenceEnd; }
 	
 	@Override
 	public Observable<String> getDescription() { return description; }
@@ -124,6 +129,7 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 		private boolean ignoreDate = false;
 		private boolean ignoreTime = false;
 		private String rawRecurrence = "";
+		private Option<LocalDate> recurrenceEnd = Option.empty();
 		
 		public Builder(String name) {
 			this.name = name;
@@ -184,8 +190,13 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 			return this;
 		}
 		
+		public Builder recurrenceEnd(LocalDate recurrenceEnd) {
+			this.recurrenceEnd = Option.of(recurrenceEnd);
+			return this;
+		}
+		
 		public AppointmentModel build() {
-			return new AppointmentModel(name, location, start, end, description, ignoreDate, ignoreTime, rawRecurrence);
+			return new AppointmentModel(name, location, start, end, description, ignoreDate, ignoreTime, rawRecurrence, recurrenceEnd);
 		}
 	}
 }

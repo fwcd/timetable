@@ -39,43 +39,43 @@ public class ParsedRecurrence {
 	private final Observable<String> raw = new Observable<>("");
 	private final Observable<Option<Recurrence>> parsed = new Observable<>(Option.empty());
 	
-	public ParsedRecurrence(ReadOnlyObservable<LocalDateTimeInterval> dateTimeInterval) {
-		ObservableUtils.dualListen(dateTimeInterval, raw, (dates, str) -> {
-			parsed.set(parse(dates.getStart().toLocalDate(), str));
+	public ParsedRecurrence(ReadOnlyObservable<LocalDateTimeInterval> dateTimeInterval, ReadOnlyObservable<Option<LocalDate>> recurrenceEnd) {
+		ObservableUtils.triListen(dateTimeInterval, raw, recurrenceEnd, (dates, str, recEnd) -> {
+			parsed.set(parse(str, dates.getStart().toLocalDate(), recEnd));
 		});
 	}
 	
-	private Option<Recurrence> parse(LocalDate start, String str) {
+	private Option<Recurrence> parse(String str, LocalDate start, Option<LocalDate> end) {
 		Matcher matcher = RECURRENCE_PATTERN.matcher(str);
 		if (matcher.find()) {
 			String modechar = matcher.group(1);
 			int distance = Integer.parseInt(matcher.group(2));
 			Option<String> args = Option.ofNullable(matcher.group(3));
 			switch (modechar) {
-				case "d": return Option.of(new DailyRecurrence(start, distance));
-				case "w": return args.flatMap(it -> parseWeeklyRecurrence(start, it, distance));
-				case "m": return args.flatMap(it -> parseMonthlyRecurrence(start, it, distance));
-				case "y": return Option.of(new YearlyRecurrence(start, distance));
+				case "d": return Option.of(new DailyRecurrence(start, end, distance));
+				case "w": return args.flatMap(it -> parseWeeklyRecurrence(it, start, end, distance));
+				case "m": return args.flatMap(it -> parseMonthlyRecurrence(it, start, end, distance));
+				case "y": return Option.of(new YearlyRecurrence(start, end, distance));
 				default: break;
 			}
 		}
 		return Option.empty();
 	}
 	
-	private Option<Recurrence> parseWeeklyRecurrence(LocalDate start, String args, int weeksBetweenRepeats) {
+	private Option<Recurrence> parseWeeklyRecurrence(String args, LocalDate start, Option<LocalDate> end, int weeksBetweenRepeats) {
 		try {
 			Set<DayOfWeek> weekDays = Arrays.stream(args.split(","))
 				.map(String::trim)
 				.map(Integer::parseInt)
 				.map(DayOfWeek::of)
 				.collect(Collectors.toSet());
-			return Option.of(new WeeklyRecurrence(start, weekDays, weeksBetweenRepeats));
+			return Option.of(new WeeklyRecurrence(start, end, weekDays, weeksBetweenRepeats));
 		} catch (NumberFormatException e) {
 			return Option.empty();
 		}
 	}
 	
-	private Option<Recurrence> parseMonthlyRecurrence(LocalDate start, String args, int monthsBetweenRepeats) {
+	private Option<Recurrence> parseMonthlyRecurrence(String args, LocalDate start, Option<LocalDate> end, int monthsBetweenRepeats) {
 		// TODO: Parse custom month filters instead of allowing all months
 		Set<Month> months = Arrays.stream(Month.values()).collect(Collectors.toSet());
 		
@@ -83,13 +83,13 @@ public class ParsedRecurrence {
 		if (weekSubMatcher.find()) {
 			int weekOfMonth = Integer.parseInt(weekSubMatcher.group(1));
 			DayOfWeek dayOfWeek = DayOfWeek.of(Integer.parseInt(weekSubMatcher.group(2)));
-			return Option.of(new MonthlyWeekRecurrence(start, months, weekOfMonth, dayOfWeek, monthsBetweenRepeats));
+			return Option.of(new MonthlyWeekRecurrence(start, end, months, weekOfMonth, dayOfWeek, monthsBetweenRepeats));
 		}
 		
 		Matcher monthSubMatcher = MONTH_SUB_MODE_PATTERN.matcher(args);
 		if (monthSubMatcher.find()) {
 			int dayOfMonth = Integer.parseInt(monthSubMatcher.group(1));
-			return Option.of(new MonthlyDayRecurrence(start, months, dayOfMonth, monthsBetweenRepeats));
+			return Option.of(new MonthlyDayRecurrence(start, end, months, dayOfMonth, monthsBetweenRepeats));
 		}
 		
 		return Option.empty();
