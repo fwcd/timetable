@@ -2,7 +2,6 @@ package com.fwcd.timetable.model.utils;
 
 import java.util.function.BiConsumer;
 
-import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
 
 public final class ObservableUtils {
@@ -11,24 +10,24 @@ public final class ObservableUtils {
 	private ObservableUtils() {}
 	
 	/** Listens to two observables "at once" */
-	public static <A, B> void dualListen(Observable<? extends A> a, Observable<? extends B> b, BiConsumer<? super A, ? super B> listener) {
+	public static <A, B> void dualListen(ReadOnlyObservable<? extends A> a, ReadOnlyObservable<? extends B> b, BiConsumer<? super A, ? super B> listener) {
 		a.listen(aValue -> listener.accept(aValue, b.get()));
 		b.listen(bValue -> listener.accept(a.get(), bValue));
 	}
 	
-	public static <A, B> void dualListenAndFire(Observable<? extends A> a, Observable<? extends B> b, BiConsumer<? super A, ? super B> listener) {
+	public static <A, B> void dualListenAndFire(ReadOnlyObservable<? extends A> a, ReadOnlyObservable<? extends B> b, BiConsumer<? super A, ? super B> listener) {
 		dualListen(a, b, listener);
 		listener.accept(a.get(), b.get());
 	}
 	
 	/** Listens to three observables "at once" */
-	public static <A, B, C> void triListen(Observable<? extends A> a, Observable<? extends B> b, Observable<? extends C> c, TriConsumer<? super A, ? super B, ? super C> listener) {
+	public static <A, B, C> void triListen(ReadOnlyObservable<? extends A> a, ReadOnlyObservable<? extends B> b, ReadOnlyObservable<? extends C> c, TriConsumer<? super A, ? super B, ? super C> listener) {
 		a.listen(aValue -> listener.accept(aValue, b.get(), c.get()));
 		b.listen(bValue -> listener.accept(a.get(), bValue, c.get()));
 		c.listen(cValue -> listener.accept(a.get(), b.get(), cValue));
 	}
 	
-	public static <A, B, C> void triListenAndFire(Observable<? extends A> a, Observable<? extends B> b, Observable<? extends C> c, TriConsumer<? super A, ? super B, ? super C> listener) {
+	public static <A, B, C> void triListenAndFire(ReadOnlyObservable<? extends A> a, ReadOnlyObservable<? extends B> b, ReadOnlyObservable<? extends C> c, TriConsumer<? super A, ? super B, ? super C> listener) {
 		triListen(a, b, c, listener);
 		listener.accept(a.get(), b.get(), c.get());
 	}

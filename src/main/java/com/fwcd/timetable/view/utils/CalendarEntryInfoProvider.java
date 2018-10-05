@@ -11,7 +11,6 @@ import com.fwcd.fructose.time.LocalDateInterval;
 import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
-import com.fwcd.timetable.model.calendar.tt.TimeTableEntryModel;
 
 public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 	private static final DateTimeFormatter DT_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
@@ -30,16 +29,6 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 		subscriptions.add(appointment.getLocation().subscribe(v -> updater.run()));
 		subscriptions.add(appointment.ignoresDate().subscribe(v -> updater.run()));
 		subscriptions.add(appointment.ignoresTime().subscribe(v -> updater.run()));
-		
-		updater.run();
-	}
-	
-	@Override
-	public void visitTimeTableEntry(TimeTableEntryModel ttEntry) {
-		Runnable updater = () -> info.set(getTimeTableEntryInfo(ttEntry));
-		
-		subscriptions.add(ttEntry.getTimeInterval().subscribe(v -> updater.run()));
-		subscriptions.add(ttEntry.getLocation().subscribe(v -> updater.run()));
 		
 		updater.run();
 	}
@@ -66,21 +55,6 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 		}
 		
 		appointment.getLocation().get().ifPresent(location -> {
-			str.append(" - ").append(location.getLabel());
-		});
-		
-		return str.toString();
-	}
-	
-	private String getTimeTableEntryInfo(TimeTableEntryModel ttEntry) {
-		StringBuilder str = new StringBuilder();
-		LocalTimeInterval timeInterval = ttEntry.getTimeInterval().get();
-		
-		str.append(TIME_FORMATTER.format(timeInterval.getStart()))
-			.append(" - ")
-			.append(TIME_FORMATTER.format(timeInterval.getEnd()));
-		
-		ttEntry.getLocation().get().ifPresent(location -> {
 			str.append(" - ").append(location.getLabel());
 		});
 		

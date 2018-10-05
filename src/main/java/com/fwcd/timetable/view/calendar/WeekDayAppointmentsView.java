@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import com.fwcd.fructose.structs.ArrayBiList;
 import com.fwcd.fructose.structs.BiList;
 import com.fwcd.fructose.time.LocalTimeInterval;
-import com.fwcd.timetable.model.calendar.CalendarEventModel;
+import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.utils.FxView;
 
@@ -15,13 +15,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
-public class WeekDayEventsView implements FxView {
+public class WeekDayAppointmentsView implements FxView {
 	private final WeekDayTimeLayouter layouter;
 	private final Pane node;
 	private final CalendarModel calendar;
 	private final BiList<LocalTimeInterval, HBox> overlapBoxes = new ArrayBiList<>();
 	
-	public WeekDayEventsView(WeekDayTimeLayouter layouter, CalendarModel calendar) {
+	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, CalendarModel calendar) {
 		this.calendar = calendar;
 		this.layouter = layouter;
 		node = new StackPane();
@@ -29,13 +29,13 @@ public class WeekDayEventsView implements FxView {
 	
 	public void setDate(LocalDate date) {
 		clear();
-		calendar.streamEvents()
+		calendar.getAppointments().stream()
 			.filter(it -> it.occursOn(date))
 			.forEach(it -> addEvent(it, date));
 	}
 	
-	private void addEvent(CalendarEventModel event, LocalDate viewedDate) {
-		Pane child = new CalendarEventView(layouter, event).getNode();
+	private void addEvent(AppointmentModel event, LocalDate viewedDate) {
+		Pane child = new AppointmentView(layouter, event).getNode();
 		
 		event.getTimeInterval().listenAndFire(t -> {
 			LocalTimeInterval interval = event.getTimeIntervalOn(viewedDate);
