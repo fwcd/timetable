@@ -156,7 +156,7 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 			return this;
 		}
 		
-		public Builder endDate(LocalDate end) {
+		public Builder lastDate(LocalDate end) {
 			this.end = LocalDateTime.of(end, this.end.toLocalTime());
 			return this;
 		}
