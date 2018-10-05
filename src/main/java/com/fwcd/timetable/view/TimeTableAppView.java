@@ -1,7 +1,7 @@
 package com.fwcd.timetable.view;
 
 import com.fwcd.timetable.model.TimeTableAppModel;
-import com.fwcd.timetable.view.calendar.CalendarView;
+import com.fwcd.timetable.view.calendar.CalendarsView;
 import com.fwcd.timetable.view.sidebar.SideBarView;
 import com.fwcd.timetable.view.utils.FxParentView;
 
@@ -18,7 +18,7 @@ public class TimeTableAppView implements FxParentView {
 	public TimeTableAppView() {
 		node = new BorderPane();
 		
-		CalendarView calendar = new CalendarView(model.getCalendar());
+		CalendarsView calendar = new CalendarsView(model.getCalendars());
 		SideBarView sideBar = new SideBarView(context, model);
 		SplitPane split = new SplitPane(
 			calendar.getNode(),

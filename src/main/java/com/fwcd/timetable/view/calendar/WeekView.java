@@ -6,6 +6,7 @@ import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.utils.FxView;
@@ -23,7 +24,7 @@ public class WeekView implements FxView {
 	private final List<WeekDayView> days = new ArrayList<>();
 	private final WeekDayTimeLayouter dayLayouter = new WeekDayTimeLayouter();
 	
-	public WeekView(CalendarModel calendar) {
+	public WeekView(ObservableList<CalendarModel> calendars) {
 		node = new GridPane();
 		node.setMinWidth(Region.USE_PREF_SIZE);
 		
@@ -39,7 +40,7 @@ public class WeekView implements FxView {
 		LocalDate weekStart = LocalDate.now().with(ChronoField.DAY_OF_WEEK, DayOfWeek.MONDAY.getValue());
 		
 		for (int i = 0; i < CalendarConstants.DAYS_OF_WEEK; i++) {
-			WeekDayView day = new WeekDayView(dayLayouter, calendar, i);
+			WeekDayView day = new WeekDayView(dayLayouter, calendars, i);
 			day.setWeekStart(weekStart);
 			
 			ColumnConstraints colConstraints = new ColumnConstraints();

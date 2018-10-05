@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.fwcd.fructose.structs.ArrayBiList;
 import com.fwcd.fructose.structs.BiList;
+import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
@@ -18,18 +19,19 @@ import javafx.scene.layout.StackPane;
 public class WeekDayAppointmentsView implements FxView {
 	private final WeekDayTimeLayouter layouter;
 	private final Pane node;
-	private final CalendarModel calendar;
+	private final ObservableList<CalendarModel> calendars;
 	private final BiList<LocalTimeInterval, HBox> overlapBoxes = new ArrayBiList<>();
 	
-	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, CalendarModel calendar) {
-		this.calendar = calendar;
+	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, ObservableList<CalendarModel> calendars) {
+		this.calendars = calendars;
 		this.layouter = layouter;
 		node = new StackPane();
 	}
 	
 	public void setDate(LocalDate date) {
 		clear();
-		calendar.getAppointments().stream()
+		calendars.stream()
+			.flatMap(it -> it.getAppointments().stream())
 			.filter(it -> it.occursOn(date))
 			.forEach(it -> addEvent(it, date));
 	}

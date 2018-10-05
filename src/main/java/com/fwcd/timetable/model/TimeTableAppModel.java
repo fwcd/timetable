@@ -1,22 +1,14 @@
 package com.fwcd.timetable.model;
 
-import java.time.LocalDateTime;
-
-import com.fwcd.timetable.model.calendar.AppointmentModel;
+import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 
 public class TimeTableAppModel {
-	private final CalendarModel calendar = new CalendarModel();
+	private final ObservableList<CalendarModel> calendars = new ObservableList<>();
 	
-	{
-		// calendar.addRandomSampleEntries();
-		calendar.getAppointments().add(new AppointmentModel.Builder("Test")
-			.start(LocalDateTime.now())
-			.end(LocalDateTime.now().plusHours(1))
-			.recurrence("d2")
-			.build()
-		);
+	public TimeTableAppModel() {
+		calendars.add(new CalendarModel("Calendar"));
 	}
 	
-	public CalendarModel getCalendar() { return calendar; }
+	public ObservableList<CalendarModel> getCalendars() { return calendars; }
 }
