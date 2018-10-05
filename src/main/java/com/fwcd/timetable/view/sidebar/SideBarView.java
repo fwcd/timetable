@@ -3,6 +3,7 @@ package com.fwcd.timetable.view.sidebar;
 import com.fwcd.fructose.ReadOnlyObservable;
 import com.fwcd.timetable.model.TimeTableAppModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
+import com.fwcd.timetable.view.sidebar.calendar.CalendarsSideView;
 import com.fwcd.timetable.view.sidebar.task.TasksView;
 import com.fwcd.timetable.view.utils.FxView;
 
@@ -15,6 +16,7 @@ public class SideBarView implements FxView {
 	
 	public SideBarView(TimeTableAppContext context, TimeTableAppModel model) {
 		node = new TabPane(
+			tabOf(context.localized("calendars"), new CalendarsSideView(context, model)),
 			tabOf(context.localized("tasks"), new TasksView(context, model))
 		);
 	}
