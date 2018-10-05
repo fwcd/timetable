@@ -1,5 +1,7 @@
 package com.fwcd.timetable.view.utils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.HashSet;
@@ -36,13 +38,29 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 		boolean ignoreTime = appointment.ignoresTime().get();
 		
 		if (!ignoreDate && !ignoreTime) {
-			str.append(DT_FORMATTER.format(appointment.getStart()))
-				.append(" - ")
-				.append(DT_FORMATTER.format(appointment.getEnd()));
+			LocalDateTime start = appointment.getStart();
+			LocalDateTime end = appointment.getEnd();
+			if (start.toLocalDate().equals(end.toLocalDate())) {
+				str.append(DATE_FORMATTER.format(start.toLocalDate()))
+					.append(' ')
+					.append(TIME_FORMATTER.format(start.toLocalTime()))
+					.append(" - ")
+					.append(TIME_FORMATTER.format(end.toLocalTime()));
+			} else {
+				str.append(DT_FORMATTER.format(start))
+					.append(" - ")
+					.append(DT_FORMATTER.format(end));
+			}
 		} else if (!ignoreDate) {
-			str.append(DATE_FORMATTER.format(appointment.getStartDate()))
-				.append(" - ")
-				.append(DATE_FORMATTER.format(appointment.getLastDate()));
+			LocalDate startDate = appointment.getStartDate();
+			LocalDate lastDate = appointment.getLastDate();
+			if (startDate.equals(lastDate)) {
+				str.append(DATE_FORMATTER.format(startDate));
+			} else {
+				str.append(DATE_FORMATTER.format(startDate))
+					.append(" - ")
+					.append(DATE_FORMATTER.format(lastDate));
+			}
 		} else if (!ignoreTime) {
 			str.append(TIME_FORMATTER.format(appointment.getStartTime()))
 				.append(" - ")
