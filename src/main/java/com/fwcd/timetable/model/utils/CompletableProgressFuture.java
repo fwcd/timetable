@@ -5,16 +5,18 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import com.fwcd.fructose.Observable;
 
 public class CompletableProgressFuture<T> implements ProgressFuture<T> {
-	private final CompletableFuture<T> delegate;
+	private final CompletableFuture<? extends T> delegate;
 	private final Observable<Double> progress;
 	
-	private CompletableProgressFuture(CompletableFuture<T> delegate, Observable<Double> progress) {
+	private CompletableProgressFuture(CompletableFuture<? extends T> delegate, Observable<Double> progress) {
 		this.delegate = delegate;
 		this.progress = progress;
 	}
@@ -24,26 +26,34 @@ public class CompletableProgressFuture<T> implements ProgressFuture<T> {
 		return result;
 	}
 	
-	public static CompletableProgressFuture<Void> runAsync(Consumer<Observable<Double>> task) {
+	public static CompletableProgressFuture<Void> runAsync(Consumer<? super Observable<Double>> task) {
 		Observable<Double> progress = new Observable<>(0.0);
 		return new CompletableProgressFuture<>(CompletableFuture.runAsync(() -> task.accept(progress)), progress);
 	}
 	
-	public static CompletableProgressFuture<Void> runAsync(Consumer<Observable<Double>> task, Executor executor) {
+	public static CompletableProgressFuture<Void> runAsync(Consumer<? super Observable<Double>> task, Executor executor) {
 		Observable<Double> progress = new Observable<>(0.0);
 		return new CompletableProgressFuture<>(CompletableFuture.runAsync(() -> task.accept(progress), executor), progress);
 	}
 	
-	public static <R> CompletableProgressFuture<R> supplyAsync(Function<Observable<Double>, R> task) {
+	public static <R> CompletableProgressFuture<R> supplyAsync(Function<? super Observable<Double>, ? extends R> task) {
 		Observable<Double> progress = new Observable<>(0.0);
 		return new CompletableProgressFuture<>(CompletableFuture.supplyAsync(() -> task.apply(progress)), progress);
 	}
 
-	public static <R> CompletableProgressFuture<R> supplyAsync(Function<Observable<Double>, R> task, Executor executor) {
+	public static <R> CompletableProgressFuture<R> supplyAsync(Function<? super Observable<Double>, ? extends R> task, Executor executor) {
 		Observable<Double> progress = new Observable<>(0.0);
 		return new CompletableProgressFuture<>(CompletableFuture.supplyAsync(() -> task.apply(progress), executor), progress);
 	}
-
+	
+	public CompletableProgressFuture<Void> thenAccept(BiConsumer<? super T, ? super Observable<Double>> action) {
+		return new CompletableProgressFuture<>(delegate.thenAccept(v -> action.accept(v, progress)), progress);
+	}
+	
+	public <R> CompletableProgressFuture<R> thenApply(BiFunction<? super T, ? super Observable<Double>, ? extends R> action) {
+		return new CompletableProgressFuture<>(delegate.thenApplyAsync(v -> action.apply(v, progress)), progress);
+	}
+	
 	@Override
 	public boolean cancel(boolean mayInterruptIfRunning) {
 		return delegate.cancel(mayInterruptIfRunning);
