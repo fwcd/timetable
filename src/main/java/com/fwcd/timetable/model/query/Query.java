@@ -6,5 +6,5 @@ import com.fwcd.fructose.Result;
 import com.fwcd.timetable.model.utils.ProgressFuture;
 
 public interface Query {
-	ProgressFuture<Result<QueryResult, IOException>> performAsync();
+	ProgressFuture<? extends Result<? extends QueryResult, ? extends IOException>> performAsync();
 }
