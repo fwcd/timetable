@@ -54,6 +54,14 @@ public class CompletableProgressFuture<T> implements ProgressFuture<T> {
 		return new CompletableProgressFuture<>(delegate.thenApplyAsync(v -> action.apply(v, progress)), progress);
 	}
 	
+	public <R> CompletableProgressFuture<R> handle(BiFunction<? super T, Throwable, ? extends R> handler) {
+		return new CompletableProgressFuture<>(delegate.handle(handler), progress);
+	}
+	
+	public CompletableProgressFuture<T> whenComplete(BiConsumer<? super T, Throwable> action) {
+		return new CompletableProgressFuture<>(delegate.whenComplete(action), progress);
+	}
+	
 	@Override
 	public boolean cancel(boolean mayInterruptIfRunning) {
 		return delegate.cancel(mayInterruptIfRunning);
