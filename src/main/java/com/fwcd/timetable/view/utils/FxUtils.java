@@ -5,11 +5,14 @@ import java.util.List;
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
 import com.fwcd.fructose.draw.DrawColor;
+import com.fwcd.fructose.io.DelegatePrintStream;
 import com.fwcd.fructose.structs.ReadOnlyObservableList;
 
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -118,5 +121,19 @@ public final class FxUtils {
 			(double) drawColor.getB() / 255D,
 			(double) drawColor.getAlpha() / 255D
 		);
+	}
+	
+	public static void showExceptionAlert(String title, Throwable e) {
+		Alert alert = new Alert(AlertType.ERROR);
+		StringBuilder msg = new StringBuilder(e.getMessage() + System.lineSeparator());
+		
+		e.printStackTrace(new DelegatePrintStream(msg::append));
+		msg.delete(600, msg.length());
+		
+		alert.setTitle(title);
+		alert.setHeaderText(e.getClass().getName());
+		alert.setContentText(msg.toString());
+		
+		alert.showAndWait();
 	}
 }
