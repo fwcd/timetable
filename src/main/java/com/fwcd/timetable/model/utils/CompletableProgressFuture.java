@@ -5,36 +5,43 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.fwcd.fructose.Observable;
 
 public class CompletableProgressFuture<T> implements ProgressFuture<T> {
 	private final CompletableFuture<T> delegate;
-	private final Observable<Double> progress = new Observable<>(0D);
+	private final Observable<Double> progress;
 	
-	private CompletableProgressFuture(CompletableFuture<T> delegate) {
+	private CompletableProgressFuture(CompletableFuture<T> delegate, Observable<Double> progress) {
 		this.delegate = delegate;
+		this.progress = progress;
 	}
 	
 	public static <R> CompletableProgressFuture<R> completedFuture(R value) {
-		return new CompletableProgressFuture<>(CompletableFuture.completedFuture(value));
+		CompletableProgressFuture<R> result = new CompletableProgressFuture<>(CompletableFuture.completedFuture(value), new Observable<>(1.0));
+		return result;
 	}
 	
-	public static CompletableProgressFuture<Void> runAsync(Runnable runnable) {
-		return new CompletableProgressFuture<>(CompletableFuture.runAsync(runnable));
+	public static CompletableProgressFuture<Void> runAsync(Consumer<Observable<Double>> task) {
+		Observable<Double> progress = new Observable<>(0.0);
+		return new CompletableProgressFuture<>(CompletableFuture.runAsync(() -> task.accept(progress)), progress);
 	}
 	
-	public static CompletableProgressFuture<Void> runAsync(Runnable runnable, Executor executor) {
-		return new CompletableProgressFuture<>(CompletableFuture.runAsync(runnable, executor));
+	public static CompletableProgressFuture<Void> runAsync(Consumer<Observable<Double>> task, Executor executor) {
+		Observable<Double> progress = new Observable<>(0.0);
+		return new CompletableProgressFuture<>(CompletableFuture.runAsync(() -> task.accept(progress), executor), progress);
 	}
 	
-	public static <R> CompletableProgressFuture<R> supplyAsync(Supplier<R> supplier) {
-		return new CompletableProgressFuture<>(CompletableFuture.supplyAsync(supplier));
+	public static <R> CompletableProgressFuture<R> supplyAsync(Function<Observable<Double>, R> task) {
+		Observable<Double> progress = new Observable<>(0.0);
+		return new CompletableProgressFuture<>(CompletableFuture.supplyAsync(() -> task.apply(progress)), progress);
 	}
 
-	public static <R> CompletableProgressFuture<R> supplyAsync(Supplier<R> supplier, Executor executor) {
-		return new CompletableProgressFuture<>(CompletableFuture.supplyAsync(supplier, executor));
+	public static <R> CompletableProgressFuture<R> supplyAsync(Function<Observable<Double>, R> task, Executor executor) {
+		Observable<Double> progress = new Observable<>(0.0);
+		return new CompletableProgressFuture<>(CompletableFuture.supplyAsync(() -> task.apply(progress), executor), progress);
 	}
 
 	@Override
