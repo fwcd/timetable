@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.stream.Stream;
 
+import com.fwcd.fructose.Observable;
+import com.fwcd.fructose.Option;
+
 public class HttpConnection implements AutoCloseable {
 	private final HttpURLConnection urlConnection;
 	private final InputStream inputStream;
@@ -23,13 +26,21 @@ public class HttpConnection implements AutoCloseable {
 	
 	public InputStream getInputStream() { return inputStream; }
 	
-	public String readString() {
+	public String readString() { return readString(Option.empty()); }
+	
+	public String readString(Observable<Double> progress) { return readString(Option.of(progress)); }
+	
+	private String readString(Option<Observable<Double>> progress) {
 		StringBuilder str = new StringBuilder();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		long contentLength = urlConnection.getContentLengthLong();
 		
 		try {
 			String line = reader.readLine();
 			while (line != null) {
+				if (progress.isPresent()) {
+					progress.unwrap().set((double) str.length() / (double) contentLength);
+				}
 				str.append(line);
 				line = reader.readLine();
 			}
