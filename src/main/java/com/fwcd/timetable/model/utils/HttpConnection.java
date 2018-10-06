@@ -14,67 +14,51 @@ public class HttpConnection implements AutoCloseable {
 	private final HttpURLConnection urlConnection;
 	private final InputStream inputStream;
 	
-	public HttpConnection(HttpURLConnection urlConnection) {
+	public HttpConnection(HttpURLConnection urlConnection) throws IOException {
 		this.urlConnection = urlConnection;
-		try {
-			urlConnection.connect();
-			inputStream = urlConnection.getInputStream();
-		} catch (IOException e) {
-			throw new HttpException(e);
-		}
+		urlConnection.connect();
+		inputStream = urlConnection.getInputStream();
 	}
 	
 	public InputStream getInputStream() { return inputStream; }
 	
-	public String readString() { return readString(Option.empty()); }
+	public String readString() throws IOException { return readString(Option.empty()); }
 	
-	public String readString(Observable<Double> progress) { return readString(Option.of(progress)); }
+	public String readString(Observable<Double> progress) throws IOException { return readString(Option.of(progress)); }
 	
-	private String readString(Option<Observable<Double>> progress) {
+	private String readString(Option<Observable<Double>> progress) throws IOException {
 		StringBuilder str = new StringBuilder();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		long contentLength = urlConnection.getContentLengthLong();
 		
-		try {
-			String line = reader.readLine();
-			while (line != null) {
-				if (progress.isPresent()) {
-					progress.unwrap().set((double) str.length() / (double) contentLength);
-				}
-				str.append(line);
-				line = reader.readLine();
+		String line = reader.readLine();
+		while (line != null) {
+			if (progress.isPresent()) {
+				progress.unwrap().set((double) str.length() / (double) contentLength);
 			}
-		} catch (IOException e) {
-			throw new HttpException(e);
+			str.append(line);
+			line = reader.readLine();
 		}
 		
 		return str.toString();
 	}
 	
-	public Stream<String> readLines() {
+	public Stream<String> readLines() throws IOException {
 		Stream.Builder<String> streamBuilder = Stream.builder();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		
-		try {
-			String line = reader.readLine();
-			while (line != null) {
-				streamBuilder.accept(line);
-				line = reader.readLine();
-			}
-		} catch (IOException e) {
-			throw new HttpException(e);
+		String line = reader.readLine();
+		while (line != null) {
+			streamBuilder.accept(line);
+			line = reader.readLine();
 		}
 		
 		return streamBuilder.build();
 	}
 	
 	@Override
-	public void close() {
-		try {
-			inputStream.close();
-		} catch (IOException e) {
-			throw new HttpException(e);
-		}
+	public void close() throws IOException {
+		inputStream.close();
 		urlConnection.disconnect();
 	}
 }
