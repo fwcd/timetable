@@ -11,15 +11,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.TextAlignment;
 
 public class CalendarManagerListCell extends ListCell<CalendarModel> {
 	private static final int ICON_RADIUS = 5;
-	private final Pane iconNode;
-	private final Pane textNode;
+	private final StackPane iconNode;
+	private final StackPane textNode;
 	
 	private final Label label;
 	private final TextField textField;
@@ -36,10 +36,14 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 			}
 		});
 		
-		iconNode = new Pane();
-		textNode = new Pane();
+		iconNode = new StackPane();
+		iconNode.setAlignment(Pos.CENTER_LEFT);
+		
+		textNode = new StackPane();
+		textNode.setAlignment(Pos.CENTER_LEFT);
 		
 		HBox node = new HBox(iconNode, textNode);
+		node.setSpacing(5);
 		node.setAlignment(Pos.CENTER_LEFT);
 		
 		setGraphic(node);
@@ -95,7 +99,7 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 	}
 	
 	private void setIconColor(Color color) {
-		iconNode.getChildren().setAll(new Circle(ICON_RADIUS, color));
+		iconNode.getChildren().setAll(new Circle(ICON_RADIUS, ICON_RADIUS, ICON_RADIUS, color));
 	}
 	
 	private void removeIcon() {
