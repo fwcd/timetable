@@ -1,8 +1,12 @@
 .vscode
 .idea
-.settings
 .gradle
+.classpath
+.project
 bin
 build
 target
 .DS_Store
+
+.settings/*
+!.settings/org.eclipse.jdt.core.prefs
