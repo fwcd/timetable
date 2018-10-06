@@ -6,6 +6,7 @@ import java.util.Queue;
 import com.fwcd.fructose.function.Subscription;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
@@ -24,6 +25,7 @@ public class CalendarEntryListCell extends ListCell<CalendarEntryModel> {
 		
 		node = new VBox(titleLabel);
 		setGraphic(node);
+		setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 	}
 	
 	@Override

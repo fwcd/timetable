@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
+import com.fwcd.fructose.draw.DrawColor;
 import com.fwcd.fructose.structs.ReadOnlyObservableList;
 
 import javafx.beans.property.Property;
@@ -14,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 public final class FxUtils {
 	private FxUtils() {}
@@ -107,5 +109,14 @@ public final class FxUtils {
 		ComboBox<T> box = new ComboBox<>();
 		values.listenAndFire(box.getItems()::setAll);
 		return box;
+	}
+
+	public static Color toFxColor(DrawColor drawColor) {
+		return new Color(
+			(double) drawColor.getR() / 255D,
+			(double) drawColor.getG() / 255D,
+			(double) drawColor.getB() / 255D,
+			(double) drawColor.getAlpha() / 255D
+		);
 	}
 }
