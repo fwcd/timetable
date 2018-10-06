@@ -62,6 +62,11 @@ public class CompletableProgressFuture<T> implements ProgressFuture<T> {
 		return new CompletableProgressFuture<>(delegate.whenComplete(action), progress);
 	}
 	
+	public CompletableProgressFuture<T> useProgress(Consumer<? super Observable<Double>> consumer) {
+		consumer.accept(progress);
+		return this;
+	}
+	
 	@Override
 	public boolean cancel(boolean mayInterruptIfRunning) {
 		return delegate.cancel(mayInterruptIfRunning);
