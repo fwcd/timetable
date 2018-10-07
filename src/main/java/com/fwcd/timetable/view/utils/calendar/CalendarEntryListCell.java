@@ -1,4 +1,4 @@
-package com.fwcd.timetable.view.sidebar.utils;
+package com.fwcd.timetable.view.utils.calendar;
 
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 

@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
+import com.fwcd.timetable.view.calendar.listview.CalendarListView;
 import com.fwcd.timetable.view.calendar.monthview.MonthView;
 import com.fwcd.timetable.view.calendar.weekview.WeekDayTimeLayouter;
 import com.fwcd.timetable.view.calendar.weekview.WeekView;
@@ -19,10 +20,12 @@ public class CalendarsView implements FxView {
 	private final TabPane node;
 	private final WeekView weekView;
 	private final MonthView monthView;
+	private final CalendarListView listView;
 	
 	public CalendarsView(TimeTableAppContext context, ObservableList<CalendarModel> model) {
 		weekView = new WeekView(model);
 		monthView = new MonthView(model);
+		listView = new CalendarListView(model);
 		
 		ScrollPane weekScrollView = new ScrollPane(weekView.getNode());
 		FxUtils.setVerticalScrollSpeed(weekScrollView, 2);
@@ -37,7 +40,8 @@ public class CalendarsView implements FxView {
 		
 		node = new TabPane(
 			FxUtils.tabOf(context.localized("week"), weekScrollView),
-			FxUtils.tabOf(context.localized("month"), monthView.getNode())
+			FxUtils.tabOf(context.localized("month"), monthView.getNode()),
+			FxUtils.tabOf(context.localized("list"), listView.getNode())
 		);
 	}
 	

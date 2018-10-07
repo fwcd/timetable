@@ -1,4 +1,4 @@
-package com.fwcd.timetable.view.sidebar.utils;
+package com.fwcd.timetable.view.utils.calendar;
 
 import java.util.ArrayDeque;
 import java.util.Queue;

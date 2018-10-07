@@ -1,4 +1,4 @@
-package com.fwcd.timetable.view.sidebar.utils;
+package com.fwcd.timetable.view.utils.calendar;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

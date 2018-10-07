@@ -5,8 +5,8 @@ import java.util.List;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.task.TaskListModel;
 import com.fwcd.timetable.model.calendar.task.TaskModel;
-import com.fwcd.timetable.view.sidebar.utils.CalendarEntryListView;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.view.utils.calendar.CalendarEntryListView;
 
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
