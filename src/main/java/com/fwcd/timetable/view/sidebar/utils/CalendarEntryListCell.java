@@ -18,6 +18,11 @@ public class CalendarEntryListCell extends ListCell<CalendarEntryModel> {
 	@Override
 	protected void updateItem(CalendarEntryModel item, boolean empty) {
 		super.updateItem(item, empty);
-		cell.updateItem(item);
+		if ((item == null) || empty) {
+			setGraphic(null);
+		} else {
+			cell.updateItem(item);
+			setGraphic(cell.getNode());
+		}
 	}
 }

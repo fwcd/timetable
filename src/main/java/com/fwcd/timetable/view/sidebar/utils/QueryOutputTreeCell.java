@@ -18,7 +18,10 @@ public class QueryOutputTreeCell extends TreeCell<QueryOutputNode> {
 	protected void updateItem(QueryOutputNode item, boolean empty) {
 		super.updateItem(item, empty);
 		
-		if (item != null) {
+		if ((item == null) || empty) {
+			setText("");
+			setGraphic(null);
+		} else {
 			Option<AppointmentModel> appointment = item.asAppointment();
 			if (appointment.isPresent()) {
 				cell.updateItem(appointment.unwrap());
