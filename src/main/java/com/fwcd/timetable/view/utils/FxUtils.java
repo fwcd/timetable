@@ -119,9 +119,20 @@ public final class FxUtils {
 		return tabOf(name, content.getNode());
 	}
 	
+	public static Tab tabOf(String name, FxView content) {
+		return tabOf(name, content.getNode());
+	}
+	
 	public static Tab tabOf(ReadOnlyObservable<String> name, Node content) {
 		Tab tab = new Tab();
 		name.listenAndFire(tab::setText);
+		tab.setClosable(false);
+		tab.setContent(content);
+		return tab;
+	}
+	
+	public static Tab tabOf(String name, Node content) {
+		Tab tab = new Tab(name);
 		tab.setClosable(false);
 		tab.setContent(content);
 		return tab;
