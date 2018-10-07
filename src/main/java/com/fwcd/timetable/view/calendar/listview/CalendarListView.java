@@ -23,6 +23,7 @@ public class CalendarListView implements FxView {
 		calendars.listenAndFire(it -> updateListenersAndEntries(calendars));
 		
 		CalendarEntryListView entriesView = new CalendarEntryListView();
+		entries.listenAndFire(entriesView.getNode().getItems()::setAll);
 		
 		node = entriesView.getNode();
 	}
