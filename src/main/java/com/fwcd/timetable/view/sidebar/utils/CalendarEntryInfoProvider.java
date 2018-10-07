@@ -11,6 +11,7 @@ import com.fwcd.fructose.ReadOnlyObservable;
 import com.fwcd.fructose.function.Subscription;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
+import com.fwcd.timetable.model.calendar.Location;
 
 public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 	private static final DateTimeFormatter DT_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
@@ -67,9 +68,10 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 				.append(TIME_FORMATTER.format(appointment.getEndTime()));
 		}
 		
-		appointment.getLocation().get().ifPresent(location -> {
-			str.append(" - ").append(location.getLabel());
-		});
+		appointment.getLocation().get()
+			.map(Location::getLabel)
+			.filter(it -> !it.isEmpty())
+			.ifPresent(location -> str.append(" - ").append(location));
 		
 		return str.toString();
 	}
