@@ -1,6 +1,7 @@
-package com.fwcd.timetable.view.utils;
+package com.fwcd.timetable.view.sidebar.utils;
 
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
+import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.scene.control.ListView;
 
