@@ -2,6 +2,7 @@ package com.fwcd.timetable.view.calendar;
 
 import java.time.LocalDate;
 
+import com.fwcd.fructose.Option;
 import com.fwcd.fructose.structs.ArrayBiList;
 import com.fwcd.fructose.structs.BiList;
 import com.fwcd.fructose.structs.ObservableList;
@@ -21,24 +22,32 @@ public class WeekDayAppointmentsView implements FxView {
 	private final Pane node;
 	private final ObservableList<CalendarModel> calendars;
 	private final BiList<LocalTimeInterval, HBox> overlapBoxes = new ArrayBiList<>();
+	private Option<LocalDate> currentDate = Option.empty();
 	
 	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, ObservableList<CalendarModel> calendars) {
 		this.calendars = calendars;
 		this.layouter = layouter;
 		node = new StackPane();
+		
+		calendars.listen(it -> updateView());
 	}
 	
 	public void setDate(LocalDate date) {
+		currentDate = Option.empty();
+		updateView();
+	}
+
+	private void updateView() {
 		clear();
-		calendars.stream()
+		currentDate.ifPresent(date -> calendars.stream()
 			.flatMap(it -> it.getAppointments().stream())
 			.filter(it -> it.occursOn(date))
-			.forEach(it -> addEvent(it, date));
+			.forEach(it -> addEvent(it, date)));
 	}
-	
+
 	private void addEvent(AppointmentModel event, LocalDate viewedDate) {
 		Pane child = new AppointmentView(layouter, event).getNode();
-		
+
 		event.getDateTimeInterval().listenAndFire(t -> {
 			LocalTimeInterval interval = event.getTimeIntervalOn(viewedDate);
 			AnchorPane.setTopAnchor(child, layouter.toPixelY(interval.getStart()));
