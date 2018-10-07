@@ -80,7 +80,7 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	@Override
 	public Observable<String> getDescription() { return description; }
 	
-	public boolean occursOn(LocalDate date) { return ignoreDate.get() ? false : dateTimeInterval.get().contains(date.atStartOfDay()) || repeatsOn(date); }
+	public boolean occursOn(LocalDate date) { return ignoreDate.get() ? false : dateTimeInterval.get().toLocalDateInterval().contains(date) || repeatsOn(date); }
 
 	public boolean repeatsOn(LocalDate date) { return recurrence.getParsed().get().filter(it -> it.matches(date)).isPresent(); }
 	
