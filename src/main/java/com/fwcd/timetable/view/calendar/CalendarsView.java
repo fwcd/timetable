@@ -4,6 +4,8 @@ import java.time.LocalTime;
 
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.timetable.view.calendar.weekview.WeekDayTimeLayouter;
+import com.fwcd.timetable.view.calendar.weekview.WeekView;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 

@@ -1,4 +1,4 @@
-package com.fwcd.timetable.view.calendar;
+package com.fwcd.timetable.view.calendar.weekview;
 
 import java.time.LocalDate;
 
@@ -9,6 +9,7 @@ import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.timetable.view.calendar.AppointmentView;
 import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.scene.Node;

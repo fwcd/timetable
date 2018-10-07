@@ -1,4 +1,4 @@
-package com.fwcd.timetable.view.calendar;
+package com.fwcd.timetable.view.calendar.weekview;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;

@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CommonEntryType;
+import com.fwcd.timetable.view.calendar.weekview.WeekDayTimeLayouter;
 import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.geometry.Insets;
