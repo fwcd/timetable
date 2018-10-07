@@ -12,6 +12,7 @@ public class QueryOutputTreeView implements FxView {
 	
 	public QueryOutputTreeView() {
 		node = new TreeView<>();
+		node.setShowRoot(false);
 		node.setCellFactory(tree -> new QueryOutputTreeCell());
 	}
 	
