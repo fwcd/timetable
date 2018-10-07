@@ -1,7 +1,9 @@
 package com.fwcd.timetable.model.query;
 
-import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.fructose.Option;
 
 public interface QueryResult {
-	CalendarModel getCalendar();
+	Option<String> getRaw();
+	
+	QueryOutputNode getOutputTree();
 }
