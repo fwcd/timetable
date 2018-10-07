@@ -8,5 +8,7 @@
 	"addtaskbutton": "Zur Liste hinzufügen",
 	"calendar": "Kalender",
 	"calendars": "Kalender",
-	"newcalendar": "Neuer Kalender"
+	"newcalendar": "Neuer Kalender",
+	"week": "Woche",
+	"month": "Monat"
 }

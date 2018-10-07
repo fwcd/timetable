@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
@@ -112,6 +113,18 @@ public final class FxUtils {
 		ComboBox<T> box = new ComboBox<>();
 		values.listenAndFire(box.getItems()::setAll);
 		return box;
+	}
+	
+	public static Tab tabOf(ReadOnlyObservable<String> name, FxView content) {
+		return tabOf(name, content.getNode());
+	}
+	
+	public static Tab tabOf(ReadOnlyObservable<String> name, Node content) {
+		Tab tab = new Tab();
+		name.listenAndFire(tab::setText);
+		tab.setClosable(false);
+		tab.setContent(content);
+		return tab;
 	}
 
 	public static Color toFxColor(DrawColor drawColor) {

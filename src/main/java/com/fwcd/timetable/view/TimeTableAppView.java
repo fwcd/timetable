@@ -18,7 +18,7 @@ public class TimeTableAppView implements FxParentView {
 	public TimeTableAppView() {
 		node = new BorderPane();
 		
-		CalendarsView calendar = new CalendarsView(model.getCalendars());
+		CalendarsView calendar = new CalendarsView(context, model.getCalendars());
 		SideBarView sideBar = new SideBarView(context, model);
 		SplitPane split = new SplitPane(
 			calendar.getNode(),

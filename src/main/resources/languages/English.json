@@ -8,5 +8,7 @@
 	"addtaskbutton": "Add to List",
 	"calendar": "Calendar",
 	"calendars": "Calendars",
-	"newcalendar": "New Calendar"
+	"newcalendar": "New Calendar",
+	"week": "Week",
+	"month": "Month"
 }
