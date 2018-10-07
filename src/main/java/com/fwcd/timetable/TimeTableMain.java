@@ -14,7 +14,7 @@ public class TimeTableMain extends Application {
 	@Override
 	public void start(Stage stage) {
 		FxParentView appView = new TimeTableAppView();
-		Scene scene = new Scene(appView.getNode(), 640, 480);
+		Scene scene = new Scene(appView.getNode(), 800, 500);
 		
 		stage.setTitle(TITLE + " " + VERSION);
 		stage.setScene(scene);
