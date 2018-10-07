@@ -1,8 +1,6 @@
 .vscode
 .idea
 .gradle
-.classpath
-.project
 bin
 build
 target
