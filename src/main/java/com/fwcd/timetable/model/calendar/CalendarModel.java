@@ -6,7 +6,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
 import com.fwcd.fructose.Observable;
-import com.fwcd.fructose.StreamUtils;
 import com.fwcd.fructose.draw.DrawColor;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.task.TaskCrateModel;
@@ -30,7 +29,7 @@ public class CalendarModel {
 	public Observable<String> getName() { return name; }
 	
 	public Stream<CalendarEntryModel> streamEntries() {
-		return StreamUtils.merge(
+		return Stream.concat(
 			appointments.stream(),
 			taskCrate.getLists().stream().flatMap(it -> it.getTasks().stream())
 		);
