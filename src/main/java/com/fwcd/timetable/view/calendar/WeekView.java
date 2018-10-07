@@ -45,6 +45,7 @@ public class WeekView implements FxView {
 			
 			ColumnConstraints colConstraints = new ColumnConstraints();
 			colConstraints.setMinWidth(MIN_DAY_WIDTH);
+			colConstraints.setPrefWidth(MIN_DAY_WIDTH);
 			colConstraints.setHgrow(Priority.ALWAYS);
 			node.getColumnConstraints().add(colConstraints);
 			
