@@ -13,7 +13,7 @@ targetCompatibility = 1.8
 mainClassName = 'com.fwcd.timetable.TimeTableMain'
 
 dependencies {
-    implementation 'com.github.fwcd:Fructose:be38c55d1acea967de3c4ee4008452028eefd13a'
+    implementation 'com.github.fwcd:Fructose:4855a29a5c8ef10635e644550d102743ed4fe5fa'
     implementation 'com.google.code.gson:gson:2.6.2'
     testImplementation 'junit:junit:4.12'
 }
