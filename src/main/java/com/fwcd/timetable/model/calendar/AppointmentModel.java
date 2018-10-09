@@ -80,9 +80,9 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	@Override
 	public Observable<String> getDescription() { return description; }
 	
-	public boolean occursOn(LocalDate date) { return ignoreDate.get() ? false : dateTimeInterval.get().toLocalDateInterval().contains(date) || repeatsOn(date); }
+	public boolean occursOn(LocalDate date) { return ignoreDate.get() ? false : repeatsOn(date).orElseGet(() -> dateTimeInterval.get().toLocalDateInterval().contains(date)); }
 
-	public boolean repeatsOn(LocalDate date) { return recurrence.getParsed().get().filter(it -> it.matches(date)).isPresent(); }
+	private Option<Boolean> repeatsOn(LocalDate date) { return recurrence.getParsed().get().map(it -> it.matches(date)); }
 	
 	@Override
 	public int compareTo(AppointmentModel o) { return getStart().compareTo(o.getStart()); }
@@ -99,7 +99,7 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	
 	public LocalTimeInterval getTimeIntervalOn(LocalDate date) {
 		if (occursOn(date)) {
-			boolean repeats = repeatsOn(date);
+			boolean repeats = repeatsOn(date).orElse(false);
 			boolean begins = beginsOn(date);
 			boolean ends = endsOn(date);
 			boolean allDay = ignoreTime.get();
