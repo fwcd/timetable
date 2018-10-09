@@ -11,11 +11,11 @@ import javafx.scene.layout.Pane;
 public class WeekNavigatorView implements FxView {
 	private final Pane node;
 	
-	public WeekNavigatorView(TimeTableAppContext context, WeekContentView contents) {
+	public WeekNavigatorView(TimeTableAppContext context, WeekContentView content) {
 		node = new HBox(
-			FxUtils.buttonOf("<", () -> {}),
-			FxUtils.buttonOf(context.localized("today"), () -> {}),
-			FxUtils.buttonOf(">", () -> {})
+			FxUtils.buttonOf("<", content::showPreviousWeek),
+			FxUtils.buttonOf(context.localized("today"), content::showCurrentWeek),
+			FxUtils.buttonOf(">", content::showNextWeek)
 		);
 	}
 	

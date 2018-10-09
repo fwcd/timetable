@@ -3,9 +3,12 @@ package com.fwcd.timetable.view.calendar.weekview;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
 import com.fwcd.timetable.model.calendar.CalendarModel;
@@ -22,25 +25,36 @@ public class WeekContentView implements FxView {
 	private static final int MIN_DAY_WIDTH = 40;
 	private final GridPane node;
 	private final List<WeekDayView> days = new ArrayList<>();
+	private final Observable<LocalDate> weekStart;
 	
-	public WeekContentView(WeekDayTimeLayouter layouter, ObservableList<CalendarModel> calendars) {
+	private final WeekDayTimeLayouter timeLayouter;
+	private final ObservableList<CalendarModel> calendars;
+	
+	public WeekContentView(WeekDayTimeLayouter timeLayouter, ObservableList<CalendarModel> calendars) {
+		this.timeLayouter = timeLayouter;
+		this.calendars = calendars;
+		
 		node = new GridPane();
 		node.setMinWidth(Region.USE_PREF_SIZE);
 		
+		weekStart = new Observable<>(currentWeekStart());
+		weekStart.listen(this::updateWeekStart);
+		setupView();
+	}
+	
+	private void setupView() {
 		RowConstraints rowConstraints = new RowConstraints();
 		rowConstraints.setVgrow(Priority.ALWAYS);
 		node.getRowConstraints().add(rowConstraints);
 		
 		ColumnConstraints timeAxisColConstraints = new ColumnConstraints();
 		timeAxisColConstraints.setHgrow(Priority.NEVER);
-		node.addColumn(0, new WeekTimeAxisView(layouter).getNode());
+		node.addColumn(0, new WeekTimeAxisView(timeLayouter).getNode());
 		node.getColumnConstraints().add(timeAxisColConstraints);
 		
-		LocalDate weekStart = LocalDate.now().with(ChronoField.DAY_OF_WEEK, DayOfWeek.MONDAY.getValue());
-		
 		for (int i = 0; i < CalendarConstants.DAYS_OF_WEEK; i++) {
-			WeekDayView day = new WeekDayView(layouter, calendars, i);
-			day.setWeekStart(weekStart);
+			WeekDayView day = new WeekDayView(timeLayouter, calendars, i);
+			day.setWeekStart(weekStart.get());
 			
 			ColumnConstraints colConstraints = new ColumnConstraints();
 			colConstraints.setMinWidth(MIN_DAY_WIDTH);
@@ -52,6 +66,24 @@ public class WeekContentView implements FxView {
 			node.addColumn(i + 1, day.getNode());
 		}
 	}
+	
+	private void updateWeekStart(LocalDate start) {
+		for (WeekDayView day : days) {
+			day.setWeekStart(start);
+		}
+	}
+	
+	public Observable<LocalDate> getWeekStart() { return weekStart; }
+	
+	public void adjustWeekStart(TemporalAdjuster adjuster) { weekStart.set(weekStart.get().with(adjuster)); }
+	
+	public void showNextWeek() { adjustWeekStart(TemporalAdjusters.next(DayOfWeek.MONDAY)); }
+	
+	public void showCurrentWeek() { weekStart.set(currentWeekStart()); }
+	
+	public void showPreviousWeek() { adjustWeekStart(TemporalAdjusters.previous(DayOfWeek.MONDAY)); }
+
+	private LocalDate currentWeekStart() { return LocalDate.now().with(ChronoField.DAY_OF_WEEK, DayOfWeek.MONDAY.getValue()); }
 	
 	@Override
 	public Node getNode() { return node; }
