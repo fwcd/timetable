@@ -90,6 +90,7 @@ public class WeekDayAppointmentsView implements FxView {
 	
 	private void clear() {
 		node.getChildren().clear();
+		overlapBoxes.clear();
 	}
 	
 	@Override
