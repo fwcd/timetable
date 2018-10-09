@@ -5,13 +5,13 @@ import java.util.stream.Collectors;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
-import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.view.utils.FxNavigableView;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
 import com.fwcd.timetable.view.utils.calendar.CalendarEntryListView;
 
 import javafx.scene.Node;
 
-public class CalendarListView implements FxView {
+public class CalendarListView implements FxNavigableView {
 	private final Node node;
 	private final ObservableList<CalendarEntryModel> entries;
 	private final SubscriptionStack calendarSubscriptions = new SubscriptionStack();
@@ -37,5 +37,5 @@ public class CalendarListView implements FxView {
 	}
 	
 	@Override
-	public Node getNode() { return node; }
+	public Node getContent() { return node; }
 }

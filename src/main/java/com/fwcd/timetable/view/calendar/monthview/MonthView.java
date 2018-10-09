@@ -11,13 +11,13 @@ import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.fructose.structs.Stack;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
 import com.fwcd.timetable.model.calendar.CalendarModel;
-import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.view.utils.FxNavigableView;
 
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
-public class MonthView implements FxView {
+public class MonthView implements FxNavigableView {
 	private final GridPane node;
 	
 	private final ObservableList<CalendarModel> calendars;
@@ -63,5 +63,5 @@ public class MonthView implements FxView {
 	public Observable<YearMonth> getMonth() { return month; }
 	
 	@Override
-	public Node getNode() { return node; }
+	public Node getContent() { return node; }
 }

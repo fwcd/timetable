@@ -1,48 +1,32 @@
 package com.fwcd.timetable.view.calendar;
 
-import java.time.LocalTime;
-
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.calendar.listview.CalendarListView;
 import com.fwcd.timetable.view.calendar.monthview.MonthView;
-import com.fwcd.timetable.view.calendar.weekview.WeekDayTimeLayouter;
 import com.fwcd.timetable.view.calendar.weekview.WeekView;
-import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.view.utils.NavigableTabPane;
 
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TabPane;
 
 public class CalendarsView implements FxView {
-	private final TabPane node;
+	private final Node node;
 	private final WeekView weekView;
 	private final MonthView monthView;
 	private final CalendarListView listView;
 	
 	public CalendarsView(TimeTableAppContext context, ObservableList<CalendarModel> model) {
-		weekView = new WeekView(model);
+		weekView = new WeekView(context, model);
 		monthView = new MonthView(model);
 		listView = new CalendarListView(model);
 		
-		ScrollPane weekScrollView = new ScrollPane(weekView.getNode());
-		FxUtils.setVerticalScrollSpeed(weekScrollView, 2);
-		weekScrollView.setFitToWidth(true);
-		
-		// Automatically scroll to the current time indicator
-		WeekDayTimeLayouter layouter = weekView.getDayLayouter();
-		double vmax = weekScrollView.getVmax();
-		double vmin = weekScrollView.getVmin();
-		double normalizedValue = layouter.toPixelY(LocalTime.now()) / layouter.toPixelY(LocalTime.MAX);
-		weekScrollView.setVvalue((normalizedValue * (vmax - vmin)) + vmin);
-		
-		node = new TabPane(
-			FxUtils.tabOf(context.localized("week"), weekScrollView),
-			FxUtils.tabOf(context.localized("month"), monthView.getNode()),
-			FxUtils.tabOf(context.localized("list"), listView.getNode())
-		);
+		NavigableTabPane tabPane = new NavigableTabPane();
+		tabPane.addTab(context.localized("week"), weekView);
+		tabPane.addTab(context.localized("month"), monthView);
+		tabPane.addTab(context.localized("list"), listView);
+		node = tabPane.getNode();
 	}
 	
 	@Override
