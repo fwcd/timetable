@@ -4,7 +4,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.TemporalAdjusters;
-import java.time.temporal.WeekFields;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.structs.ArrayStack;
@@ -16,6 +15,7 @@ import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
 public class MonthView implements FxView {
 	private final GridPane node;
@@ -28,9 +28,9 @@ public class MonthView implements FxView {
 	public MonthView(ObservableList<CalendarModel> calendars) {
 		this.calendars = calendars;
 		
-		month = new Observable<>(YearMonth.now());
 		node = new GridPane();
 		
+		month = new Observable<>(YearMonth.now());
 		month.listenAndFire(this::updateView);
 	}
 	
@@ -50,6 +50,8 @@ public class MonthView implements FxView {
 			days.push(day);
 			
 			Node dayNode = day.getNode();
+			GridPane.setHgrow(dayNode, Priority.ALWAYS);
+			GridPane.setVgrow(dayNode, Priority.ALWAYS);
 			GridPane.setRowIndex(dayNode, i / CalendarConstants.DAYS_OF_WEEK);
 			GridPane.setColumnIndex(dayNode, i % CalendarConstants.DAYS_OF_WEEK);
 			
