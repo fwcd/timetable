@@ -35,7 +35,7 @@ public class WeekDayView implements FxView {
 	private final WeekDayTimeLayouter layouter;
 	
 	private final int dayOffset;
-	private Observable<Option<LocalDate>> currentDate = new Observable<>(Option.empty());
+	private final Observable<Option<LocalDate>> date = new Observable<>(Option.empty());
 	
 	public WeekDayView(WeekDayTimeLayouter layouter, ObservableList<CalendarModel> calendars, int dayOffset) {
 		this.dayOffset = dayOffset;
@@ -45,6 +45,7 @@ public class WeekDayView implements FxView {
 		node.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0, 1, 0, 1))));
 		
 		events = new WeekDayAppointmentsView(layouter, calendars);
+		date.listenAndFire(it -> it.ifPresent(events::setDate));
 		
 		// Add layered nodes
 		
@@ -80,8 +81,8 @@ public class WeekDayView implements FxView {
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
 		
-		currentDate.listenAndFire(d -> {
-			if (currentDate.get().filter(LocalDate.now()::equals).isPresent()) {
+		date.listenAndFire(d -> {
+			if (date.get().filter(LocalDate.now()::equals).isPresent()) {
 				anchor.getChildren().add(indicatorNode);
 			} else {
 				anchor.getChildren().clear();
@@ -100,13 +101,10 @@ public class WeekDayView implements FxView {
 	}
 	
 	public void setWeekStart(LocalDate weekStart) {
-		setDate(weekStart.plusDays(dayOffset));
+		date.set(Option.of(weekStart.plusDays(dayOffset)));
 	}
 	
-	private void setDate(LocalDate date) {
-		currentDate.set(Option.of(date));
-		events.setDate(date);
-	}
+	public Observable<Option<LocalDate>> getDate() { return date; }
 
 	@Override
 	public Pane getNode() {
