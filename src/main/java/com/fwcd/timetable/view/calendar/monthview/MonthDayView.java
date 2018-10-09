@@ -21,11 +21,13 @@ public class MonthDayView implements FxView, AutoCloseable {
 	private final Label indexLabel;
 	private final VBox content;
 	
+	private final LocalDate date;
 	private final ObservableList<CalendarModel> calendars;
 	private final SubscriptionStack calendarSubscriptions = new SubscriptionStack();
 	
 	public MonthDayView(ObservableList<CalendarModel> calendars, LocalDate date) {
 		this.calendars = calendars;
+		this.date = date;
 		
 		node = new BorderPane();
 		
@@ -49,6 +51,7 @@ public class MonthDayView implements FxView, AutoCloseable {
 	private void updateView() {
 		content.getChildren().setAll(calendars.stream()
 			.flatMap(it -> it.getAppointments().stream())
+			.filter(it -> it.occursOn(date))
 			.map(it -> new Label(it.getName().get()))
 			.collect(Collectors.toList())
 		);
