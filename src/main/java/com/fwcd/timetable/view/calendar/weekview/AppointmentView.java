@@ -38,6 +38,7 @@ public class AppointmentView implements FxView {
 	}
 	
 	private Color colorOf(AppointmentModel model) {
+		// TODO: Use calendar color as appointment color
 		switch (model.getType()) {
 			case CommonEntryType.APPOINTMENT: return Color.LIGHTSALMON;
 			case CommonEntryType.TIME_TABLE_ENTRY: return Color.AQUA;

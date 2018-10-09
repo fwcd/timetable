@@ -1,11 +1,8 @@
 package com.fwcd.timetable.view.utils.calendar;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
-import com.fwcd.fructose.function.Subscription;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.view.utils.SubscriptionStack;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -17,7 +14,7 @@ public class CalendarEntryCell implements FxView {
 	private final Label titleLabel = new Label();
 	private final Label subtitleLabel = new Label();
 	private final VBox node;
-	private final Queue<Subscription> itemSubscriptions = new ArrayDeque<>();
+	private final SubscriptionStack itemSubscriptions = new SubscriptionStack();
 	
 	public CalendarEntryCell() {
 		titleLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
@@ -27,16 +24,14 @@ public class CalendarEntryCell implements FxView {
 	}
 	
 	public void updateItem(CalendarEntryModel item) {
-		while (!itemSubscriptions.isEmpty()) {
-			itemSubscriptions.poll().unsubscribe();
-		}
+		itemSubscriptions.unsubscribeAll();
 		
 		if (item != null) {
 			CalendarEntryInfoProvider infoProvider = new CalendarEntryInfoProvider();
 			item.accept(infoProvider);
 			
-			itemSubscriptions.offer(item.getName().subscribeAndFire(name -> titleLabel.setText(titlePrefixOf(item) + name)));
-			itemSubscriptions.offer(infoProvider.getInfo().subscribeAndFire(info -> {
+			itemSubscriptions.push(item.getName().subscribeAndFire(name -> titleLabel.setText(titlePrefixOf(item) + name)));
+			itemSubscriptions.push(infoProvider.getInfo().subscribeAndFire(info -> {
 				subtitleLabel.setText(info);
 				if (info.isEmpty()) {
 					node.getChildren().setAll(titleLabel);
@@ -44,7 +39,7 @@ public class CalendarEntryCell implements FxView {
 					node.getChildren().setAll(titleLabel, subtitleLabel);
 				}
 			}));
-			infoProvider.getSubscriptions().forEach(itemSubscriptions::offer);
+			itemSubscriptions.moveAll(infoProvider.getSubscriptions());
 		}
 	}
 	

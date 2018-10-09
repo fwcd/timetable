@@ -12,7 +12,6 @@ public class MonthView implements FxView {
 	
 	public MonthView(ObservableList<CalendarModel> calendars) {
 		node = new GridPane();
-		
 	}
 	
 	@Override

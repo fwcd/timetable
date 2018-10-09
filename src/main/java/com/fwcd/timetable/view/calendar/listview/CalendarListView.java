@@ -1,14 +1,12 @@
 package com.fwcd.timetable.view.calendar.listview;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.stream.Collectors;
 
-import com.fwcd.fructose.function.Subscription;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.view.utils.SubscriptionStack;
 import com.fwcd.timetable.view.utils.calendar.CalendarEntryListView;
 
 import javafx.scene.Node;
@@ -16,7 +14,7 @@ import javafx.scene.Node;
 public class CalendarListView implements FxView {
 	private final Node node;
 	private final ObservableList<CalendarEntryModel> entries;
-	private final Queue<Subscription> calendarSubscriptions = new ArrayDeque<>();
+	private final SubscriptionStack calendarSubscriptions = new SubscriptionStack();
 	
 	public CalendarListView(ObservableList<CalendarModel> calendars) {
 		entries = new ObservableList<>();
@@ -29,14 +27,8 @@ public class CalendarListView implements FxView {
 	}
 	
 	private void updateListenersAndEntries(ObservableList<CalendarModel> calendars) {
-		while (!calendarSubscriptions.isEmpty()) {
-			calendarSubscriptions.poll().unsubscribe();
-		}
-		
-		for (CalendarModel calendar : calendars) {
-			calendarSubscriptions.offer(calendar.getAppointments().subscribe(it -> updateEntries(calendars)));
-		}
-		
+		calendarSubscriptions.unsubscribeAll();
+		calendarSubscriptions.subscribeAll(calendars, CalendarModel::getAppointments, it -> updateEntries(calendars));
 		updateEntries(calendars);
 	}
 	

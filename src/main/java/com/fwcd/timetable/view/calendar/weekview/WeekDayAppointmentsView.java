@@ -1,11 +1,8 @@
 package com.fwcd.timetable.view.calendar.weekview;
 
 import java.time.LocalDate;
-import java.util.ArrayDeque;
-import java.util.Queue;
 
 import com.fwcd.fructose.Option;
-import com.fwcd.fructose.function.Subscription;
 import com.fwcd.fructose.structs.ArrayBiList;
 import com.fwcd.fructose.structs.BiList;
 import com.fwcd.fructose.structs.ObservableList;
@@ -13,6 +10,7 @@ import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.view.utils.SubscriptionStack;
 
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
@@ -25,7 +23,7 @@ public class WeekDayAppointmentsView implements FxView {
 	private final Pane node;
 	
 	private final ObservableList<CalendarModel> calendars;
-	private final Queue<Subscription> calendarSubscriptions = new ArrayDeque<>();
+	private final SubscriptionStack calendarSubscriptions = new SubscriptionStack();
 	
 	private final BiList<LocalTimeInterval, HBox> overlapBoxes = new ArrayBiList<>();
 	private Option<LocalDate> currentDate = Option.empty();
@@ -44,14 +42,8 @@ public class WeekDayAppointmentsView implements FxView {
 	}
 	
 	private void updateListenersAndView() {
-		while (!calendarSubscriptions.isEmpty()) {
-			calendarSubscriptions.poll().unsubscribe();
-		}
-		
-		for (CalendarModel calendar : calendars) {
-			calendarSubscriptions.offer(calendar.getAppointments().subscribe(it -> updateView()));
-		}
-		
+		calendarSubscriptions.unsubscribeAll();
+		calendarSubscriptions.subscribeAll(calendars, CalendarModel::getAppointments, it -> updateView());
 		updateView();
 	}
 
