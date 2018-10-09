@@ -14,11 +14,12 @@ import javafx.scene.control.ScrollPane;
 
 public class WeekView implements FxNavigableView {
 	private final Node navigatorNode;
+	private final WeekContentView content;
 	private final ScrollPane contentNode;
 	private final WeekDayTimeLayouter timeLayouter = new WeekDayTimeLayouter();
 	
 	public WeekView(TimeTableAppContext context, ObservableList<CalendarModel> calendars) {
-		WeekContentView content = new WeekContentView(timeLayouter, calendars);
+		content = new WeekContentView(timeLayouter, calendars);
 		contentNode = new ScrollPane(content.getNode());
 		navigatorNode = new WeekNavigatorView(context, content).getNode();
 		
@@ -33,8 +34,8 @@ public class WeekView implements FxNavigableView {
 	}
 	
 	@Override
-	public Node getContent() { return contentNode; }
+	public Node getContentNode() { return contentNode; }
 	
 	@Override
-	public Option<Node> getNavigationBar() { return Option.of(navigatorNode); }
+	public Option<Node> getNavigatorNode() { return Option.of(navigatorNode); }
 }

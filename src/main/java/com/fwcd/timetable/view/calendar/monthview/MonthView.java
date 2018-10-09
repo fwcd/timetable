@@ -63,5 +63,5 @@ public class MonthView implements FxNavigableView {
 	public Observable<YearMonth> getMonth() { return month; }
 	
 	@Override
-	public Node getContent() { return node; }
+	public Node getContentNode() { return node; }
 }

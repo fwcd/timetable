@@ -5,7 +5,7 @@ import com.fwcd.fructose.Option;
 import javafx.scene.Node;
 
 public interface FxNavigableView {
-	Node getContent();
+	Node getContentNode();
 	
-	default Option<Node> getNavigationBar() { return Option.empty(); }
+	default Option<Node> getNavigatorNode() { return Option.empty(); }
 }

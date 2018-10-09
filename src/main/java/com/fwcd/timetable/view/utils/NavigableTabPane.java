@@ -18,7 +18,7 @@ public class NavigableTabPane implements FxView {
 	private final StackPane node;
 	private final AnchorPane navigationPane;
 	private final TabPane tabPane;
-	private final Map<Tab, Node> navigationWrappers = new HashMap<>();
+	private final Map<Tab, Node> navigatorBars = new HashMap<>();
 	
 	public NavigableTabPane() {
 		navigationPane = new AnchorPane();
@@ -31,11 +31,11 @@ public class NavigableTabPane implements FxView {
 	}
 	
 	private void updateNavigation(Tab selectedTab) {
-		Node navigationWrapper = navigationWrappers.get(selectedTab);
-		if (navigationWrapper == null) {
+		Node navigatorBar = navigatorBars.get(selectedTab);
+		if (navigatorBar == null) {
 			navigationPane.getChildren().clear();
 		} else {
-			navigationPane.getChildren().add(navigationWrapper);
+			navigationPane.getChildren().add(navigatorBar);
 		}
 	}
 	
@@ -48,15 +48,15 @@ public class NavigableTabPane implements FxView {
 	}
 	
 	public <T> void addTab(T name, FxNavigableView navigableView, BiFunction<? super T, ? super Node, ? extends Tab> tabFactory) {
-		Tab tab = tabFactory.apply(name, navigableView.getContent());
+		Tab tab = tabFactory.apply(name, navigableView.getContentNode());
 		tabPane.getTabs().add(tab);
 		
-		Option<Node> navigationBar = navigableView.getNavigationBar();
-		if (navigationBar.isPresent()) {
-			Pane navigationWrapper = new Pane(navigationBar.unwrap());
-			AnchorPane.setTopAnchor(navigationWrapper, 0D);
-			AnchorPane.setRightAnchor(navigationWrapper, 0D);
-			navigationWrappers.put(tab, navigationWrapper);
+		Option<Node> navigator = navigableView.getNavigatorNode();
+		if (navigator.isPresent()) {
+			Pane navigatorBar = new Pane(navigator.unwrap());
+			AnchorPane.setTopAnchor(navigatorBar, 0D);
+			AnchorPane.setRightAnchor(navigatorBar, 0D);
+			navigatorBars.put(tab, navigatorBar);
 		}
 		
 		if (tabPane.getTabs().size() == 1) {

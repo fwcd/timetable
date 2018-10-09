@@ -37,5 +37,5 @@ public class CalendarListView implements FxNavigableView {
 	}
 	
 	@Override
-	public Node getContent() { return node; }
+	public Node getContentNode() { return node; }
 }
