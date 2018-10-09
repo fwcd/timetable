@@ -83,7 +83,7 @@ public class WeekDayView implements FxView {
 		
 		date.listenAndFire(d -> {
 			if (date.get().filter(LocalDate.now()::equals).isPresent()) {
-				anchor.getChildren().add(indicatorNode);
+				anchor.getChildren().setAll(indicatorNode);
 			} else {
 				anchor.getChildren().clear();
 			}
