@@ -1,0 +1,24 @@
+{
+	"JavaFX view": {
+		"scope": "java",
+		"prefix": "fxview",
+		"body": [
+			"import com.fwcd.timetable.view.utils.FxView;",
+			"",
+			"import javafx.scene.Node;",
+			"",
+			"public class $1 implements FxView {",
+			"\tprivate final $2 node;",
+			"\t",
+			"\tpublic $1() {",
+			"\t\tnode = new $2();",
+			"\t\t$0",
+			"\t}",
+			"\t",
+			"\t@Override",
+			"\tpublic Node getNode() { return node; }",
+			"}"
+		],
+		"description": "Create a new JavaFX view class"
+	}
+}
