@@ -83,6 +83,7 @@ public class WeekDayView implements FxView {
 			anchor.setVisible(it.filter(LocalDate.now()::equals).isPresent());
 		});
 		
+		anchor.setPickOnBounds(false);
 		AnchorPane.setLeftAnchor(indicatorNode, 0D);
 		AnchorPane.setRightAnchor(indicatorNode, 0D);
 		

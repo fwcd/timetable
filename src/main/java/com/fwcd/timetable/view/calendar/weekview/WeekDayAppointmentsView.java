@@ -31,7 +31,9 @@ public class WeekDayAppointmentsView implements FxView {
 	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, ObservableList<CalendarModel> calendars) {
 		this.calendars = calendars;
 		this.layouter = layouter;
+		
 		node = new StackPane();
+		node.setPickOnBounds(false);
 		
 		calendars.listen(it -> updateListenersAndView());
 	}
@@ -92,14 +94,18 @@ public class WeekDayAppointmentsView implements FxView {
 		
 		if (overlappingBox == null) {
 			overlappingBox = new StackPane();
+			overlappingBox.setPickOnBounds(false);
+			
 			overlapBoxes.add(eventInterval, overlappingBox);
 			node.getChildren().add(overlappingBox);
 		}
 		
 		int overlaps = overlappingBox.getChildren().size();
 		double indent = overlaps * 10;
+		AnchorPane anchor = new AnchorPane(child);
+		anchor.setPickOnBounds(false);
 		AnchorPane.setLeftAnchor(child, indent);
-		overlappingBox.getChildren().add(new AnchorPane(child));
+		overlappingBox.getChildren().add(anchor);
 	}
 	
 	private void clear() {
