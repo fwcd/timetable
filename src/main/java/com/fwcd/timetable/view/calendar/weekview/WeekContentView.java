@@ -22,7 +22,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 
 public class WeekContentView implements FxView {
-	private static final int MIN_DAY_WIDTH = 40;
+	private static final int MIN_DAY_WIDTH = 30;
 	private final GridPane node;
 	private final List<WeekDayView> days = new ArrayList<>();
 	private final Observable<LocalDate> weekStart;

@@ -5,6 +5,7 @@ import com.fwcd.timetable.view.utils.FxView;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -34,5 +35,5 @@ public class CurrentTimeIndicator implements FxView {
 	}
 	
 	@Override
-	public Node getNode() { return node; }
+	public Pane getNode() { return node; }
 }

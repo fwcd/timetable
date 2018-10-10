@@ -20,7 +20,6 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -30,7 +29,7 @@ import javafx.util.Duration;
 public class WeekDayView implements FxView {
 	private static final Color BORDER_COLOR = new Color(0.9, 0.9, 0.9, 1);
 	private final StackPane node;
-	private final WeekDayAppointmentsView events;
+	private final WeekDayAppointmentsView appointments;
 	private final WeekDayTimeLayouter layouter;
 	
 	private final int dayOffset;
@@ -43,13 +42,13 @@ public class WeekDayView implements FxView {
 		node = new StackPane();
 		node.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0, 1, 0, 1))));
 		
-		events = new WeekDayAppointmentsView(layouter, calendars);
-		date.listenAndFire(it -> it.ifPresent(events::setDate));
+		appointments = new WeekDayAppointmentsView(layouter, calendars);
+		date.listenAndFire(it -> it.ifPresent(appointments::setDate));
 		
 		// Add layered nodes
 		
 		addHourMarks();
-		node.getChildren().add(events.getNode());
+		node.getChildren().add(appointments.getNode());
 		addTimeIndicator();
 	}
 	
@@ -71,8 +70,8 @@ public class WeekDayView implements FxView {
 	
 	private void addTimeIndicator() {
 		CurrentTimeIndicator indicator = new CurrentTimeIndicator();
-		Node indicatorNode = indicator.getNode();
-		AnchorPane anchor = new AnchorPane();
+		Pane indicatorNode = indicator.getNode();
+		AnchorPane anchor = new AnchorPane(indicatorNode);
 		Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), e -> updateIndicatorY(indicatorNode)));
 		
 		updateIndicatorY(indicatorNode);
@@ -80,15 +79,10 @@ public class WeekDayView implements FxView {
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
 		
-		date.listenAndFire(d -> {
-			if (date.get().filter(LocalDate.now()::equals).isPresent()) {
-				anchor.getChildren().setAll(indicatorNode);
-			} else {
-				anchor.getChildren().clear();
-			}
+		date.listenAndFire(it -> {
+			anchor.setVisible(it.filter(LocalDate.now()::equals).isPresent());
 		});
 		
-		GridPane.setFillWidth(anchor, true);
 		AnchorPane.setLeftAnchor(indicatorNode, 0D);
 		AnchorPane.setRightAnchor(indicatorNode, 0D);
 		
