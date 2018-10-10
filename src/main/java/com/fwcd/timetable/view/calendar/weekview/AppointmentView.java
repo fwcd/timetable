@@ -25,6 +25,7 @@ public class AppointmentView implements FxView {
 	public AppointmentView(WeekDayTimeLayouter layouter, AppointmentModel model) {
 		node = new VBox();
 		node.setBackground(new Background(new BackgroundFill(colorOf(model), new CornerRadii(3), Insets.EMPTY)));
+		node.getStyleClass().add("appointment");
 		
 		Label nameLabel = new Label();
 		nameLabel.setFont(Font.font(null, FontWeight.BOLD, 12));

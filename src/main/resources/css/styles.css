@@ -11,3 +11,7 @@
 	-fx-background-insets: 0 0 0 0;
 	-fx-padding: 0.15em;
 }
+
+.appointment {
+	-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 0, 0);
+}

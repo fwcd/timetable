@@ -14,7 +14,6 @@ import com.fwcd.timetable.view.utils.SubscriptionStack;
 
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -25,7 +24,7 @@ public class WeekDayAppointmentsView implements FxView {
 	private final ObservableList<CalendarModel> calendars;
 	private final SubscriptionStack calendarSubscriptions = new SubscriptionStack();
 	
-	private final BiList<LocalTimeInterval, HBox> overlapBoxes = new ArrayBiList<>();
+	private final BiList<LocalTimeInterval, StackPane> overlapBoxes = new ArrayBiList<>();
 	private Option<LocalDate> currentDate = Option.empty();
 	
 	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, ObservableList<CalendarModel> calendars) {
@@ -65,12 +64,12 @@ public class WeekDayAppointmentsView implements FxView {
 		});
 		
 		LocalTimeInterval eventInterval = event.getTimeIntervalOn(viewedDate);
-		HBox overlappingBox = null;
+		StackPane overlappingBox = null;
 		int overlapBoxCount = overlapBoxes.size();
 		
 		for (int i = 0; i < overlapBoxCount; i++) {
 			LocalTimeInterval interval = overlapBoxes.getA(i);
-			HBox box = overlapBoxes.getB(i);
+			StackPane box = overlapBoxes.getB(i);
 			
 			if (interval.overlaps(eventInterval)) {
 				overlapBoxes.setA(i, interval.merge(eventInterval));
@@ -80,11 +79,14 @@ public class WeekDayAppointmentsView implements FxView {
 		}
 		
 		if (overlappingBox == null) {
-			overlappingBox = new HBox();
+			overlappingBox = new StackPane();
 			overlapBoxes.add(eventInterval, overlappingBox);
 			node.getChildren().add(overlappingBox);
 		}
 		
+		int overlaps = overlappingBox.getChildren().size();
+		double indent = overlaps * 10;
+		AnchorPane.setLeftAnchor(child, indent);
 		overlappingBox.getChildren().add(new AnchorPane(child));
 	}
 	

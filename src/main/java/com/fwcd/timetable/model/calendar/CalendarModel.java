@@ -18,6 +18,7 @@ public class CalendarModel {
 	
 	public CalendarModel(String name) {
 		this.name = new Observable<>(name);
+		addRandomSampleEntries(); // DEBUG
 	}
 	
 	public Observable<DrawColor> getColor() { return color; }
