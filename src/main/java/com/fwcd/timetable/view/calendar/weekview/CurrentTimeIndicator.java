@@ -7,7 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
@@ -20,13 +19,14 @@ public class CurrentTimeIndicator implements FxView {
 		
 		ObservableList<Node> childs = node.getChildren();
 		
-		Circle circle = new Circle(0, 0, CIRCLE_RADIUS, Color.BLUE);
+		Circle circle = new Circle(0, 0, CIRCLE_RADIUS);
 		StackPane.setAlignment(circle, Pos.CENTER_LEFT);
+		circle.getStyleClass().add("current-time-indicator");
 		childs.add(circle);
 		
 		Line line = new Line();
 		StackPane.setAlignment(line, Pos.CENTER_RIGHT);
-		line.setStroke(Color.BLUE);
+		line.getStyleClass().add("current-time-indicator");
 		line.setStartY(0);
 		line.setEndY(0);
 		line.setStartX(0);

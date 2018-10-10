@@ -15,3 +15,8 @@
 .appointment {
 	-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 0, 0);
 }
+
+.current-time-indicator {
+	-fx-fill: blue;
+	-fx-stroke: blue;
+}
