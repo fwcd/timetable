@@ -9,6 +9,7 @@ import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
 
@@ -45,25 +46,36 @@ public class WeekDayAppointmentsView implements FxView {
 		calendarSubscriptions.subscribeAll(calendars, CalendarModel::getAppointments, it -> updateView());
 		updateView();
 	}
+	
+	private static class AppointmentWithCalendar {
+		AppointmentModel appointment;
+		CalendarModel calendar;
+		
+		public AppointmentWithCalendar(AppointmentModel appointment, CalendarModel calendar) {
+			this.appointment = appointment;
+			this.calendar = calendar;
+		}
+	}
 
 	private void updateView() {
 		clear();
 		currentDate.ifPresent(date -> calendars.stream()
-			.flatMap(it -> it.getAppointments().stream())
-			.filter(it -> it.occursOn(date))
-			.forEach(it -> addEvent(it, date)));
+			.flatMap(cal -> cal.getAppointments().stream().map(app -> new AppointmentWithCalendar(app, cal)))
+			.filter(it -> it.appointment.occursOn(date))
+			.forEach(it -> add(it, date)));
 	}
 
-	private void addEvent(AppointmentModel event, LocalDate viewedDate) {
-		Pane child = new AppointmentView(layouter, event).getNode();
+	private void add(AppointmentWithCalendar appWithCal, LocalDate viewedDate) {
+		AppointmentModel appointment = appWithCal.appointment;
+		Pane child = new AppointmentView(layouter, appointment, FxUtils.toFxColor(appWithCal.calendar.getColor().get())).getNode();
 
-		event.getDateTimeInterval().listenAndFire(t -> {
-			LocalTimeInterval interval = event.getTimeIntervalOn(viewedDate);
+		appointment.getDateTimeInterval().listenAndFire(t -> {
+			LocalTimeInterval interval = appointment.getTimeIntervalOn(viewedDate);
 			AnchorPane.setTopAnchor(child, layouter.toPixelY(interval.getStart()));
 			child.setPrefHeight(layouter.toPixelHeight(interval.getDuration()));
 		});
 		
-		LocalTimeInterval eventInterval = event.getTimeIntervalOn(viewedDate);
+		LocalTimeInterval eventInterval = appointment.getTimeIntervalOn(viewedDate);
 		StackPane overlappingBox = null;
 		int overlapBoxCount = overlapBoxes.size();
 		
