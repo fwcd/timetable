@@ -15,5 +15,6 @@ mainClassName = 'com.fwcd.timetable.TimeTableMain'
 dependencies {
     implementation 'com.github.fwcd:Fructose:8ffc1b427a61397ad561f2df3da9b7a82bf86660'
     implementation 'com.google.code.gson:gson:2.6.2'
+    implementation 'org.controlsfx:controlsfx:9.0.0'
     testImplementation 'junit:junit:4.12'
 }
