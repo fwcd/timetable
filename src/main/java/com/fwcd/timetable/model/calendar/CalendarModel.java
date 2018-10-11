@@ -23,6 +23,7 @@ public class CalendarModel {
 	
 	public CalendarModel(String name) {
 		this.name = new Observable<>(name);
+		addRandomSampleEntries(); // DEBUG
 		setupChangeListeners();
 	}
 	

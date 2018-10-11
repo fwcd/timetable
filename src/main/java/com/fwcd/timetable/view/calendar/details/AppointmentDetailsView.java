@@ -1,7 +1,5 @@
 package com.fwcd.timetable.view.calendar.details;
 
-import java.time.LocalDateTime;
-
 import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.view.utils.FxUtils;
@@ -9,12 +7,12 @@ import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import tornadofx.control.DateTimePicker;
 
 public class AppointmentDetailsView implements FxView {
 	private final VBox node;
@@ -26,21 +24,21 @@ public class AppointmentDetailsView implements FxView {
 		
 		GridPane properties = new GridPane();
 		
-		DatePicker start = new DatePicker();
+		DateTimePicker start = new DateTimePicker();
 		FxUtils.bindBidirectionally(
 			model.getDateTimeInterval(),
-			start.valueProperty(),
-			interval -> interval.getStart().toLocalDate(),
-			date -> new LocalDateTimeInterval(LocalDateTime.of(date, model.getStartTime()), model.getEnd())
+			start.dateTimeValueProperty(),
+			interval -> interval.getStart(),
+			dateTime -> new LocalDateTimeInterval(dateTime, model.getEnd())
 		);
 		properties.addRow(1, new Label("Start: "), start);
 		
-		DatePicker end = new DatePicker();
+		DateTimePicker end = new DateTimePicker();
 		FxUtils.bindBidirectionally(
 			model.getDateTimeInterval(),
-			end.valueProperty(),
-			interval -> interval.getEnd().toLocalDate(),
-			date -> new LocalDateTimeInterval(model.getStart(), LocalDateTime.of(date, model.getEndTime()))
+			end.dateTimeValueProperty(),
+			interval -> interval.getEnd(),
+			dateTime -> new LocalDateTimeInterval(model.getStart(), dateTime)
 		);
 		properties.addRow(2, new Label("End: "), end);
 		
