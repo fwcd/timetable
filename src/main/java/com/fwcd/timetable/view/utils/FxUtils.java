@@ -1,6 +1,7 @@
 package com.fwcd.timetable.view.utils;
 
 import java.util.List;
+import java.util.function.Function;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
@@ -8,11 +9,16 @@ import com.fwcd.fructose.draw.DrawColor;
 import com.fwcd.fructose.io.DelegatePrintStream;
 import com.fwcd.fructose.structs.ReadOnlyObservableList;
 
+import org.controlsfx.control.PopOver;
+import org.controlsfx.control.PopOver.ArrowLocation;
+
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.Pane;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -20,6 +26,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.stage.Window;
 
 public final class FxUtils {
 	private FxUtils() {}
@@ -98,6 +105,24 @@ public final class FxUtils {
 		});
 	}
 	
+	public static <T, R> void bindBidirectionally(Observable<T> fructoseObservable, Property<R> fxProperty, Function<T, R> mapper, Function<R, T> inverseMapper) {
+		Flag updating = new Flag();
+		fructoseObservable.listenAndFire(it -> {
+			if (!updating.value) {
+				updating.value = true;
+				fxProperty.setValue(mapper.apply(it));
+				updating.value = false;
+			}
+		});
+		fxProperty.addListener((obs, old, newValue) -> {
+			if (!updating.value) {
+				updating.value = true;
+				fructoseObservable.set(inverseMapper.apply(newValue));
+				updating.value = false;
+			}
+		});
+	}
+	
 	public static <T> ComboBox<T> comboBoxOf(List<T> values) {
 		ComboBox<T> box = new ComboBox<>(FXCollections.observableList(values));
 		return box;
@@ -159,5 +184,12 @@ public final class FxUtils {
 		alert.setContentText(msg.toString());
 		
 		alert.showAndWait();
+	}
+
+	public static void showIndependentPopOver(PopOver popOver, Node node) {
+		Bounds bounds = node.localToScreen(node.getBoundsInLocal());
+		double x = bounds.getMaxX();
+		double y = bounds.getMaxY() - bounds.getHeight();
+		popOver.show(node.getScene().getWindow(), x, y);
 	}
 }

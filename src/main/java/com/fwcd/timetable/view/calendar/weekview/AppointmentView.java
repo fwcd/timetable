@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.view.calendar.details.AppointmentDetailsView;
+import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 
 import org.controlsfx.control.PopOver;
@@ -44,7 +45,7 @@ public class AppointmentView implements FxView {
 		node.getChildren().add(timeLabel);
 		
 		PopOver popOver = new PopOver(new AppointmentDetailsView(model).getNode());
-		node.setOnMouseClicked(e -> popOver.show(node));
+		node.setOnMouseClicked(e -> FxUtils.showIndependentPopOver(popOver, node));
 	}
 
 	private Color brightColor(Color calColor) {

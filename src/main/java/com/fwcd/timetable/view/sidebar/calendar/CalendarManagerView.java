@@ -25,7 +25,7 @@ public class CalendarManagerView implements FxView {
 		calendarList = new ListView<>();
 		calendarList.setEditable(true);
 		calendarList.setCellFactory(list -> new CalendarManagerListCell());
-		model.getCalendars().listenAndFire(calendarList.getItems()::setAll);
+		model.getCalendarCrate().getCalendars().listenAndFire(calendarList.getItems()::setAll);
 		
 		HBox controls = new HBox(
 			FxUtils.buttonOf(context.localized("newcalendar"), this::createCalendar)
@@ -38,7 +38,7 @@ public class CalendarManagerView implements FxView {
 	}
 	
 	private void createCalendar() {
-		ObservableList<CalendarModel> calendars = model.getCalendars();
+		ObservableList<CalendarModel> calendars = model.getCalendarCrate().getCalendars();
 		calendars.add(new CalendarModel(""));
 		calendarList.edit(calendars.size() - 1);
 	}

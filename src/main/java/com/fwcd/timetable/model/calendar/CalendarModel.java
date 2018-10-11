@@ -5,10 +5,12 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
+import com.fwcd.fructose.EventListenerList;
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.draw.DrawColor;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.task.TaskCrateModel;
+import com.fwcd.timetable.view.utils.SubscriptionStack;
 
 public class CalendarModel {
 	private final Observable<String> name;
@@ -16,9 +18,25 @@ public class CalendarModel {
 	private final ObservableList<AppointmentModel> appointments = new ObservableList<>();
 	private final TaskCrateModel taskCrate = new TaskCrateModel();
 	
+	private final EventListenerList<CalendarModel> changeListeners = new EventListenerList<>();
+	private final SubscriptionStack appointmentSubscriptions = new SubscriptionStack();
+	
 	public CalendarModel(String name) {
 		this.name = new Observable<>(name);
+		setupChangeListeners();
 	}
+	
+	private void setupChangeListeners() {
+		name.listen(it -> changeListeners.fire(this));
+		color.listen(it -> changeListeners.fire(this));
+		appointments.listenAndFire(it -> {
+			changeListeners.fire(this);
+			appointmentSubscriptions.unsubscribeAll();
+			appointmentSubscriptions.subscribeAll(appointments, AppointmentModel::getChangeListeners, app -> changeListeners.fire(this));
+		});
+	}
+	
+	public EventListenerList<CalendarModel> getChangeListeners() { return changeListeners; }
 	
 	public Observable<DrawColor> getColor() { return color; }
 	

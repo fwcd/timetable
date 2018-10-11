@@ -1,14 +1,9 @@
 package com.fwcd.timetable.model;
 
-import com.fwcd.fructose.structs.ObservableList;
-import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 
 public class TimeTableAppModel {
-	private final ObservableList<CalendarModel> calendars = new ObservableList<>();
+	private final CalendarCrateModel calendarCrate = new CalendarCrateModel();
 	
-	public TimeTableAppModel() {
-		calendars.add(new CalendarModel("Calendar"));
-	}
-	
-	public ObservableList<CalendarModel> getCalendars() { return calendars; }
+	public CalendarCrateModel getCalendarCrate() { return calendarCrate; }
 }

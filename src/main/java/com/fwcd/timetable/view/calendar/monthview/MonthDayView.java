@@ -3,8 +3,7 @@ package com.fwcd.timetable.view.calendar.monthview;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
-import com.fwcd.fructose.structs.ObservableList;
-import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
 
@@ -22,10 +21,11 @@ public class MonthDayView implements FxView, AutoCloseable {
 	private final VBox content;
 	
 	private final LocalDate date;
-	private final ObservableList<CalendarModel> calendars;
-	private final SubscriptionStack calendarSubscriptions = new SubscriptionStack();
+	private final CalendarCrateModel calendars;
 	
-	public MonthDayView(ObservableList<CalendarModel> calendars, LocalDate date) {
+	private final SubscriptionStack subscriptions = new SubscriptionStack();
+	
+	public MonthDayView(CalendarCrateModel calendars, LocalDate date) {
 		this.calendars = calendars;
 		this.date = date;
 		
@@ -39,17 +39,11 @@ public class MonthDayView implements FxView, AutoCloseable {
 		content = new VBox();
 		node.setCenter(content);
 		
-		calendars.listen(it -> updateListenersAndView());
-	}
-	
-	private void updateListenersAndView() {
-		calendarSubscriptions.unsubscribeAll();
-		calendarSubscriptions.subscribeAll(calendars, CalendarModel::getAppointments, it -> updateView());
-		updateView();
+		subscriptions.push(calendars.getChangeListeners().subscribe(it -> updateView()));
 	}
 	
 	private void updateView() {
-		content.getChildren().setAll(calendars.stream()
+		content.getChildren().setAll(calendars.getCalendars().stream()
 			.flatMap(it -> it.getAppointments().stream())
 			.filter(it -> it.occursOn(date))
 			.map(it -> new Label(it.getName().get()))
@@ -59,7 +53,7 @@ public class MonthDayView implements FxView, AutoCloseable {
 	
 	@Override
 	public void close() {
-		calendarSubscriptions.unsubscribeAll();
+		subscriptions.unsubscribeAll();
 	}
 	
 	@Override

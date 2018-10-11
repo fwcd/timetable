@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fwcd.fructose.Observable;
-import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
-import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.scene.Node;
@@ -28,9 +27,9 @@ public class WeekContentView implements FxView {
 	private final Observable<LocalDate> weekStart;
 	
 	private final WeekDayTimeLayouter timeLayouter;
-	private final ObservableList<CalendarModel> calendars;
+	private final CalendarCrateModel calendars;
 	
-	public WeekContentView(WeekDayTimeLayouter timeLayouter, ObservableList<CalendarModel> calendars) {
+	public WeekContentView(WeekDayTimeLayouter timeLayouter, CalendarCrateModel calendars) {
 		this.timeLayouter = timeLayouter;
 		this.calendars = calendars;
 		

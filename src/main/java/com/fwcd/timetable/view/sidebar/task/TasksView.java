@@ -19,7 +19,7 @@ public class TasksView implements FxView {
 	public TasksView(TimeTableAppContext context, TimeTableAppModel model) {
 		node = new BorderPane();
 		
-		ComboBox<CalendarModel> comboBox = FxUtils.comboBoxOfObservable(model.getCalendars());
+		ComboBox<CalendarModel> comboBox = FxUtils.comboBoxOfObservable(model.getCalendarCrate().getCalendars());
 		comboBox.valueProperty().addListener((obs, old, selectedCalendar) -> {
 			node.setCenter(new TaskCrateView(context, selectedCalendar.getTaskCrate()).getNode());
 		});

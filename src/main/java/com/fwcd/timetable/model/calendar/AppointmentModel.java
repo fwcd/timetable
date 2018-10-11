@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import com.fwcd.fructose.EventListenerList;
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.time.LocalDateTimeInterval;
@@ -19,6 +20,7 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	private final Observable<Boolean> ignoreTime;
 	private final ParsedRecurrence recurrence;
 	private final Observable<Option<LocalDate>> recurrenceEnd;
+	private final EventListenerList<AppointmentModel> changeListeners = new EventListenerList<>();
 	
 	private AppointmentModel(
 		String name,
@@ -40,6 +42,19 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 		this.recurrenceEnd = new Observable<>(recurrenceEnd);
 		recurrence = new ParsedRecurrence(dateTimeInterval, this.recurrenceEnd);
 		recurrence.getRaw().set(rawRecurrence);
+		
+		setupChangeListeners();
+	}
+	
+	private void setupChangeListeners() {
+		name.listen(it -> changeListeners.fire(this));
+		location.listen(it -> changeListeners.fire(this));
+		dateTimeInterval.listen(it -> changeListeners.fire(this));
+		description.listen(it -> changeListeners.fire(this));
+		ignoreDate.listen(it -> changeListeners.fire(this));
+		ignoreTime.listen(it -> changeListeners.fire(this));
+		recurrence.getParsed().listen(it -> changeListeners.fire(this));
+		recurrenceEnd.listen(it -> changeListeners.fire(this));
 	}
 	
 	@Override
@@ -76,6 +91,9 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	public ParsedRecurrence getRecurrence() { return recurrence; }
 	
 	public Observable<Option<LocalDate>> getRecurrenceEnd() { return recurrenceEnd; }
+	
+	/** A change listener list that fires whenever any property of this appointment is mutated */
+	public EventListenerList<AppointmentModel> getChangeListeners() { return changeListeners; }
 	
 	@Override
 	public Observable<String> getDescription() { return description; }

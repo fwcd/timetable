@@ -13,7 +13,8 @@ targetCompatibility = 1.8
 mainClassName = 'com.fwcd.timetable.TimeTableMain'
 
 dependencies {
-    implementation 'com.github.fwcd:Fructose:8ffc1b427a61397ad561f2df3da9b7a82bf86660'
+    implementation 'com.github.fwcd:Fructose:25c00889b199c1ee874e7ad59f517b7d0c11be2c'
+    implementation 'no.tornado:tornadofx-controls:1.0.4'
     implementation 'com.google.code.gson:gson:2.6.2'
     implementation 'org.controlsfx:controlsfx:8.40.14'
     testImplementation 'junit:junit:4.12'

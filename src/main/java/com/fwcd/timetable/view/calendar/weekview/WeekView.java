@@ -3,8 +3,7 @@ package com.fwcd.timetable.view.calendar.weekview;
 import java.time.LocalTime;
 
 import com.fwcd.fructose.Option;
-import com.fwcd.fructose.structs.ObservableList;
-import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxNavigableView;
 import com.fwcd.timetable.view.utils.FxUtils;
@@ -18,7 +17,7 @@ public class WeekView implements FxNavigableView {
 	private final ScrollPane contentNode;
 	private final WeekDayTimeLayouter timeLayouter = new WeekDayTimeLayouter();
 	
-	public WeekView(TimeTableAppContext context, ObservableList<CalendarModel> calendars) {
+	public WeekView(TimeTableAppContext context, CalendarCrateModel calendars) {
 		content = new WeekContentView(timeLayouter, calendars);
 		contentNode = new ScrollPane(content.getNode());
 		navigatorNode = new WeekNavigatorView(context, content).getNode();

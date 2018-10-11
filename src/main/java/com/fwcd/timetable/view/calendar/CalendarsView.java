@@ -1,6 +1,7 @@
 package com.fwcd.timetable.view.calendar;
 
 import com.fwcd.fructose.structs.ObservableList;
+import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.calendar.listview.CalendarListView;
@@ -17,7 +18,7 @@ public class CalendarsView implements FxView {
 	private final MonthView monthView;
 	private final CalendarListView listView;
 	
-	public CalendarsView(TimeTableAppContext context, ObservableList<CalendarModel> model) {
+	public CalendarsView(TimeTableAppContext context, CalendarCrateModel model) {
 		weekView = new WeekView(context, model);
 		monthView = new MonthView(model);
 		listView = new CalendarListView(model);

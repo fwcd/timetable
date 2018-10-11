@@ -1,5 +1,6 @@
 package com.fwcd.timetable.model.calendar.task;
 
+import com.fwcd.fructose.EventListenerList;
 import com.fwcd.fructose.Observable;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
@@ -9,10 +10,20 @@ public class TaskModel implements CalendarEntryModel {
 	private final Observable<String> name;
 	private final Observable<String> description = new Observable<>("");
 	
+	private final EventListenerList<TaskModel> changeListeners = new EventListenerList<>();
+	
 	public TaskModel(String name) {
 		this.name = new Observable<>(name);
+		setupChangeListeners();
 	}
 	
+	private void setupChangeListeners() {
+		name.listen(it -> changeListeners.fire(this));
+		description.listen(it -> changeListeners.fire(this));
+	}
+	
+	public EventListenerList<TaskModel> getChangeListeners() { return changeListeners; }
+
 	@Override
 	public void accept(CalendarEntryVisitor visitor) { visitor.visitTask(this); }
 	

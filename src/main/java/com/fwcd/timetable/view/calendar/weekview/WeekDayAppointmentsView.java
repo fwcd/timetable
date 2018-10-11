@@ -5,13 +5,12 @@ import java.time.LocalDate;
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.structs.ArrayBiList;
 import com.fwcd.fructose.structs.BiList;
-import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
+import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
-import com.fwcd.timetable.view.utils.SubscriptionStack;
 
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
@@ -22,30 +21,23 @@ public class WeekDayAppointmentsView implements FxView {
 	private final WeekDayTimeLayouter layouter;
 	private final Pane node;
 	
-	private final ObservableList<CalendarModel> calendars;
-	private final SubscriptionStack calendarSubscriptions = new SubscriptionStack();
+	private final CalendarCrateModel calendars;
 	
 	private final BiList<LocalTimeInterval, StackPane> overlapBoxes = new ArrayBiList<>();
 	private Option<LocalDate> currentDate = Option.empty();
 	
-	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, ObservableList<CalendarModel> calendars) {
-		this.calendars = calendars;
+	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, CalendarCrateModel calendars) {
 		this.layouter = layouter;
+		this.calendars = calendars;
 		
 		node = new StackPane();
 		node.setPickOnBounds(false);
 		
-		calendars.listen(it -> updateListenersAndView());
+		calendars.getChangeListeners().add(it -> { updateView(); });
 	}
 	
 	public void setDate(LocalDate date) {
 		currentDate = Option.of(date);
-		updateView();
-	}
-	
-	private void updateListenersAndView() {
-		calendarSubscriptions.unsubscribeAll();
-		calendarSubscriptions.subscribeAll(calendars, CalendarModel::getAppointments, it -> updateView());
 		updateView();
 	}
 	
@@ -61,7 +53,7 @@ public class WeekDayAppointmentsView implements FxView {
 
 	private void updateView() {
 		clear();
-		currentDate.ifPresent(date -> calendars.stream()
+		currentDate.ifPresent(date -> calendars.getCalendars().stream()
 			.flatMap(cal -> cal.getAppointments().stream().map(app -> new AppointmentWithCalendar(app, cal)))
 			.filter(it -> it.appointment.occursOn(date))
 			.forEach(it -> add(it, date)));
@@ -70,14 +62,11 @@ public class WeekDayAppointmentsView implements FxView {
 	private void add(AppointmentWithCalendar appWithCal, LocalDate viewedDate) {
 		AppointmentModel appointment = appWithCal.appointment;
 		Pane child = new AppointmentView(layouter, appointment, FxUtils.toFxColor(appWithCal.calendar.getColor().get())).getNode();
-
-		appointment.getDateTimeInterval().listenAndFire(t -> {
-			LocalTimeInterval interval = appointment.getTimeIntervalOn(viewedDate);
-			AnchorPane.setTopAnchor(child, layouter.toPixelY(interval.getStart()));
-			child.setPrefHeight(layouter.toPixelHeight(interval.getDuration()));
-		});
 		
 		LocalTimeInterval eventInterval = appointment.getTimeIntervalOn(viewedDate);
+		AnchorPane.setTopAnchor(child, layouter.toPixelY(eventInterval.getStart()));
+		child.setPrefHeight(layouter.toPixelHeight(eventInterval.getDuration()));
+		
 		StackPane overlappingBox = null;
 		int overlapBoxCount = overlapBoxes.size();
 		
