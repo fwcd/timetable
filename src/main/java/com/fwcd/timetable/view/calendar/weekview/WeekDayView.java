@@ -7,6 +7,7 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
 import com.fwcd.timetable.model.calendar.CalendarCrateModel;
+import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.animation.Animation;
@@ -34,14 +35,14 @@ public class WeekDayView implements FxView {
 	private final int dayOffset;
 	private final Observable<Option<LocalDate>> date = new Observable<>(Option.empty());
 	
-	public WeekDayView(WeekDayTimeLayouter layouter, CalendarCrateModel calendars, int dayOffset) {
+	public WeekDayView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarCrateModel calendars, int dayOffset) {
 		this.dayOffset = dayOffset;
 		this.layouter = layouter;
 		
 		node = new StackPane();
 		node.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0, 1, 0, 1))));
 		
-		appointments = new WeekDayAppointmentsView(layouter, calendars);
+		appointments = new WeekDayAppointmentsView(layouter, context, calendars);
 		date.listenAndFire(it -> it.ifPresent(appointments::setDate));
 		
 		// Add layered nodes

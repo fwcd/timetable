@@ -12,5 +12,10 @@
 	"week": "Woche",
 	"month": "Monat",
 	"list": "Liste",
-	"today": "Heute"
+	"today": "Heute",
+	"appointmentstart": "Beginn",
+	"appointmentend": "Ende",
+	"recurrence": "Wiederholung",
+	"ignoredate": "Ignoriere Datum",
+	"ignoretime": "Ignoriere Zeit"
 }

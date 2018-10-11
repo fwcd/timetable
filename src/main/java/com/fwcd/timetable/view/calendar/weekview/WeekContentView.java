@@ -11,6 +11,7 @@ import java.util.List;
 import com.fwcd.fructose.Observable;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
 import com.fwcd.timetable.model.calendar.CalendarCrateModel;
+import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.scene.Node;
@@ -29,7 +30,7 @@ public class WeekContentView implements FxView {
 	private final WeekDayTimeLayouter timeLayouter;
 	private final CalendarCrateModel calendars;
 	
-	public WeekContentView(WeekDayTimeLayouter timeLayouter, CalendarCrateModel calendars) {
+	public WeekContentView(WeekDayTimeLayouter timeLayouter, TimeTableAppContext context, CalendarCrateModel calendars) {
 		this.timeLayouter = timeLayouter;
 		this.calendars = calendars;
 		
@@ -38,10 +39,10 @@ public class WeekContentView implements FxView {
 		
 		weekStart = new Observable<>(currentWeekStart());
 		weekStart.listen(this::updateWeekStart);
-		setupView();
+		setupView(context);
 	}
 	
-	private void setupView() {
+	private void setupView(TimeTableAppContext context) {
 		RowConstraints rowConstraints = new RowConstraints();
 		rowConstraints.setVgrow(Priority.ALWAYS);
 		node.getRowConstraints().add(rowConstraints);
@@ -52,7 +53,7 @@ public class WeekContentView implements FxView {
 		node.getColumnConstraints().add(timeAxisColConstraints);
 		
 		for (int i = 0; i < CalendarConstants.DAYS_OF_WEEK; i++) {
-			WeekDayView day = new WeekDayView(timeLayouter, calendars, i);
+			WeekDayView day = new WeekDayView(timeLayouter, context, calendars, i);
 			day.setWeekStart(weekStart.get());
 			
 			ColumnConstraints colConstraints = new ColumnConstraints();

@@ -18,7 +18,7 @@ public class WeekView implements FxNavigableView {
 	private final WeekDayTimeLayouter timeLayouter = new WeekDayTimeLayouter();
 	
 	public WeekView(TimeTableAppContext context, CalendarCrateModel calendars) {
-		content = new WeekContentView(timeLayouter, calendars);
+		content = new WeekContentView(timeLayouter, context, calendars);
 		contentNode = new ScrollPane(content.getNode());
 		navigatorNode = new WeekNavigatorView(context, content).getNode();
 		
