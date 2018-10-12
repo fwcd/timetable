@@ -38,7 +38,7 @@ public class NewAppointmentView implements FxView {
 			.build();
 		node.setPadding(Insets.EMPTY);
 		calendar.getAppointments().add(appointment);
-		node.getChildren().setAll(new AppointmentDetailsView(appointment).getNode());
+		node.getChildren().setAll(new AppointmentDetailsView(calendar, appointment).getNode());
 	}
 	
 	@Override

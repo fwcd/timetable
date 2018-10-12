@@ -69,7 +69,9 @@ public class WeekDayAppointmentsView implements FxView {
 
 	private void add(AppointmentWithCalendar appWithCal, LocalDate viewedDate) {
 		AppointmentModel appointment = appWithCal.appointment;
-		Pane child = new AppointmentView(layouter, appointment, FxUtils.toFxColor(appWithCal.calendar.getColor().get())).getNode();
+		CalendarModel calendar = appWithCal.calendar;
+		Pane child = new AppointmentView(layouter, calendar, appointment,
+				FxUtils.toFxColor(calendar.getColor().get())).getNode();
 		
 		LocalTimeInterval eventInterval = appointment.getTimeIntervalOn(viewedDate);
 		AnchorPane.setTopAnchor(child, layouter.toPixelY(eventInterval.getStart()));
