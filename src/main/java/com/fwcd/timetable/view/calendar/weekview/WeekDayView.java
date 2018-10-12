@@ -1,19 +1,25 @@
 package com.fwcd.timetable.view.calendar.weekview;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
 import com.fwcd.timetable.model.calendar.CalendarCrateModel;
+import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
+import com.fwcd.timetable.view.calendar.popover.NewAppointmentView;
 import com.fwcd.timetable.view.utils.FxView;
+
+import org.controlsfx.control.PopOver;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
@@ -31,6 +37,7 @@ public class WeekDayView implements FxView {
 	private final StackPane node;
 	private final WeekDayAppointmentsView appointments;
 	private final WeekDayTimeLayouter layouter;
+	private final CalendarCrateModel calendars;
 	
 	private final int dayOffset;
 	private final Observable<Option<LocalDate>> date = new Observable<>(Option.empty());
@@ -38,6 +45,7 @@ public class WeekDayView implements FxView {
 	public WeekDayView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarCrateModel calendars, int dayOffset) {
 		this.dayOffset = dayOffset;
 		this.layouter = layouter;
+		this.calendars = calendars;
 		
 		node = new StackPane();
 		node.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0, 1, 0, 1))));
@@ -45,11 +53,26 @@ public class WeekDayView implements FxView {
 		appointments = new WeekDayAppointmentsView(layouter, context, calendars);
 		date.listenAndFire(it -> it.ifPresent(appointments::setDate));
 		
+		node.setOnMouseClicked(e -> {
+			NewAppointmentView newAppointmentView = createNewAppointmentView(context, e);
+			double yOffset = -30; // TODO: Dynamic calculation of the y-offset
+			new PopOver(newAppointmentView.getNode())
+				.show(node.getScene().getWindow(), e.getScreenX(), e.getScreenY() + yOffset);
+		});
+		
 		// Add layered nodes
 		
 		addHourMarks();
 		node.getChildren().add(appointments.getNode());
 		addTimeIndicator();
+	}
+
+	private NewAppointmentView createNewAppointmentView(TimeTableAppContext context, MouseEvent e) {
+		CalendarModel calendar = /* TODO */ calendars.getCalendars().get(0);
+		LocalDate newDate = date.get().unwrap("Can not create appointment without a date");
+		LocalTime newTime = layouter.toTime(e.getY());
+		LocalDateTime dateTime = LocalDateTime.of(newDate, newTime);
+		return new NewAppointmentView(context, calendar, dateTime);
 	}
 	
 	private void addHourMarks() {

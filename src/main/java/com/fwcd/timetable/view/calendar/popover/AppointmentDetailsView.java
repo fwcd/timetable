@@ -1,8 +1,9 @@
-package com.fwcd.timetable.view.calendar.details;
+package com.fwcd.timetable.view.calendar.popover;
 
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
+import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.model.calendar.Location;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
@@ -10,6 +11,7 @@ import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -21,7 +23,7 @@ import tornadofx.control.DateTimePicker;
 public class AppointmentDetailsView implements FxView {
 	private final VBox node;
 	
-	public AppointmentDetailsView(TimeTableAppContext context, AppointmentModel model) {
+	public AppointmentDetailsView(CalendarModel calendar, TimeTableAppContext context, AppointmentModel model) {
 		TextField title = new TextField();
 		FxUtils.bindBidirectionally(model.getName(), title.textProperty());
 		title.setFont(Font.font(14));
@@ -67,10 +69,13 @@ public class AppointmentDetailsView implements FxView {
 		FxUtils.bindBidirectionally(model.ignoresTime(), ignoreTime.selectedProperty());
 		properties.addRow(5, localizedPropertyLabel("ignoretime", context), ignoreTime);
 		
+		Button deleteButton = FxUtils.buttonOf("Delete Appointment", () -> calendar.getAppointments().remove(model)); // TODO: Localization
+		
 		node = new VBox(
 			title,
 			location,
-			properties
+			properties,
+			deleteButton
 		);
 		node.setPadding(new Insets(10, 10, 10, 10));
 	}

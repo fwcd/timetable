@@ -10,9 +10,7 @@ import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
-import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
-import com.fwcd.timetable.view.utils.SubscriptionStack;
 
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
@@ -25,7 +23,6 @@ public class WeekDayAppointmentsView implements FxView {
 	
 	private final TimeTableAppContext context;
 	private final CalendarCrateModel calendars;
-	private final SubscriptionStack calendarSubscriptions = new SubscriptionStack();
 	
 	private final BiList<LocalTimeInterval, StackPane> overlapBoxes = new ArrayBiList<>();
 	private Option<LocalDate> currentDate = Option.empty();
@@ -38,13 +35,7 @@ public class WeekDayAppointmentsView implements FxView {
 		node = new StackPane();
 		node.setPickOnBounds(false);
 		
-		calendars.getCalendars().listen(it -> updateListenersAndView());
-	}
-	
-	private void updateListenersAndView() {
-		calendarSubscriptions.unsubscribeAll();
-		calendarSubscriptions.subscribeAll(calendars.getCalendars(), CalendarModel::getAppointments, it -> updateView());
-		updateView();
+		calendars.getStructuralChangeListeners().add(it -> updateView());
 	}
 	
 	public void setDate(LocalDate date) {
@@ -72,7 +63,8 @@ public class WeekDayAppointmentsView implements FxView {
 
 	private void add(AppointmentWithCalendar appWithCal, LocalDate viewedDate) {
 		AppointmentModel appointment = appWithCal.appointment;
-		Pane child = new AppointmentView(layouter, context, appointment, FxUtils.toFxColor(appWithCal.calendar.getColor().get())).getNode();
+		CalendarModel calendar = appWithCal.calendar;
+		Pane child = new AppointmentView(layouter, context, calendar, appointment).getNode();
 		
 		LocalTimeInterval eventInterval = appointment.getTimeIntervalOn(viewedDate);
 		AnchorPane.setTopAnchor(child, layouter.toPixelY(eventInterval.getStart()));

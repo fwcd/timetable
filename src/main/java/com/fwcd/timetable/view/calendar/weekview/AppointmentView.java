@@ -3,8 +3,9 @@ package com.fwcd.timetable.view.calendar.weekview;
 import java.time.format.DateTimeFormatter;
 
 import com.fwcd.timetable.model.calendar.AppointmentModel;
+import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
-import com.fwcd.timetable.view.calendar.details.AppointmentDetailsView;
+import com.fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 
@@ -25,8 +26,8 @@ public class AppointmentView implements FxView {
 	private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm"); 
 	private final Pane node;
 	
-	public AppointmentView(WeekDayTimeLayouter layouter, TimeTableAppContext context, AppointmentModel model, Color calColor) {
-		Color bgColor = brightColor(calColor);
+	public AppointmentView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarModel calendar, AppointmentModel model) {
+		Color bgColor = brightColor(FxUtils.toFxColor(calendar.getColor().get()));
 		Color fgColor = Color.BLACK;
 		
 		node = new VBox();
@@ -45,8 +46,11 @@ public class AppointmentView implements FxView {
 		model.getDateTimeInterval().listenAndFire(it -> timeLabel.setText(TIME_FORMATTER.format(it.getStart()) + " - " + TIME_FORMATTER.format(it.getEnd())));
 		node.getChildren().add(timeLabel);
 		
-		PopOver popOver = new PopOver(new AppointmentDetailsView(context, model).getNode());
-		node.setOnMouseClicked(e -> FxUtils.showIndependentPopOver(popOver, node));
+		PopOver popOver = new PopOver(new AppointmentDetailsView(calendar, context, model).getNode());
+		node.setOnMouseClicked(e -> {
+			FxUtils.showIndependentPopOver(popOver, node);
+			e.consume();
+		});
 	}
 
 	private Color brightColor(Color calColor) {

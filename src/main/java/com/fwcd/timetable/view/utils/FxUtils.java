@@ -10,7 +10,6 @@ import com.fwcd.fructose.io.DelegatePrintStream;
 import com.fwcd.fructose.structs.ReadOnlyObservableList;
 
 import org.controlsfx.control.PopOver;
-import org.controlsfx.control.PopOver.ArrowLocation;
 
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
@@ -18,7 +17,6 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.Pane;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -26,7 +24,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.stage.Window;
 
 public final class FxUtils {
 	private FxUtils() {}

@@ -20,7 +20,9 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	private final Observable<Boolean> ignoreTime;
 	private final ParsedRecurrence recurrence;
 	private final Observable<Option<LocalDate>> recurrenceEnd;
+	
 	private final EventListenerList<AppointmentModel> changeListeners = new EventListenerList<>();
+	private final EventListenerList<AppointmentModel> structuralChangeListeners = new EventListenerList<>();
 	
 	private AppointmentModel(
 		String name,
@@ -44,6 +46,7 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 		recurrence.getRaw().set(rawRecurrence);
 		
 		setupChangeListeners();
+		setupStructuralChangeListeners();
 	}
 	
 	private void setupChangeListeners() {
@@ -55,6 +58,14 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 		ignoreTime.listen(it -> changeListeners.fire(this));
 		recurrence.getParsed().listen(it -> changeListeners.fire(this));
 		recurrenceEnd.listen(it -> changeListeners.fire(this));
+	}
+	
+	private void setupStructuralChangeListeners() {
+		dateTimeInterval.listen(it -> structuralChangeListeners.fire(this));
+		ignoreDate.listen(it -> structuralChangeListeners.fire(this));
+		ignoreTime.listen(it -> structuralChangeListeners.fire(this));
+		recurrence.getParsed().listen(it -> structuralChangeListeners.fire(this));
+		recurrenceEnd.listen(it -> structuralChangeListeners.fire(this));
 	}
 	
 	@Override
@@ -94,6 +105,9 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	
 	/** A change listener list that fires whenever any property of this appointment is mutated */
 	public EventListenerList<AppointmentModel> getChangeListeners() { return changeListeners; }
+	
+	/** A change listener list that fires whenever the "structure" (date, time, recurrence, etc) of this appointment is mutated */
+	public EventListenerList<AppointmentModel> getStructuralChangeListeners() { return structuralChangeListeners; }
 	
 	@Override
 	public Observable<String> getDescription() { return description; }

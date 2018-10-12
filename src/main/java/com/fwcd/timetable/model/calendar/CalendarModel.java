@@ -19,6 +19,7 @@ public class CalendarModel {
 	private final TaskCrateModel taskCrate = new TaskCrateModel();
 	
 	private final EventListenerList<CalendarModel> changeListeners = new EventListenerList<>();
+	private final EventListenerList<CalendarModel> structuralChangeListeners = new EventListenerList<>();
 	private final SubscriptionStack appointmentSubscriptions = new SubscriptionStack();
 	
 	public CalendarModel(String name) {
@@ -31,12 +32,16 @@ public class CalendarModel {
 		color.listen(it -> changeListeners.fire(this));
 		appointments.listenAndFire(it -> {
 			changeListeners.fire(this);
+			structuralChangeListeners.fire(this);
 			appointmentSubscriptions.unsubscribeAll();
 			appointmentSubscriptions.subscribeAll(appointments, AppointmentModel::getChangeListeners, app -> changeListeners.fire(this));
+			appointmentSubscriptions.subscribeAll(appointments, AppointmentModel::getStructuralChangeListeners, app -> structuralChangeListeners.fire(this));
 		});
 	}
 	
 	public EventListenerList<CalendarModel> getChangeListeners() { return changeListeners; }
+	
+	public EventListenerList<CalendarModel> getStructuralChangeListeners() { return structuralChangeListeners; }
 	
 	public Observable<DrawColor> getColor() { return color; }
 	
