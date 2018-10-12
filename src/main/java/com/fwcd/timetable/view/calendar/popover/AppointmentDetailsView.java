@@ -1,4 +1,4 @@
-package com.fwcd.timetable.view.calendar.details;
+package com.fwcd.timetable.view.calendar.popover;
 
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.time.LocalDateTimeInterval;

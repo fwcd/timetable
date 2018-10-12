@@ -1,13 +1,18 @@
 package com.fwcd.timetable.view.calendar.weekview;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
 import com.fwcd.timetable.model.calendar.CalendarCrateModel;
+import com.fwcd.timetable.view.TimeTableAppContext;
+import com.fwcd.timetable.view.calendar.popover.NewAppointmentView;
 import com.fwcd.timetable.view.utils.FxView;
+
+import org.controlsfx.control.PopOver;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -34,7 +39,7 @@ public class WeekDayView implements FxView {
 	private final int dayOffset;
 	private final Observable<Option<LocalDate>> date = new Observable<>(Option.empty());
 	
-	public WeekDayView(WeekDayTimeLayouter layouter, CalendarCrateModel calendars, int dayOffset) {
+	public WeekDayView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarCrateModel calendars, int dayOffset) {
 		this.dayOffset = dayOffset;
 		this.layouter = layouter;
 		
@@ -43,6 +48,8 @@ public class WeekDayView implements FxView {
 		
 		appointments = new WeekDayAppointmentsView(layouter, calendars);
 		date.listenAndFire(it -> it.ifPresent(appointments::setDate));
+		
+		node.setOnMouseClicked(e -> new PopOver(new NewAppointmentView(context, /* TODO */ calendars.getCalendars().get(0), LocalDateTime.of(date.get().unwrap("Can not create appointment without a date"), layouter.toTime(e.getY()))).getNode()).show(node.getScene().getWindow(), e.getScreenX(), e.getScreenY()));
 		
 		// Add layered nodes
 		

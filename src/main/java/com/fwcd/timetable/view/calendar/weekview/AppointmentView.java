@@ -3,7 +3,7 @@ package com.fwcd.timetable.view.calendar.weekview;
 import java.time.format.DateTimeFormatter;
 
 import com.fwcd.timetable.model.calendar.AppointmentModel;
-import com.fwcd.timetable.view.calendar.details.AppointmentDetailsView;
+import com.fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 
@@ -45,7 +45,10 @@ public class AppointmentView implements FxView {
 		node.getChildren().add(timeLabel);
 		
 		PopOver popOver = new PopOver(new AppointmentDetailsView(model).getNode());
-		node.setOnMouseClicked(e -> FxUtils.showIndependentPopOver(popOver, node));
+		node.setOnMouseClicked(e -> {
+			FxUtils.showIndependentPopOver(popOver, node);
+			e.consume();
+		});
 	}
 
 	private Color brightColor(Color calColor) {

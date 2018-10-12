@@ -12,6 +12,11 @@ public class WeekDayTimeLayouter {
 			+ (time.getSecond() * (hourHeight / 3600));
 	}
 	
+	public LocalTime toTime(double pixelY) {
+		double secondHeight = hourHeight / 3600;
+		return LocalTime.ofSecondOfDay((long) (pixelY / secondHeight));
+	}
+	
 	public double toPixelHeight(Duration duration) {
 		return duration.getSeconds() * (hourHeight / 3600);
 	}
