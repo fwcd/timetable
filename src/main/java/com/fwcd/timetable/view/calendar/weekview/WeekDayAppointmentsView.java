@@ -11,7 +11,6 @@ import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
-import com.fwcd.timetable.view.utils.SubscriptionStack;
 
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
@@ -23,7 +22,6 @@ public class WeekDayAppointmentsView implements FxView {
 	private final Pane node;
 	
 	private final CalendarCrateModel calendars;
-	private final SubscriptionStack calendarSubscriptions = new SubscriptionStack();
 	
 	private final BiList<LocalTimeInterval, StackPane> overlapBoxes = new ArrayBiList<>();
 	private Option<LocalDate> currentDate = Option.empty();
@@ -35,13 +33,7 @@ public class WeekDayAppointmentsView implements FxView {
 		node = new StackPane();
 		node.setPickOnBounds(false);
 		
-		calendars.getCalendars().listen(it -> updateListenersAndView());
-	}
-	
-	private void updateListenersAndView() {
-		calendarSubscriptions.unsubscribeAll();
-		calendarSubscriptions.subscribeAll(calendars.getCalendars(), CalendarModel::getAppointments, it -> updateView());
-		updateView();
+		calendars.getStructuralChangeListeners().add(it -> updateView());
 	}
 	
 	public void setDate(LocalDate date) {

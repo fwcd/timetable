@@ -61,11 +61,11 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	}
 	
 	private void setupStructuralChangeListeners() {
-		dateTimeInterval.listen(it -> changeListeners.fire(this));
-		ignoreDate.listen(it -> changeListeners.fire(this));
-		ignoreTime.listen(it -> changeListeners.fire(this));
-		recurrence.getParsed().listen(it -> changeListeners.fire(this));
-		recurrenceEnd.listen(it -> changeListeners.fire(this));
+		dateTimeInterval.listen(it -> structuralChangeListeners.fire(this));
+		ignoreDate.listen(it -> structuralChangeListeners.fire(this));
+		ignoreTime.listen(it -> structuralChangeListeners.fire(this));
+		recurrence.getParsed().listen(it -> structuralChangeListeners.fire(this));
+		recurrenceEnd.listen(it -> structuralChangeListeners.fire(this));
 	}
 	
 	@Override
