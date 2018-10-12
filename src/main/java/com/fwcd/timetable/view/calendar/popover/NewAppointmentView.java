@@ -8,9 +8,11 @@ import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 
-import javafx.scene.Node;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 public class NewAppointmentView implements FxView {
 	private final Pane node;
@@ -22,9 +24,11 @@ public class NewAppointmentView implements FxView {
 		this.calendar = calendar;
 		
 		Button newAppointmentButton = FxUtils.buttonOf(context.localized("newappointment"), this::createAppointment);
-		node = new Pane(
+		StackPane.setAlignment(newAppointmentButton, Pos.CENTER);
+		node = new StackPane(
 			newAppointmentButton
 		);
+		node.setPadding(new Insets(10));
 	}
 	
 	private void createAppointment() {
@@ -32,10 +36,11 @@ public class NewAppointmentView implements FxView {
 			.start(start)
 			.end(start.plusHours(1))
 			.build();
+		node.setPadding(Insets.EMPTY);
 		calendar.getAppointments().add(appointment);
 		node.getChildren().setAll(new AppointmentDetailsView(appointment).getNode());
 	}
 	
 	@Override
-	public Node getNode() { return node; }
+	public Pane getNode() { return node; }
 }

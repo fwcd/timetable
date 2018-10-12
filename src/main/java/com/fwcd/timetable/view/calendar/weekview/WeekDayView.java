@@ -53,8 +53,12 @@ public class WeekDayView implements FxView {
 		appointments = new WeekDayAppointmentsView(layouter, calendars);
 		date.listenAndFire(it -> it.ifPresent(appointments::setDate));
 		
-		node.setOnMouseClicked(e -> createNewAppointmentPopOver(context, e)
-			.show(node.getScene().getWindow(), e.getScreenX(), e.getScreenY()));
+		node.setOnMouseClicked(e -> {
+			NewAppointmentView newAppointmentView = createNewAppointmentView(context, e);
+			double yOffset = -30; // TODO: Dynamic calculation of the y-offset
+			new PopOver(newAppointmentView.getNode())
+				.show(node.getScene().getWindow(), e.getScreenX(), e.getScreenY() + yOffset);
+		});
 		
 		// Add layered nodes
 		
@@ -63,12 +67,12 @@ public class WeekDayView implements FxView {
 		addTimeIndicator();
 	}
 
-	private PopOver createNewAppointmentPopOver(TimeTableAppContext context, MouseEvent e) {
+	private NewAppointmentView createNewAppointmentView(TimeTableAppContext context, MouseEvent e) {
 		CalendarModel calendar = /* TODO */ calendars.getCalendars().get(0);
 		LocalDate newDate = date.get().unwrap("Can not create appointment without a date");
 		LocalTime newTime = layouter.toTime(e.getY());
 		LocalDateTime dateTime = LocalDateTime.of(newDate, newTime);
-		return new PopOver(new NewAppointmentView(context, calendar, dateTime).getNode());
+		return new NewAppointmentView(context, calendar, dateTime);
 	}
 	
 	private void addHourMarks() {
