@@ -69,6 +69,9 @@ public class ParsedRecurrence {
 				.map(Integer::parseInt)
 				.map(DayOfWeek::of)
 				.collect(Collectors.toSet());
+			if (weekDays.isEmpty()) {
+				weekDays = Arrays.stream(DayOfWeek.values()).collect(Collectors.toSet());
+			}
 			return Option.of(new WeeklyRecurrence(start, end, weekDays, weeksBetweenRepeats));
 		} catch (NumberFormatException e) {
 			return Option.empty();

@@ -18,7 +18,8 @@ public class DailyRecurrence implements Recurrence {
 	
 	@Override
 	public boolean matches(LocalDate date) {
-		return (Period.between(start, date).getDays() % daysBetweenRepeats == 0)
+		return (daysBetweenRepeats != 0)
+			&& (Period.between(start, date).getDays() % daysBetweenRepeats == 0)
 			&& (date.compareTo(start) >= 0)
 			&& (end.map(e -> date.compareTo(e) <= 0).orElse(true));
 	}
