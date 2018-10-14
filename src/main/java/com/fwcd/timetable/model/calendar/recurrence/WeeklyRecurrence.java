@@ -2,7 +2,7 @@ package com.fwcd.timetable.model.calendar.recurrence;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 import com.fwcd.fructose.Option;
@@ -22,9 +22,8 @@ public class WeeklyRecurrence implements Recurrence {
 	
 	@Override
 	public boolean matches(LocalDate date) {
-		Period period = Period.between(start, date);
 		return weekDays.contains(date.getDayOfWeek())
-			&& (period.getDays() % (7 * weeksBetweenRepeats) == 0)
+			&& (ChronoUnit.WEEKS.between(start, date) % weeksBetweenRepeats == 0)
 			&& (date.compareTo(start) >= 0)
 			&& (end.map(e -> date.compareTo(e) <= 0).orElse(true));
 	}
