@@ -3,11 +3,11 @@ package com.fwcd.timetable.view.calendar.popover;
 import java.time.LocalDateTime;
 
 import com.fwcd.timetable.model.calendar.AppointmentModel;
-import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -18,11 +18,11 @@ public class NewAppointmentView implements FxView {
 	private final Pane node;
 	private final LocalDateTime start;
 	
-	public NewAppointmentView(TimeTableAppContext context, CalendarCrateModel calendars, LocalDateTime start) {
+	public NewAppointmentView(TimeTableAppContext context, CalendarsViewModel calendars, LocalDateTime start) {
 		this.start = start;
 		
 		node = new VBox(
-			calendars.getCalendars().stream()
+			calendars.getModel().getCalendars().stream()
 				.map(cal -> FxUtils.buttonOf(
 					context.localized("newappointment").mapStrongly(it -> it + " in " + cal.toString()),
 					() -> createAppointment(context, cal))

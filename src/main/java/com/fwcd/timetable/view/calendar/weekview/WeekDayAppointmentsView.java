@@ -7,10 +7,10 @@ import com.fwcd.fructose.structs.ArrayBiList;
 import com.fwcd.fructose.structs.BiList;
 import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
-import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
@@ -22,12 +22,12 @@ public class WeekDayAppointmentsView implements FxView {
 	private final Pane node;
 	
 	private final TimeTableAppContext context;
-	private final CalendarCrateModel calendars;
+	private final CalendarsViewModel calendars;
 	
 	private final BiList<LocalTimeInterval, StackPane> overlapBoxes = new ArrayBiList<>();
 	private Option<LocalDate> currentDate = Option.empty();
 	
-	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarCrateModel calendars) {
+	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarsViewModel calendars) {
 		this.layouter = layouter;
 		this.context = context;
 		this.calendars = calendars;
@@ -55,7 +55,7 @@ public class WeekDayAppointmentsView implements FxView {
 
 	private void updateView() {
 		clear();
-		currentDate.ifPresent(date -> calendars.getCalendars().stream()
+		currentDate.ifPresent(date -> calendars.getSelectedCalendars().stream()
 			.flatMap(cal -> cal.getAppointments().stream().map(app -> new AppointmentWithCalendar(app, cal)))
 			.filter(it -> it.appointment.occursOn(date))
 			.forEach(it -> add(it, date)));

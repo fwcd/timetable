@@ -1,12 +1,12 @@
 package com.fwcd.timetable.view.calendar;
 
-import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.calendar.listview.CalendarListView;
 import com.fwcd.timetable.view.calendar.monthview.MonthView;
 import com.fwcd.timetable.view.calendar.weekview.WeekView;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.NavigableTabPane;
+import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.scene.Node;
 
@@ -16,10 +16,10 @@ public class CalendarsView implements FxView {
 	private final MonthView monthView;
 	private final CalendarListView listView;
 	
-	public CalendarsView(TimeTableAppContext context, CalendarCrateModel model) {
-		weekView = new WeekView(context, model);
-		monthView = new MonthView(model);
-		listView = new CalendarListView(model);
+	public CalendarsView(TimeTableAppContext context, CalendarsViewModel viewModel) {
+		weekView = new WeekView(context, viewModel);
+		monthView = new MonthView(viewModel);
+		listView = new CalendarListView(viewModel);
 		
 		NavigableTabPane tabPane = new NavigableTabPane();
 		tabPane.addTab(context.localized("week"), weekView);

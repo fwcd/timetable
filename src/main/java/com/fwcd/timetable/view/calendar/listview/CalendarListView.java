@@ -3,10 +3,10 @@ package com.fwcd.timetable.view.calendar.listview;
 import java.util.stream.Collectors;
 
 import com.fwcd.fructose.structs.ObservableList;
-import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.view.utils.FxNavigableView;
 import com.fwcd.timetable.view.utils.calendar.CalendarEntryListView;
+import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.scene.Node;
 
@@ -14,9 +14,9 @@ public class CalendarListView implements FxNavigableView {
 	private final Node node;
 	private final ObservableList<CalendarEntryModel> entries;
 	
-	public CalendarListView(CalendarCrateModel calendars) {
+	public CalendarListView(CalendarsViewModel calendars) {
 		entries = new ObservableList<>();
-		calendars.getChangeListeners().add(it -> updateEntries(calendars));
+		calendars.getModel().getChangeListeners().add(it -> updateEntries(calendars));
 		updateEntries(calendars);
 		
 		CalendarEntryListView entriesView = new CalendarEntryListView();
@@ -25,8 +25,8 @@ public class CalendarListView implements FxNavigableView {
 		node = entriesView.getNode();
 	}
 	
-	private void updateEntries(CalendarCrateModel calendars) {
-		entries.set(calendars.getCalendars()
+	private void updateEntries(CalendarsViewModel calendars) {
+		entries.set(calendars.getModel().getCalendars()
 			.stream()
 			.flatMap(it -> it.getAppointments().stream())
 			.collect(Collectors.toList()));

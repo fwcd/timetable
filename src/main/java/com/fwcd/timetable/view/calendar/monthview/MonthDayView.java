@@ -3,9 +3,9 @@ package com.fwcd.timetable.view.calendar.monthview;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
-import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -21,11 +21,11 @@ public class MonthDayView implements FxView, AutoCloseable {
 	private final VBox content;
 	
 	private final LocalDate date;
-	private final CalendarCrateModel calendars;
+	private final CalendarsViewModel calendars;
 	
 	private final SubscriptionStack subscriptions = new SubscriptionStack();
 	
-	public MonthDayView(CalendarCrateModel calendars, LocalDate date) {
+	public MonthDayView(CalendarsViewModel calendars, LocalDate date) {
 		this.calendars = calendars;
 		this.date = date;
 		
@@ -39,11 +39,11 @@ public class MonthDayView implements FxView, AutoCloseable {
 		content = new VBox();
 		node.setCenter(content);
 		
-		subscriptions.push(calendars.getChangeListeners().subscribe(it -> updateView()));
+		subscriptions.push(calendars.getModel().getChangeListeners().subscribe(it -> updateView()));
 	}
 	
 	private void updateView() {
-		content.getChildren().setAll(calendars.getCalendars().stream()
+		content.getChildren().setAll(calendars.getModel().getCalendars().stream()
 			.flatMap(it -> it.getAppointments().stream())
 			.filter(it -> it.occursOn(date))
 			.map(it -> new Label(it.getName().get()))

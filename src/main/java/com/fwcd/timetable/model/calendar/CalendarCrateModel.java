@@ -12,7 +12,6 @@ public class CalendarCrateModel {
 	private final SubscriptionStack calendarSubscriptions = new SubscriptionStack();
 	
 	public CalendarCrateModel() {
-		calendars.add(new CalendarModel("Calendar"));
 		setupChangeListeners();
 	}
 	

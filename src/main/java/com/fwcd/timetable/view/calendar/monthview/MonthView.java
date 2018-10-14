@@ -9,8 +9,8 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.structs.ArrayStack;
 import com.fwcd.fructose.structs.Stack;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
-import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.view.utils.FxNavigableView;
+import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
@@ -19,12 +19,12 @@ import javafx.scene.layout.Priority;
 public class MonthView implements FxNavigableView {
 	private final GridPane node;
 	
-	private final CalendarCrateModel calendars;
+	private final CalendarsViewModel calendars;
 	private final Stack<MonthDayView> days = new ArrayStack<>();
 	
 	private final Observable<YearMonth> month;
 	
-	public MonthView(CalendarCrateModel calendars) {
+	public MonthView(CalendarsViewModel calendars) {
 		this.calendars = calendars;
 		
 		node = new GridPane();
