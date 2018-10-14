@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import com.fwcd.fructose.Option;
 
 public class DailyRecurrence implements Recurrence {
+	private static final long serialVersionUID = -2555555069797368936L;
 	private final LocalDate start;
 	private final Option<LocalDate> end;
 	private final int daysBetweenRepeats;

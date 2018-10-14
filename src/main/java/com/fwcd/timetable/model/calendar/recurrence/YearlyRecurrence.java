@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import com.fwcd.fructose.Option;
 
 public class YearlyRecurrence implements Recurrence {
+	private static final long serialVersionUID = 3528256984722663329L;
 	private final LocalDate start;
 	private final Option<LocalDate> end;
 	private final int yearsBetweenRepeats;

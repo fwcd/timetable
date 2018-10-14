@@ -1,5 +1,6 @@
 package com.fwcd.timetable.model.calendar.recurrence;
 
+import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
@@ -31,7 +32,8 @@ import com.fwcd.timetable.model.utils.ObservableUtils;
  * weeksubmode = 'w', number (week of the month), ' ', number (day of the week)
  * </pre>
  */
-public class ParsedRecurrence {
+public class ParsedRecurrence implements Serializable {
+	private static final long serialVersionUID = -1134267101451984444L;
 	private static final Pattern RECURRENCE_PATTERN = Pattern.compile("^(d|w|m)(\\d+)(?: (.+))?$");
 	private static final Pattern MONTH_SUB_MODE_PATTERN = Pattern.compile("^d(\\d+)$");
 	private static final Pattern WEEK_SUB_MODE_PATTERN = Pattern.compile("^w(\\d+) (\\d+)$");

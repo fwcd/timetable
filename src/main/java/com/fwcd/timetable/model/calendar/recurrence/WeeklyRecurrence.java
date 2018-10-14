@@ -8,6 +8,7 @@ import java.util.Set;
 import com.fwcd.fructose.Option;
 
 public class WeeklyRecurrence implements Recurrence {
+	private static final long serialVersionUID = -4477528751020266582L;
 	private final LocalDate start;
 	private final Option<LocalDate> end;
 	private final int weeksBetweenRepeats;

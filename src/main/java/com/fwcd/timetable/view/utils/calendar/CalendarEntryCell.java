@@ -2,6 +2,7 @@ package com.fwcd.timetable.view.utils.calendar;
 
 import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
+import com.fwcd.timetable.model.calendar.CalendarSerializationUtils;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
 import com.google.gson.Gson;
@@ -16,7 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class CalendarEntryCell implements FxView {
-	private static final Gson GSON = new Gson();
+	private static final Gson GSON = CalendarSerializationUtils.newGson();
 	
 	private final Label titleLabel = new Label();
 	private final Label subtitleLabel = new Label();
