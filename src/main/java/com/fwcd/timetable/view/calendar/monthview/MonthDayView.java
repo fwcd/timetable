@@ -39,11 +39,11 @@ public class MonthDayView implements FxView, AutoCloseable {
 		content = new VBox();
 		node.setCenter(content);
 		
-		subscriptions.push(calendars.getModel().getChangeListeners().subscribe(it -> updateView()));
+		subscriptions.push(calendars.getChangeListeners().subscribe(it -> updateView()));
 	}
 	
 	private void updateView() {
-		content.getChildren().setAll(calendars.getModel().getCalendars().stream()
+		content.getChildren().setAll(calendars.getSelectedCalendars().stream()
 			.flatMap(it -> it.getAppointments().stream())
 			.filter(it -> it.occursOn(date))
 			.map(it -> new Label(it.getName().get()))

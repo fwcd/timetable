@@ -11,6 +11,7 @@ public class CalendarsViewModel {
 	private final CalendarCrateModel model;
 	private final ObservableSet<CalendarModel> selectedCalendars = new ObservableSet<>(new LinkedHashSet<>());
 	
+	private final EventListenerList<CalendarsViewModel> changeListeners = new EventListenerList<>();
 	private final EventListenerList<CalendarsViewModel> structuralChangeListeners = new EventListenerList<>();
 	
 	public CalendarsViewModel(CalendarCrateModel model) {
@@ -22,13 +23,19 @@ public class CalendarsViewModel {
 	
 	private void setupChangeListeners() {
 		model.getStructuralChangeListeners().listen(it -> structuralChangeListeners.fire(this));
-		selectedCalendars.listen(it -> structuralChangeListeners.fire(this));
+		model.getChangeListeners().listen(it -> changeListeners.fire(this));
+		selectedCalendars.listen(it -> {
+			changeListeners.fire(this);
+			structuralChangeListeners.fire(this);
+		});
 	}
 	
 	public void addAndSelect(CalendarModel calendar) {
 		model.getCalendars().add(calendar);
 		selectedCalendars.add(calendar);
 	}
+	
+	public EventListenerList<CalendarsViewModel> getChangeListeners() { return changeListeners; }
 	
 	public EventListenerList<CalendarsViewModel> getStructuralChangeListeners() { return structuralChangeListeners; }
 	
