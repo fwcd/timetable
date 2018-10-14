@@ -11,8 +11,9 @@ import com.fwcd.fructose.Option;
 import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.recurrence.ParsedRecurrence;
+import com.fwcd.timetable.model.utils.PostDeserializable;
 
-public class AppointmentModel implements Serializable, CalendarEntryModel, Comparable<AppointmentModel> {
+public class AppointmentModel implements Serializable, CalendarEntryModel, Comparable<AppointmentModel>, PostDeserializable {
 	private static final long serialVersionUID = 6135909125862494477L;
 	private final Observable<String> name;
 	private final Observable<Option<Location>> location;
@@ -27,14 +28,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	private transient EventListenerList<AppointmentModel> nullableStructuralChangeListeners;
 	
 	public AppointmentModel() {
-		name = new Observable<>("");
-		location = new Observable<>(Option.empty());
-		dateTimeInterval = new Observable<>(new LocalDateTimeInterval(LocalDateTime.now(), LocalDateTime.now()));
-		description = new Observable<>("");
-		ignoreDate = new Observable<>(false);
-		ignoreTime = new Observable<>(false);
-		recurrenceEnd = new Observable<>(Option.empty());
-		recurrence = new ParsedRecurrence(dateTimeInterval, recurrenceEnd);
+		this("", Option.empty(), LocalDateTime.now(), LocalDateTime.now(), "", false, false, "", Option.empty());
 	}
 	
 	private AppointmentModel(
@@ -79,6 +73,12 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		ignoreTime.listen(it -> getStructuralChangeListeners().fire(this));
 		recurrence.getParsed().listen(it -> getStructuralChangeListeners().fire(this));
 		recurrenceEnd.listen(it -> getStructuralChangeListeners().fire(this));
+	}
+	
+	@Override
+	public void postDeserialize() {
+		setupChangeListeners();
+		setupStructuralChangeListeners();
 	}
 	
 	@Override

@@ -7,7 +7,8 @@ public class GsonUtils {
 	private GsonUtils() {}
 	
 	public static Gson newGson(Class<?>... polymorphicTypes) {
-		GsonBuilder builder = new GsonBuilder();
+		GsonBuilder builder = new GsonBuilder()
+			.registerTypeAdapterFactory(new GsonPostDeserializationFactory());
 		
 		for (Class<?> polymorphicType : polymorphicTypes) {
 			builder.registerTypeAdapter(polymorphicType, new PolymorphicSerializer<>());

@@ -11,9 +11,10 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.draw.DrawColor;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.task.TaskCrateModel;
+import com.fwcd.timetable.model.utils.PostDeserializable;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
 
-public class CalendarModel implements Serializable {
+public class CalendarModel implements Serializable, PostDeserializable {
 	private static final long serialVersionUID = 831554590083407654L;
 	private final Observable<String> name;
 	private final Observable<DrawColor> color = new Observable<>(randomColor());
@@ -24,8 +25,18 @@ public class CalendarModel implements Serializable {
 	private transient EventListenerList<CalendarModel> nullableStructuralChangeListeners;
 	private transient SubscriptionStack nullableAppointmentSubscriptions;
 	
+	public CalendarModel() {
+		name = new Observable<>("");
+		setupChangeListeners();
+	}
+	
 	public CalendarModel(String name) {
 		this.name = new Observable<>(name);
+		setupChangeListeners();
+	}
+	
+	@Override
+	public void postDeserialize() {
 		setupChangeListeners();
 	}
 	

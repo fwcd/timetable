@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 import com.fwcd.fructose.EventListenerList;
 import com.fwcd.fructose.structs.ObservableList;
+import com.fwcd.timetable.model.utils.PostDeserializable;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
 
-public class TaskCrateModel implements Serializable {
+public class TaskCrateModel implements Serializable, PostDeserializable {
 	private static final long serialVersionUID = -1485835006395536825L;
 	private final ObservableList<TaskListModel> lists = new ObservableList<>();
 	
@@ -14,6 +15,11 @@ public class TaskCrateModel implements Serializable {
 	private transient SubscriptionStack nullableListSubscriptions;
 	
 	public TaskCrateModel() {
+		setupChangeListeners();
+	}
+	
+	@Override
+	public void postDeserialize() {
 		setupChangeListeners();
 	}
 	

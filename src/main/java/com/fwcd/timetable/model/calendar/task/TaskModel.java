@@ -7,8 +7,9 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import com.fwcd.timetable.model.calendar.CommonEntryType;
+import com.fwcd.timetable.model.utils.PostDeserializable;
 
-public class TaskModel implements CalendarEntryModel, Serializable {
+public class TaskModel implements CalendarEntryModel, Serializable, PostDeserializable {
 	private static final long serialVersionUID = -1219052993628334319L;
 	private final Observable<String> name;
 	private final Observable<String> description = new Observable<>("");
@@ -17,6 +18,11 @@ public class TaskModel implements CalendarEntryModel, Serializable {
 	
 	public TaskModel(String name) {
 		this.name = new Observable<>(name);
+		setupChangeListeners();
+	}
+	
+	@Override
+	public void postDeserialize() {
 		setupChangeListeners();
 	}
 	
