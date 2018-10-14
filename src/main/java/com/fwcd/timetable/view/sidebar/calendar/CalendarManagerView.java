@@ -1,6 +1,5 @@
 package com.fwcd.timetable.view.sidebar.calendar;
 
-import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
@@ -38,9 +37,8 @@ public class CalendarManagerView implements FxView {
 	}
 	
 	private void createCalendar() {
-		ObservableList<CalendarModel> calendars = viewModel.getModel().getCalendars();
-		calendars.add(new CalendarModel(""));
-		calendarList.edit(calendars.size() - 1);
+		viewModel.addAndSelect(new CalendarModel(""));
+		calendarList.edit(viewModel.getModel().getCalendars().size() - 1);
 	}
 	
 	@Override
