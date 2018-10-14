@@ -24,7 +24,7 @@ public class CalendarManagerView implements FxView {
 		
 		calendarList = new ListView<>();
 		calendarList.setEditable(true);
-		calendarList.setCellFactory(list -> new CalendarManagerListCell(viewModel));
+		calendarList.setCellFactory(list -> new CalendarManagerListCell(context, viewModel));
 		viewModel.getModel().getCalendars().listenAndFire(calendarList.getItems()::setAll);
 		
 		HBox controls = new HBox(

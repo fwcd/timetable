@@ -81,7 +81,7 @@ public class AppointmentDetailsView implements FxView {
 	}
 
 	private Label localizedPropertyLabel(String unlocalized, TimeTableAppContext context) {
-		return FxUtils.labelOf(context.localized(unlocalized).mapStrongly(it -> it + ": "));
+		return FxUtils.labelOf(context.localized(unlocalized), ": ");
 	}
 	
 	@Override

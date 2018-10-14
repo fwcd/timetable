@@ -1,14 +1,17 @@
 package com.fwcd.timetable.view.sidebar.calendar;
 
 import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -29,7 +32,7 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 	private final Label label;
 	private final TextField textField;
 	
-	public CalendarManagerListCell(CalendarsViewModel viewModel) {
+	public CalendarManagerListCell(TimeTableAppContext context, CalendarsViewModel viewModel) {
 		this.viewModel = viewModel;
 		
 		label = new Label();
@@ -55,6 +58,15 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		HBox node = new HBox(checkBoxNode, iconNode, textNode);
 		node.setSpacing(5);
 		node.setAlignment(Pos.CENTER_LEFT);
+		
+		MenuItem deleteItem = FxUtils.newMenuItem(context.localized("delete"));
+		deleteItem.setOnAction(e -> {
+			CalendarModel calendar = getItem();
+			if (calendar != null) {
+				viewModel.getModel().getCalendars().remove(calendar);
+			}
+		});
+		setContextMenu(new ContextMenu(deleteItem));
 		
 		setGraphic(node);
 		setContentDisplay(ContentDisplay.GRAPHIC_ONLY);

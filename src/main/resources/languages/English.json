@@ -18,5 +18,6 @@
 	"recurrence": "Recurrence",
 	"ignoredate": "Ignore Date",
 	"ignoretime": "Ignore Time",
-	"newappointment": "New Appointment"
+	"newappointment": "New Appointment",
+	"delete": "Delete"
 }

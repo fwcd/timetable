@@ -18,5 +18,6 @@
 	"recurrence": "Wiederholung",
 	"ignoredate": "Ignoriere Datum",
 	"ignoretime": "Ignoriere Zeit",
-	"newappointment": "Neuer Termin"
+	"newappointment": "Neuer Termin",
+	"delete": "Löschen"
 }

@@ -17,6 +17,8 @@ public class CalendarsViewModel {
 	public CalendarsViewModel(CalendarCrateModel model) {
 		this.model = model;
 		
+		model.getCalendars().listen(selectedCalendars::retainAll);
+		
 		setupChangeListeners();
 		addAndSelect(new CalendarModel("Calendar"));
 	}
