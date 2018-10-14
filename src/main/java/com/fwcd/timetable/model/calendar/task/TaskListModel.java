@@ -1,16 +1,19 @@
 package com.fwcd.timetable.model.calendar.task;
 
+import java.io.Serializable;
+
 import com.fwcd.fructose.EventListenerList;
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
 
-public class TaskListModel {
+public class TaskListModel implements Serializable {
+	private static final long serialVersionUID = 3478629580505983160L;
 	private final Observable<String> name;
 	private final ObservableList<TaskModel> tasks = new ObservableList<>();
 	
-	private final EventListenerList<TaskListModel> changeListeners = new EventListenerList<>();
-	private final SubscriptionStack taskSubscriptions = new SubscriptionStack();
+	private transient EventListenerList<TaskListModel> nullableChangeListeners;
+	private transient SubscriptionStack nullableTaskSubscriptions;
 	
 	public TaskListModel(String name) {
 		this.name = new Observable<>(name);
@@ -18,15 +21,27 @@ public class TaskListModel {
 	}
 	
 	private void setupChangeListeners() {
-		name.listen(it -> changeListeners.fire(this));
+		name.listen(it -> getChangeListeners().fire(this));
 		tasks.listenAndFire(it -> {
-			changeListeners.fire(this);
-			taskSubscriptions.unsubscribeAll();
-			taskSubscriptions.subscribeAll(tasks, TaskModel::getChangeListeners, task -> changeListeners.fire(this));
+			getChangeListeners().fire(this);
+			getTaskSubscriptions().unsubscribeAll();
+			getTaskSubscriptions().subscribeAll(tasks, TaskModel::getChangeListeners, task -> getChangeListeners().fire(this));
 		});
 	}
 	
-	public EventListenerList<TaskListModel> getChangeListeners() { return changeListeners; }
+	public EventListenerList<TaskListModel> getChangeListeners() {
+		if (nullableChangeListeners == null) {
+			nullableChangeListeners = new EventListenerList<>();
+		}
+		return nullableChangeListeners;
+	}
+	
+	public SubscriptionStack getTaskSubscriptions() {
+		if (nullableTaskSubscriptions == null) {
+			nullableTaskSubscriptions = new SubscriptionStack();
+		}
+		return nullableTaskSubscriptions;
+	}
 
 	public Observable<String> getName() { return name; }
 	

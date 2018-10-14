@@ -20,5 +20,16 @@
 			"}"
 		],
 		"description": "Create a new JavaFX view class"
+	},
+	"Lazy Initialization": {
+		"scope": "java",
+		"prefix": "lazyinit",
+		"body": [
+			"if ($1 == null) {",
+			"\t$1 = new $2();",
+			"}",
+			"return $1;"
+		],
+		"description": "Implements the getter body for a lazily initialized field"
 	}
 }

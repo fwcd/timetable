@@ -1,16 +1,19 @@
 package com.fwcd.timetable.model.calendar.task;
 
+import java.io.Serializable;
+
 import com.fwcd.fructose.EventListenerList;
 import com.fwcd.fructose.Observable;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import com.fwcd.timetable.model.calendar.CommonEntryType;
 
-public class TaskModel implements CalendarEntryModel {
+public class TaskModel implements CalendarEntryModel, Serializable {
+	private static final long serialVersionUID = -1219052993628334319L;
 	private final Observable<String> name;
 	private final Observable<String> description = new Observable<>("");
 	
-	private final EventListenerList<TaskModel> changeListeners = new EventListenerList<>();
+	private transient EventListenerList<TaskModel> nullableChangeListeners;
 	
 	public TaskModel(String name) {
 		this.name = new Observable<>(name);
@@ -18,11 +21,16 @@ public class TaskModel implements CalendarEntryModel {
 	}
 	
 	private void setupChangeListeners() {
-		name.listen(it -> changeListeners.fire(this));
-		description.listen(it -> changeListeners.fire(this));
+		name.listen(it -> getChangeListeners().fire(this));
+		description.listen(it -> getChangeListeners().fire(this));
 	}
 	
-	public EventListenerList<TaskModel> getChangeListeners() { return changeListeners; }
+	public EventListenerList<TaskModel> getChangeListeners() {
+		if (nullableChangeListeners == null) {
+			nullableChangeListeners = new EventListenerList<>();
+		}
+		return nullableChangeListeners;
+	}
 
 	@Override
 	public void accept(CalendarEntryVisitor visitor) { visitor.visitTask(this); }
