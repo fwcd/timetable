@@ -8,7 +8,6 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
 import com.fwcd.timetable.model.calendar.CalendarCrateModel;
-import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.calendar.popover.NewAppointmentView;
 import com.fwcd.timetable.view.utils.FxView;
@@ -68,11 +67,10 @@ public class WeekDayView implements FxView {
 	}
 
 	private NewAppointmentView createNewAppointmentView(TimeTableAppContext context, MouseEvent e) {
-		CalendarModel calendar = /* TODO */ calendars.getCalendars().get(0);
 		LocalDate newDate = date.get().unwrap("Can not create appointment without a date");
 		LocalTime newTime = layouter.toTime(e.getY());
 		LocalDateTime dateTime = LocalDateTime.of(newDate, newTime);
-		return new NewAppointmentView(context, calendar, dateTime);
+		return new NewAppointmentView(context, calendars, dateTime);
 	}
 	
 	private void addHourMarks() {

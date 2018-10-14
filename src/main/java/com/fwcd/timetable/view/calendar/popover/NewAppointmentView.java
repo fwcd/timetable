@@ -3,35 +3,36 @@ package com.fwcd.timetable.view.calendar.popover;
 import java.time.LocalDateTime;
 
 import com.fwcd.timetable.model.calendar.AppointmentModel;
+import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 public class NewAppointmentView implements FxView {
 	private final Pane node;
 	private final LocalDateTime start;
-	private final CalendarModel calendar;
 	
-	public NewAppointmentView(TimeTableAppContext context, CalendarModel calendar, LocalDateTime start) {
+	public NewAppointmentView(TimeTableAppContext context, CalendarCrateModel calendars, LocalDateTime start) {
 		this.start = start;
-		this.calendar = calendar;
 		
-		Button newAppointmentButton = FxUtils.buttonOf(context.localized("newappointment"), () -> createAppointment(context));
-		StackPane.setAlignment(newAppointmentButton, Pos.CENTER);
-		node = new StackPane(
-			newAppointmentButton
+		node = new VBox(
+			calendars.getCalendars().stream()
+				.map(cal -> FxUtils.buttonOf(
+					context.localized("newappointment").mapStrongly(it -> it + " in " + cal.toString()),
+					() -> createAppointment(context, cal))
+				)
+				.toArray(Button[]::new)
 		);
 		node.setPadding(new Insets(10));
 	}
 	
-	private void createAppointment(TimeTableAppContext context) {
+	private void createAppointment(TimeTableAppContext context, CalendarModel calendar) {
 		AppointmentModel appointment = new AppointmentModel.Builder("")
 			.start(start)
 			.end(start.plusHours(1))
