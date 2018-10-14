@@ -69,7 +69,7 @@ public class AppointmentDetailsView implements FxView {
 		FxUtils.bindBidirectionally(model.ignoresTime(), ignoreTime.selectedProperty());
 		properties.addRow(5, localizedPropertyLabel("ignoretime", context), ignoreTime);
 		
-		Button deleteButton = FxUtils.buttonOf("Delete Appointment", () -> calendar.getAppointments().remove(model)); // TODO: Localization
+		Button deleteButton = FxUtils.buttonOf(context.localized("deleteappointment"), () -> calendar.getAppointments().remove(model));
 		
 		node = new VBox(
 			title,
