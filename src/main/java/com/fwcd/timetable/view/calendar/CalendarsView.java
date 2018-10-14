@@ -18,7 +18,7 @@ public class CalendarsView implements FxView {
 	
 	public CalendarsView(TimeTableAppContext context, CalendarsViewModel viewModel) {
 		weekView = new WeekView(context, viewModel);
-		monthView = new MonthView(viewModel);
+		monthView = new MonthView(context, viewModel);
 		listView = new CalendarListView(viewModel);
 		
 		NavigableTabPane tabPane = new NavigableTabPane();

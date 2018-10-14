@@ -9,6 +9,7 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.structs.ArrayStack;
 import com.fwcd.fructose.structs.Stack;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
+import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxNavigableView;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
@@ -17,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
 public class MonthView implements FxNavigableView {
+	private final TimeTableAppContext context;
 	private final GridPane node;
 	
 	private final CalendarsViewModel calendars;
@@ -24,8 +26,9 @@ public class MonthView implements FxNavigableView {
 	
 	private final Observable<YearMonth> month;
 	
-	public MonthView(CalendarsViewModel calendars) {
+	public MonthView(TimeTableAppContext context, CalendarsViewModel calendars) {
 		this.calendars = calendars;
+		this.context = context;
 		
 		node = new GridPane();
 		
@@ -45,7 +48,7 @@ public class MonthView implements FxNavigableView {
 		int i = 0;
 		
 		for (LocalDate date = first; date.compareTo(last) <= 0; date = date.plusDays(1)) {
-			MonthDayView day = new MonthDayView(calendars, date);
+			MonthDayView day = new MonthDayView(context, calendars, date);
 			days.push(day);
 			
 			Node dayNode = day.getNode();
