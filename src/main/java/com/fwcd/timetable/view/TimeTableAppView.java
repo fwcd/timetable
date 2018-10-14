@@ -28,7 +28,7 @@ public class TimeTableAppView implements FxParentView {
 		split.setOrientation(Orientation.HORIZONTAL);
 		split.setDividerPositions(0.7);
 		
-		node.setTop(new MenuBarView(context).getNode());
+		node.setTop(new MenuBarView(context, viewModel).getNode());
 		node.setCenter(split);
 	}
 	

@@ -19,5 +19,7 @@
 	"ignoredate": "Ignore Date",
 	"ignoretime": "Ignore Time",
 	"newappointment": "New Appointment",
-	"delete": "Delete"
+	"delete": "Delete",
+	"open": "Open",
+	"save": "Save"
 }

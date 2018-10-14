@@ -1,15 +1,26 @@
 package com.fwcd.timetable.model.calendar;
 
+import java.io.Reader;
+import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.List;
+
 import com.fwcd.fructose.EventListenerList;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-public class CalendarCrateModel {
+public class CalendarCrateModel implements Serializable {
+	private static final long serialVersionUID = -1914115703122727566L;
+	private static final Gson GSON = CalendarSerializationUtils.newGson();
+	private static final Type CALENDARS_TYPE = new TypeToken<List<CalendarModel>>() {}.getType();
+	
 	private final ObservableList<CalendarModel> calendars = new ObservableList<>();
 	
-	private final EventListenerList<CalendarCrateModel> changeListeners = new EventListenerList<>();
-	private final EventListenerList<CalendarCrateModel> structuralChangeListeners = new EventListenerList<>();
-	private final SubscriptionStack calendarSubscriptions = new SubscriptionStack();
+	private transient EventListenerList<CalendarCrateModel> nullableChangeListeners;
+	private transient EventListenerList<CalendarCrateModel> nullableStructuralChangeListeners;
+	private transient SubscriptionStack nullableCalendarSubscriptions;
 	
 	public CalendarCrateModel() {
 		setupChangeListeners();
@@ -17,17 +28,42 @@ public class CalendarCrateModel {
 	
 	private void setupChangeListeners() {
 		calendars.listenAndFire(it -> {
-			changeListeners.fire(this);
-			structuralChangeListeners.fire(this);
-			calendarSubscriptions.unsubscribeAll();
-			calendarSubscriptions.subscribeAll(calendars, CalendarModel::getChangeListeners, cal -> changeListeners.fire(this));
-			calendarSubscriptions.subscribeAll(calendars, CalendarModel::getStructuralChangeListeners, cal -> structuralChangeListeners.fire(this));
+			getChangeListeners().fire(this);
+			getStructuralChangeListeners().fire(this);
+			getCalendarSubscriptions().unsubscribeAll();
+			getCalendarSubscriptions().subscribeAll(calendars, CalendarModel::getChangeListeners, cal -> getChangeListeners().fire(this));
+			getCalendarSubscriptions().subscribeAll(calendars, CalendarModel::getStructuralChangeListeners, cal -> getStructuralChangeListeners().fire(this));
 		});
 	}
 	
-	public EventListenerList<CalendarCrateModel> getChangeListeners() { return changeListeners; }
-	
-	public EventListenerList<CalendarCrateModel> getStructuralChangeListeners() { return structuralChangeListeners; }
-	
 	public ObservableList<CalendarModel> getCalendars() { return calendars; }
+	
+	public EventListenerList<CalendarCrateModel> getChangeListeners() {
+		if (nullableChangeListeners == null) {
+			nullableChangeListeners = new EventListenerList<>();
+		}
+		return nullableChangeListeners;
+	}
+	
+	public EventListenerList<CalendarCrateModel> getStructuralChangeListeners() {
+		if (nullableStructuralChangeListeners == null) {
+			nullableStructuralChangeListeners = new EventListenerList<>();
+		}
+		return nullableStructuralChangeListeners;
+	}
+	
+	public SubscriptionStack getCalendarSubscriptions() {
+		if (nullableCalendarSubscriptions == null) {
+			nullableCalendarSubscriptions = new SubscriptionStack();
+		}
+		return nullableCalendarSubscriptions;
+	}
+	
+	public void saveAsJsonTo(Appendable writer) {
+		GSON.toJson(calendars.get(), CALENDARS_TYPE, writer);
+	}
+	
+	public void loadFromJsonIn(Reader reader) {
+		calendars.set(GSON.fromJson(reader, CALENDARS_TYPE));
+	}
 }

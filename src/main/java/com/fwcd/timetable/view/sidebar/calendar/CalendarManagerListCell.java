@@ -59,8 +59,7 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		node.setSpacing(5);
 		node.setAlignment(Pos.CENTER_LEFT);
 		
-		MenuItem deleteItem = FxUtils.newMenuItem(context.localized("delete"));
-		deleteItem.setOnAction(e -> {
+		MenuItem deleteItem = FxUtils.menuItemOf(context.localized("delete"), () -> {
 			CalendarModel calendar = getItem();
 			if (calendar != null) {
 				viewModel.getModel().getCalendars().remove(calendar);
