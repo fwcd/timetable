@@ -64,6 +64,8 @@ public class NavigableTabPane implements FxView {
 		}
 	}
 	
+	public Tab getSelectedTab() { return tabPane.getSelectionModel().getSelectedItem(); }
+	
 	@Override
 	public Node getNode() { return node; }
 }

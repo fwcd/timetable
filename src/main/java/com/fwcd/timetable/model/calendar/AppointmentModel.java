@@ -24,6 +24,17 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	private final EventListenerList<AppointmentModel> changeListeners = new EventListenerList<>();
 	private final EventListenerList<AppointmentModel> structuralChangeListeners = new EventListenerList<>();
 	
+	public AppointmentModel() {
+		name = new Observable<>("");
+		location = new Observable<>(Option.empty());
+		dateTimeInterval = new Observable<>(new LocalDateTimeInterval(LocalDateTime.now(), LocalDateTime.now()));
+		description = new Observable<>("");
+		ignoreDate = new Observable<>(false);
+		ignoreTime = new Observable<>(false);
+		recurrenceEnd = new Observable<>(Option.empty());
+		recurrence = new ParsedRecurrence(dateTimeInterval, recurrenceEnd);
+	}
+	
 	private AppointmentModel(
 		String name,
 		Option<Location> location,

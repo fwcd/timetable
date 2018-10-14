@@ -20,3 +20,7 @@
 	-fx-fill: blue;
 	-fx-stroke: blue;
 }
+
+.drag-active {
+	-fx-background-color: blue;
+}
