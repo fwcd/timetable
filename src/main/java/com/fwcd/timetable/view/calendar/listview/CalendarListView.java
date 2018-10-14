@@ -16,7 +16,7 @@ public class CalendarListView implements FxNavigableView {
 	
 	public CalendarListView(CalendarsViewModel calendars) {
 		entries = new ObservableList<>();
-		calendars.getModel().getChangeListeners().add(it -> updateEntries(calendars));
+		calendars.getChangeListeners().add(it -> updateEntries(calendars));
 		updateEntries(calendars);
 		
 		CalendarEntryListView entriesView = new CalendarEntryListView();
@@ -26,7 +26,7 @@ public class CalendarListView implements FxNavigableView {
 	}
 	
 	private void updateEntries(CalendarsViewModel calendars) {
-		entries.set(calendars.getModel().getCalendars()
+		entries.set(calendars.getSelectedCalendars()
 			.stream()
 			.flatMap(it -> it.getAppointments().stream())
 			.collect(Collectors.toList()));
