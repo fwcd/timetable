@@ -20,7 +20,7 @@ import javafx.scene.layout.StackPane;
 
 public class WeekDayAppointmentsView implements FxView {
 	private final WeekDayTimeLayouter layouter;
-	private final Pane node;
+	private final StackPane node;
 	
 	private final TimeTableAppContext context;
 	private final CalendarsViewModel calendars;
@@ -34,6 +34,7 @@ public class WeekDayAppointmentsView implements FxView {
 		this.calendars = calendars;
 		
 		node = new StackPane();
+		node.setMinSize(0, 0);
 		node.setPickOnBounds(false);
 		
 		calendars.getStructuralChangeListeners().add(it -> updateView());
@@ -60,6 +61,7 @@ public class WeekDayAppointmentsView implements FxView {
 		
 		LocalTimeInterval eventInterval = appointment.getTimeIntervalOn(viewedDate);
 		AnchorPane.setTopAnchor(child, layouter.toPixelY(eventInterval.getStart()));
+		child.maxWidthProperty().bind(node.widthProperty());
 		child.setPrefHeight(layouter.toPixelHeight(eventInterval.getDuration()));
 		
 		StackPane overlappingBox = null;

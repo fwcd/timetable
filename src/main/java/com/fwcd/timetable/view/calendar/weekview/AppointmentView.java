@@ -31,12 +31,14 @@ public class AppointmentView implements FxView {
 		Color fgColor = Color.BLACK;
 		
 		node = new VBox();
+		node.setMinWidth(0);
 		node.setBackground(new Background(new BackgroundFill(bgColor, new CornerRadii(3), Insets.EMPTY)));
 		node.getStyleClass().add("appointment");
 		
 		Label nameLabel = new Label();
 		nameLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
 		nameLabel.setTextFill(fgColor);
+		nameLabel.setWrapText(true);
 		model.getName().listenAndFire(nameLabel::setText);
 		node.getChildren().add(nameLabel);
 		

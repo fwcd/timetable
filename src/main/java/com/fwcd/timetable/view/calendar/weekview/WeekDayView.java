@@ -46,6 +46,7 @@ public class WeekDayView implements FxView {
 		this.calendars = calendars;
 		
 		node = new StackPane();
+		node.setMinWidth(0);
 		node.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0, 1, 0, 1))));
 		
 		appointments = new WeekDayAppointmentsView(layouter, context, calendars);
