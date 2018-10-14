@@ -56,6 +56,9 @@ public class CalendarsView implements FxView {
 				// Ignore any dragboard contents that are not a valid
 				// JSON appointment
 				e.setDropCompleted(false);
+			} catch (NullPointerException f) {
+				f.printStackTrace();
+				e.setDropCompleted(false);
 			}
 		});
 	}

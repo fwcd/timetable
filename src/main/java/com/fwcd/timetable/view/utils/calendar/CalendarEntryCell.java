@@ -35,7 +35,8 @@ public class CalendarEntryCell implements FxView {
 			if (currentItem.isPresent()) {
 				Dragboard dragboard = node.startDragAndDrop(TransferMode.COPY);
 				ClipboardContent content = new ClipboardContent();
-				content.putString(GSON.toJson(currentItem.unwrap()));
+				String json = GSON.toJson(currentItem.unwrap());
+				content.putString(json);
 				dragboard.setContent(content);
 			}
 		});
