@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import com.fwcd.fructose.EventListenerList;
+import com.fwcd.fructose.ListenerList;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
 import com.google.gson.Gson;
@@ -20,6 +21,7 @@ public class CalendarCrateModel implements Serializable {
 	
 	private transient EventListenerList<CalendarCrateModel> nullableChangeListeners;
 	private transient EventListenerList<CalendarCrateModel> nullableStructuralChangeListeners;
+	private transient ListenerList nullableOnLoadFromJsonListeners;
 	private transient SubscriptionStack nullableCalendarSubscriptions;
 	
 	public CalendarCrateModel() {
@@ -37,6 +39,15 @@ public class CalendarCrateModel implements Serializable {
 	}
 	
 	public ObservableList<CalendarModel> getCalendars() { return calendars; }
+	
+	public void saveAsJsonTo(Appendable writer) {
+		GSON.toJson(calendars.get(), CALENDARS_TYPE, writer);
+	}
+	
+	public void loadFromJsonIn(Reader reader) {
+		calendars.set(GSON.fromJson(reader, CALENDARS_TYPE));
+		getOnLoadFromJsonListeners().fire();
+	}
 	
 	public EventListenerList<CalendarCrateModel> getChangeListeners() {
 		if (nullableChangeListeners == null) {
@@ -59,11 +70,10 @@ public class CalendarCrateModel implements Serializable {
 		return nullableCalendarSubscriptions;
 	}
 	
-	public void saveAsJsonTo(Appendable writer) {
-		GSON.toJson(calendars.get(), CALENDARS_TYPE, writer);
-	}
-	
-	public void loadFromJsonIn(Reader reader) {
-		calendars.set(GSON.fromJson(reader, CALENDARS_TYPE));
+	public ListenerList getOnLoadFromJsonListeners() {
+		if (nullableOnLoadFromJsonListeners == null) {
+			nullableOnLoadFromJsonListeners = new ListenerList();
+		}
+		return nullableOnLoadFromJsonListeners;
 	}
 }
