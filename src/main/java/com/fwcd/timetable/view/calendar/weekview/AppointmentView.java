@@ -46,7 +46,7 @@ public class AppointmentView implements FxView {
 		model.getDateTimeInterval().listenAndFire(it -> timeLabel.setText(TIME_FORMATTER.format(it.getStart()) + " - " + TIME_FORMATTER.format(it.getEnd())));
 		node.getChildren().add(timeLabel);
 		
-		PopOver popOver = new PopOver(new AppointmentDetailsView(calendar, context, model).getNode());
+		PopOver popOver = FxUtils.newPopOver(new AppointmentDetailsView(calendar, context, model));
 		node.setOnMouseClicked(e -> {
 			FxUtils.showIndependentPopOver(popOver, node);
 			e.consume();

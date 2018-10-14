@@ -17,6 +17,8 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -188,5 +190,23 @@ public final class FxUtils {
 		double x = bounds.getMaxX();
 		double y = bounds.getMaxY() - bounds.getHeight();
 		popOver.show(node.getScene().getWindow(), x, y);
+	}
+
+	public static void enableHideOnEscape(PopOver popOver) {
+		popOver.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+			if (e.getCode() == KeyCode.ESCAPE) {
+				popOver.hide();
+			}
+		});
+	}
+	
+	public static PopOver newPopOver(FxView content) {
+		return newPopOver(content.getNode());
+	}
+	
+	public static PopOver newPopOver(Node content) {
+		PopOver popOver = new PopOver(content);
+		enableHideOnEscape(popOver);
+		return popOver;
 	}
 }
