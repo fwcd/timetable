@@ -29,6 +29,7 @@ public class CalendarListView implements FxNavigableView {
 		entries.set(calendars.getSelectedCalendars()
 			.stream()
 			.flatMap(it -> it.getAppointments().stream())
+			.sorted()
 			.collect(Collectors.toList()));
 	}
 	
