@@ -1,5 +1,6 @@
 package com.fwcd.timetable.model.utils;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class GsonUtils {
@@ -8,5 +9,9 @@ public class GsonUtils {
 	public static GsonBuilder buildGson() {
 		return new GsonBuilder()
 			.registerTypeAdapterFactory(new GsonPostDeserializationFactory());
+	}
+	
+	public static Gson newGson() {
+		return buildGson().create();
 	}
 }

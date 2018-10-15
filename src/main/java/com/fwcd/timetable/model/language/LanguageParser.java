@@ -13,7 +13,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class LanguageParser {
 	private static final Type MAP_TYPE = new TypeToken<Map<String, String>>() {}.getType();
-	private static final Gson GSON = GsonUtils.buildGson().create();
+	private static final Gson GSON = GsonUtils.newGson();
 	
 	public Language parseFromJson(String name, InputStreamable source) {
 		Map<String, String> map = source.mapStream(in -> {

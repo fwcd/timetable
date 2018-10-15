@@ -8,7 +8,7 @@ import com.fwcd.fructose.structs.BiList;
 import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
-import com.fwcd.timetable.view.TimeTableAppContext;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.calendar.utils.AppointmentWithCalendar;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;

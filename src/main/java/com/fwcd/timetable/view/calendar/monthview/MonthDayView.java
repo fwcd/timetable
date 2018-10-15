@@ -4,7 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
-import com.fwcd.timetable.view.TimeTableAppContext;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import com.fwcd.timetable.view.calendar.utils.AppointmentWithCalendar;
 import com.fwcd.timetable.view.utils.FxUtils;

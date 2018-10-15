@@ -1,6 +1,6 @@
 package com.fwcd.timetable.view.sidebar.calendar;
 
-import com.fwcd.timetable.view.TimeTableAppContext;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 

@@ -4,7 +4,7 @@ import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.model.calendar.CalendarSerializationUtils;
-import com.fwcd.timetable.view.TimeTableAppContext;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.calendar.listview.CalendarListView;
 import com.fwcd.timetable.view.calendar.monthview.MonthView;
 import com.fwcd.timetable.view.calendar.weekview.WeekView;

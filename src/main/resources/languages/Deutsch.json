@@ -23,5 +23,12 @@
 	"deleteappointment": "Termin löschen",
 	"delete": "Löschen",
 	"open": "Öffnen",
-	"save": "Speichern"
+	"save": "Speichern",
+	"settings": "Einstellungen",
+	"saveerror": "Fehler beim Speichern",
+	"openerror": "Fehler beim Öffnen",
+	"language": "Sprache",
+	"dateformat": "Datumsformat",
+	"timeformat": "Zeitformat",
+	"datetimeformat": "Datums- und Zeitformat"
 }

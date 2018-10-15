@@ -3,7 +3,7 @@ package com.fwcd.timetable.view.calendar.weekview;
 import java.time.LocalTime;
 
 import com.fwcd.fructose.Option;
-import com.fwcd.timetable.view.TimeTableAppContext;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxNavigableView;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;

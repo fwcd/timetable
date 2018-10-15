@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
-import com.fwcd.timetable.view.TimeTableAppContext;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 

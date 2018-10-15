@@ -1,9 +1,11 @@
 package com.fwcd.timetable.model.language;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-public class Language {
+public class Language implements Serializable {
+	private static final long serialVersionUID = -3794484912692629155L;
 	private final String name;
 	private final Map<String, String> mappings;
 	

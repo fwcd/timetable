@@ -23,5 +23,12 @@
 	"deleteappointment": "Delete Appointment",
 	"delete": "Delete",
 	"open": "Open",
-	"save": "Save"
+	"save": "Save",
+	"settings": "Settings",
+	"saveerror": "Error while saving",
+	"openerror": "Error while opening",
+	"language": "Language",
+	"dateformat": "Date Format",
+	"timeformat": "Time Format",
+	"datetimeformat": "Date and Time Format"
 }

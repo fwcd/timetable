@@ -3,6 +3,7 @@ package com.fwcd.timetable.view;
 import com.fwcd.timetable.view.calendar.CalendarsView;
 import com.fwcd.timetable.view.sidebar.SideBarView;
 import com.fwcd.timetable.view.utils.FxParentView;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.TimeTableAppViewModel;
 
 import javafx.geometry.Orientation;
