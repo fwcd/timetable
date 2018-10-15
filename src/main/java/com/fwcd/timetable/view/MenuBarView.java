@@ -2,12 +2,10 @@ package com.fwcd.timetable.view;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
@@ -39,9 +37,9 @@ public class MenuBarView implements FxView {
 	}
 	
 	private void showOpenDialog() {
-		File file = fileChooser.showOpenDialog(node.getScene().getWindow());
+		Path file = fileChooser.showOpenDialog(node.getScene().getWindow()).toPath();
 		if (file != null) {
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
+			try (BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
 				viewModel.getCalendars().getModel().loadFromJsonIn(reader);
 			} catch (IOException | JsonIOException e) {
 				FxUtils.showExceptionAlert("Exception", e);
@@ -50,9 +48,9 @@ public class MenuBarView implements FxView {
 	}
 	
 	private void showSaveDialog() {
-		File file = fileChooser.showSaveDialog(node.getScene().getWindow());
+		Path file = fileChooser.showSaveDialog(node.getScene().getWindow()).toPath();
 		if (file != null) {
-			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
+			try (BufferedWriter writer = Files.newBufferedWriter(file, StandardCharsets.UTF_8)) {
 				viewModel.getCalendars().getModel().saveAsJsonTo(writer);
 			} catch (IOException | JsonIOException e) {
 				FxUtils.showExceptionAlert("Exception", e);
