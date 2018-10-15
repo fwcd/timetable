@@ -27,12 +27,11 @@ public class AppointmentView implements FxView {
 	private final Pane node;
 	
 	public AppointmentView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarModel calendar, AppointmentModel model) {
-		Color bgColor = brightColor(FxUtils.toFxColor(calendar.getColor().get()));
 		Color fgColor = Color.BLACK;
 		
 		node = new VBox();
 		node.setMinWidth(0);
-		node.setBackground(new Background(new BackgroundFill(bgColor, new CornerRadii(3), Insets.EMPTY)));
+		calendar.getColor().listenAndFire(it -> node.setBackground(new Background(new BackgroundFill(brightColor(FxUtils.toFxColor(it)), new CornerRadii(3), Insets.EMPTY))));
 		node.getStyleClass().add("appointment");
 		
 		Label nameLabel = new Label();

@@ -31,5 +31,6 @@
 	"dateformat": "Datumsformat",
 	"timeformat": "Zeitformat",
 	"datetimeformat": "Datums- und Zeitformat",
-	"reset": "Zurücksetzen"
+	"reset": "Zurücksetzen",
+	"changecolor": "Farbe ändern"
 }

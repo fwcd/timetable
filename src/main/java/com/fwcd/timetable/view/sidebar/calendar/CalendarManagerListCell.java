@@ -1,8 +1,12 @@
 package com.fwcd.timetable.view.sidebar.calendar;
 
+import com.fwcd.fructose.Option;
+import com.fwcd.fructose.ReadOnlyObservable;
+import com.fwcd.fructose.draw.DrawColor;
 import com.fwcd.timetable.model.calendar.CalendarModel;
-import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
+import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.geometry.Pos;
@@ -11,13 +15,11 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.TextAlignment;
 
@@ -31,6 +33,8 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 	
 	private final Label label;
 	private final TextField textField;
+	
+	private final SubscriptionStack itemSubscriptions = new SubscriptionStack();
 	
 	public CalendarManagerListCell(TimeTableAppContext context, CalendarsViewModel viewModel) {
 		this.viewModel = viewModel;
@@ -59,33 +63,36 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		node.setSpacing(5);
 		node.setAlignment(Pos.CENTER_LEFT);
 		
-		MenuItem deleteItem = FxUtils.menuItemOf(context.localized("delete"), () -> {
-			CalendarModel calendar = getItem();
-			if (calendar != null) {
-				viewModel.getModel().getCalendars().remove(calendar);
-			}
-		});
-		setContextMenu(new ContextMenu(deleteItem));
+		setContextMenu(new ContextMenu(
+			FxUtils.menuItemOf(context.localized("delete"), () -> getCalendar().ifPresent(viewModel.getModel().getCalendars()::remove)),
+			FxUtils.menuItemOf(context.localized("changecolor"), () -> getCalendar().ifPresent(it -> FxUtils.showColorPicker(this, it.getColor())))
+		));
 		
 		setGraphic(node);
 		setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 		setEditModeEnabled(false);
 	}
 	
+	private Option<CalendarModel> getCalendar() {
+		return Option.ofNullable(getItem());
+	}
+	
 	@Override
 	public void updateItem(CalendarModel item, boolean empty) {
 		super.updateItem(item, empty);
+		itemSubscriptions.unsubscribeAll();
 		
 		if ((item == null) || empty) {
 			clearContents();
 		} else {
 			showCheckBox(item);
-			setIconColor(FxUtils.toFxColor(item.getColor().get()));
+			setIconColor(item.getColor());
 			if (isEditing()) {
-				textField.setText(item.getName().get());
+				itemSubscriptions.push(item.getName().subscribeAndFire(textField::setText));
+				textField.setText("");
 				setEditModeEnabled(true);
 			} else {
-				label.setText(item.getName().get());
+				itemSubscriptions.push(item.getName().subscribeAndFire(label::setText));
 				setEditModeEnabled(false);
 			}
 		}
@@ -120,8 +127,10 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		setEditModeEnabled(false);
 	}
 	
-	private void setIconColor(Color color) {
-		iconNode.getChildren().setAll(new Circle(ICON_RADIUS, ICON_RADIUS, ICON_RADIUS, color));
+	private void setIconColor(ReadOnlyObservable<DrawColor> color) {
+		Circle circle = new Circle(ICON_RADIUS, ICON_RADIUS, ICON_RADIUS);
+		itemSubscriptions.push(color.subscribeAndFire(it -> circle.setFill(FxUtils.toFxColor(it))));
+		iconNode.getChildren().setAll(circle);
 	}
 	
 	private void removeIcon() {

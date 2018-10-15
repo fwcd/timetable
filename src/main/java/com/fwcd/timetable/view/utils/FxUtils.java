@@ -22,6 +22,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -202,6 +203,15 @@ public final class FxUtils {
 			(double) drawColor.getAlpha() / 255D
 		);
 	}
+
+	public static DrawColor toDrawColor(Color fxColor) {
+		return new DrawColor(
+			(int) (fxColor.getRed() * 255D),
+			(int) (fxColor.getGreen() * 255D),
+			(int) (fxColor.getBlue() * 255D),
+			(int) (fxColor.getOpacity() * 255D)
+		);
+	}
 	
 	public static void showExceptionAlert(String title, Throwable e) {
 		Alert alert = new Alert(AlertType.ERROR);
@@ -264,5 +274,11 @@ public final class FxUtils {
 				}
 			}
 		});
+	}
+	
+	public static void showColorPicker(Node node, Observable<DrawColor> color) {
+		ColorPicker colorPicker = new ColorPicker();
+		FxUtils.bindBidirectionally(color, colorPicker.valueProperty(), FxUtils::toFxColor, FxUtils::toDrawColor);
+		FxUtils.showIndependentPopOver(FxUtils.newPopOver(colorPicker), node);
 	}
 }
