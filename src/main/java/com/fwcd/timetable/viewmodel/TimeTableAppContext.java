@@ -26,6 +26,8 @@ public class TimeTableAppContext {
 		});
 	}
 	
+	public void resetSettings() { settings.set(new TimeTableAppSettings.Builder().build()); }
+	
 	public Observable<TimeTableAppSettings> getSettings() { return settings; }
 	
 	public LanguageManager getLanguageManager() { return languageManager; }

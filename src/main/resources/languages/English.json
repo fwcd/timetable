@@ -30,5 +30,6 @@
 	"language": "Language",
 	"dateformat": "Date Format",
 	"timeformat": "Time Format",
-	"datetimeformat": "Date and Time Format"
+	"datetimeformat": "Date and Time Format",
+	"reset": "Reset"
 }
