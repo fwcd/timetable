@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fwcd.timetable.model.calendar.task.TaskListModel;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
@@ -13,8 +14,11 @@ public class TaskListsView implements FxView {
 	private final Accordion node;
 	private final TaskCrateViewModel crate;
 	
-	public TaskListsView(TaskCrateViewModel crate) {
+	private final TimeTableAppContext context;
+	
+	public TaskListsView(TimeTableAppContext context, TaskCrateViewModel crate) {
 		this.crate = crate;
+		this.context = context;
 		
 		node = new Accordion();
 		crate.getModel().getLists().listenAndFire(this::setVisibleLists);
@@ -28,7 +32,7 @@ public class TaskListsView implements FxView {
 		node.getPanes().clear();
 		
 		for (TaskListModel list : lists) {
-			TitledPane titledPane = wrapListInTitledPane(new TaskListView(list));
+			TitledPane titledPane = wrapListInTitledPane(new TaskListView(context, list));
 			node.expandedPaneProperty().addListener((obs, old, newValue) -> {
 				if ((newValue != null) && newValue.equals(titledPane)) {
 					crate.select(list);

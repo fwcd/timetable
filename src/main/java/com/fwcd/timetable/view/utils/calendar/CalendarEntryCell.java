@@ -5,6 +5,7 @@ import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.CalendarSerializationUtils;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.google.gson.Gson;
 
 import javafx.scene.Node;
@@ -18,6 +19,7 @@ import javafx.scene.text.FontWeight;
 
 public class CalendarEntryCell implements FxView {
 	private static final Gson GSON = CalendarSerializationUtils.newGson();
+	private final TimeTableAppContext context;
 	
 	private final Label titleLabel = new Label();
 	private final Label subtitleLabel = new Label();
@@ -26,7 +28,9 @@ public class CalendarEntryCell implements FxView {
 	private final SubscriptionStack itemSubscriptions = new SubscriptionStack();
 	private Option<CalendarEntryModel> currentItem = Option.empty();
 	
-	public CalendarEntryCell() {
+	public CalendarEntryCell(TimeTableAppContext context) {
+		this.context = context;
+		
 		titleLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
 		subtitleLabel.setFont(Font.font(12));
 		
@@ -47,7 +51,7 @@ public class CalendarEntryCell implements FxView {
 		itemSubscriptions.unsubscribeAll();
 		
 		if (item != null) {
-			CalendarEntryInfoProvider infoProvider = new CalendarEntryInfoProvider();
+			CalendarEntryInfoProvider infoProvider = new CalendarEntryInfoProvider(context);
 			item.accept(infoProvider);
 			
 			itemSubscriptions.push(item.getName().subscribeAndFire(name -> titleLabel.setText(titlePrefixOf(item) + name)));

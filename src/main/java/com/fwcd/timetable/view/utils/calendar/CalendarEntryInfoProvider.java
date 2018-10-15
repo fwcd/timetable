@@ -12,14 +12,16 @@ import com.fwcd.fructose.function.Subscription;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import com.fwcd.timetable.model.calendar.Location;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
-	private static final DateTimeFormatter DT_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
-	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-	private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
-	
+	private final TimeTableAppContext context;
 	private final Observable<String> info = new Observable<>("");
 	private final Collection<Subscription> subscriptions = new HashSet<>();
+	
+	public CalendarEntryInfoProvider(TimeTableAppContext context) {
+		this.context = context;
+	}
 	
 	@Override
 	public void visitAppointment(AppointmentModel appointment) {
@@ -38,34 +40,38 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 		boolean ignoreDate = appointment.ignoresDate().get();
 		boolean ignoreTime = appointment.ignoresTime().get();
 		
+		DateTimeFormatter dateFormatter = context.getDateFormatter().get();
+		DateTimeFormatter timeFormatter = context.getTimeFormatter().get();
+		DateTimeFormatter dateTimeFormatter = context.getDateTimeFormatter().get();
+		
 		if (!ignoreDate && !ignoreTime) {
 			LocalDateTime start = appointment.getStart();
 			LocalDateTime end = appointment.getEnd();
 			if (start.toLocalDate().equals(end.toLocalDate())) {
-				str.append(DATE_FORMATTER.format(start.toLocalDate()))
+				str.append(dateFormatter.format(start.toLocalDate()))
 					.append(' ')
-					.append(TIME_FORMATTER.format(start.toLocalTime()))
+					.append(timeFormatter.format(start.toLocalTime()))
 					.append(" - ")
-					.append(TIME_FORMATTER.format(end.toLocalTime()));
+					.append(timeFormatter.format(end.toLocalTime()));
 			} else {
-				str.append(DT_FORMATTER.format(start))
+				str.append(dateTimeFormatter.format(start))
 					.append(" - ")
-					.append(DT_FORMATTER.format(end));
+					.append(dateTimeFormatter.format(end));
 			}
 		} else if (!ignoreDate) {
 			LocalDate startDate = appointment.getStartDate();
 			LocalDate lastDate = appointment.getLastDate();
 			if (startDate.equals(lastDate)) {
-				str.append(DATE_FORMATTER.format(startDate));
+				str.append(dateFormatter.format(startDate));
 			} else {
-				str.append(DATE_FORMATTER.format(startDate))
+				str.append(dateFormatter.format(startDate))
 					.append(" - ")
-					.append(DATE_FORMATTER.format(lastDate));
+					.append(dateFormatter.format(lastDate));
 			}
 		} else if (!ignoreTime) {
-			str.append(TIME_FORMATTER.format(appointment.getStartTime()))
+			str.append(timeFormatter.format(appointment.getStartTime()))
 				.append(" - ")
-				.append(TIME_FORMATTER.format(appointment.getEndTime()));
+				.append(timeFormatter.format(appointment.getEndTime()));
 		}
 		
 		appointment.getLocation().get()

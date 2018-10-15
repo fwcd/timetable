@@ -38,7 +38,7 @@ public class TaskCrateView implements FxView {
 		top.setPadding(new Insets(4, 4, 4, 4));
 		node.setTop(top);
 		
-		TaskListsView lists = new TaskListsView(viewModel);
+		TaskListsView lists = new TaskListsView(context, viewModel);
 		node.setCenter(lists.getNode());
 	}
 	

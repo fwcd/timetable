@@ -1,6 +1,7 @@
 package com.fwcd.timetable.view.utils.calendar;
 
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ListCell;
@@ -8,8 +9,8 @@ import javafx.scene.control.ListCell;
 public class CalendarEntryListCell extends ListCell<CalendarEntryModel> {
 	private final CalendarEntryCell cell;
 	
-	public CalendarEntryListCell() {
-		cell = new CalendarEntryCell();
+	public CalendarEntryListCell(TimeTableAppContext context) {
+		cell = new CalendarEntryCell(context);
 		
 		setGraphic(cell.getNode());
 		setContentDisplay(ContentDisplay.GRAPHIC_ONLY);

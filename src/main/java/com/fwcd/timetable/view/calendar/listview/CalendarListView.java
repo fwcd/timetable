@@ -6,6 +6,7 @@ import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.view.utils.FxNavigableView;
 import com.fwcd.timetable.view.utils.calendar.CalendarEntryListView;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.scene.Node;
@@ -14,12 +15,12 @@ public class CalendarListView implements FxNavigableView {
 	private final Node node;
 	private final ObservableList<CalendarEntryModel> entries;
 	
-	public CalendarListView(CalendarsViewModel calendars) {
+	public CalendarListView(TimeTableAppContext context, CalendarsViewModel calendars) {
 		entries = new ObservableList<>();
 		calendars.getChangeListeners().add(it -> updateEntries(calendars));
 		updateEntries(calendars);
 		
-		CalendarEntryListView entriesView = new CalendarEntryListView();
+		CalendarEntryListView entriesView = new CalendarEntryListView(context);
 		entries.listenAndFire(entriesView.getNode().getItems()::setAll);
 		
 		node = entriesView.getNode();

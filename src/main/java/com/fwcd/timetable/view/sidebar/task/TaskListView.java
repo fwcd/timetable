@@ -7,6 +7,7 @@ import com.fwcd.timetable.model.calendar.task.TaskListModel;
 import com.fwcd.timetable.model.calendar.task.TaskModel;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.calendar.CalendarEntryListView;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
@@ -15,9 +16,9 @@ public class TaskListView implements FxView {
 	private final ListView<CalendarEntryModel> node;
 	private final TaskListModel model;
 	
-	public TaskListView(TaskListModel model) {
+	public TaskListView(TimeTableAppContext context, TaskListModel model) {
 		this.model = model;
-		node = new CalendarEntryListView().getNode();
+		node = new CalendarEntryListView(context).getNode();
 		model.getTasks().listenAndFire(this::setVisibleTasks);
 	}
 	

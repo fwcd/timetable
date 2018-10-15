@@ -2,12 +2,13 @@ package com.fwcd.timetable.view.calendar.weekview;
 
 import java.time.format.DateTimeFormatter;
 
+import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
-import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import org.controlsfx.control.PopOver;
 
@@ -23,7 +24,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class AppointmentView implements FxView {
-	private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm"); 
 	private final Pane node;
 	
 	public AppointmentView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarModel calendar, AppointmentModel model) {
@@ -45,7 +45,7 @@ public class AppointmentView implements FxView {
 		Label timeLabel = new Label();
 		timeLabel.setFont(Font.font(11));
 		timeLabel.setTextFill(fgColor);
-		model.getDateTimeInterval().listenAndFire(it -> timeLabel.setText(TIME_FORMATTER.format(it.getStart()) + " - " + TIME_FORMATTER.format(it.getEnd())));
+		model.getDateTimeInterval().listenAndFire(it -> timeLabel.setText(formatDateTimeInterval(it, context.getDateTimeFormatter().get())));
 		node.getChildren().add(timeLabel);
 		
 		PopOver popOver = FxUtils.newPopOver(new AppointmentDetailsView(calendar, context, model));
@@ -53,6 +53,10 @@ public class AppointmentView implements FxView {
 			FxUtils.showIndependentPopOver(popOver, node);
 			e.consume();
 		});
+	}
+	
+	private String formatDateTimeInterval(LocalDateTimeInterval interval, DateTimeFormatter formatter) {
+		return formatter.format(interval.getStart()) + " - " + formatter.format(interval.getEnd());
 	}
 
 	private Color brightColor(Color calColor) {

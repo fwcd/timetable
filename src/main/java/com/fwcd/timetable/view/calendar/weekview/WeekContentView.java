@@ -49,7 +49,7 @@ public class WeekContentView implements FxView {
 		
 		ColumnConstraints timeAxisColConstraints = new ColumnConstraints();
 		timeAxisColConstraints.setHgrow(Priority.NEVER);
-		node.addColumn(0, new WeekTimeAxisView(timeLayouter).getNode());
+		node.addColumn(0, new WeekTimeAxisView(context, timeLayouter).getNode());
 		node.getColumnConstraints().add(timeAxisColConstraints);
 		
 		for (int i = 0; i < CalendarConstants.DAYS_OF_WEEK; i++) {

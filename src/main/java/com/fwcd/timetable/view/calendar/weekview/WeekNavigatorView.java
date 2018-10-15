@@ -17,13 +17,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class WeekNavigatorView implements FxView {
-	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yy"); 
 	private final HBox node;
 	
 	public WeekNavigatorView(TimeTableAppContext context, WeekContentView content) {
 		Label weekLabel = new Label();
 		weekLabel.setFont(Font.font(null, FontWeight.BOLD, 14));
-		content.getWeekStart().listenAndFire(it -> weekLabel.setText(describeWeek(it)));
+		content.getWeekStart().listenAndFire(it -> weekLabel.setText(describeWeek(it, context.getDateFormatter().get())));
 		
 		HBox.setMargin(weekLabel, new Insets(0, /* right */ 4, 0, 0));
 		
@@ -36,8 +35,8 @@ public class WeekNavigatorView implements FxView {
 		node.setAlignment(Pos.CENTER);
 	}
 	
-	private String describeWeek(LocalDate weekStart) {
-		return FORMATTER.format(weekStart) + " - " + FORMATTER.format(weekStart.plusDays(CalendarConstants.DAYS_OF_WEEK - 1));
+	private String describeWeek(LocalDate weekStart, DateTimeFormatter formatter) {
+		return formatter.format(weekStart) + " - " + formatter.format(weekStart.plusDays(CalendarConstants.DAYS_OF_WEEK - 1));
 	}
 	
 	@Override

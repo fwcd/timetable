@@ -18,10 +18,12 @@ public class TimeTableAppContext {
 	private final Observable<DateTimeFormatter> dateTimeFormatter = new Observable<>(DateTimeFormatter.ISO_DATE_TIME);
 	
 	public TimeTableAppContext() {
-		settings.listenAndFire(it -> languageManager.getLanguage(it.getLanguage()).ifPresent(language::set));
-		settings.listenAndFire(it -> dateFormatter.set(DateTimeFormatter.ofPattern(it.getDateFormat())));
-		settings.listenAndFire(it -> timeFormatter.set(DateTimeFormatter.ofPattern(it.getTimeFormat())));
-		settings.listenAndFire(it -> dateTimeFormatter.set(DateTimeFormatter.ofPattern(it.getDateTimeFormat())));
+		settings.listenAndFire(it -> {
+			languageManager.getLanguage(it.getLanguage()).ifPresent(language::set);
+			dateFormatter.set(DateTimeFormatter.ofPattern(it.getDateFormat()));
+			timeFormatter.set(DateTimeFormatter.ofPattern(it.getTimeFormat()));
+			dateTimeFormatter.set(DateTimeFormatter.ofPattern(it.getDateTimeFormat()));
+		});
 	}
 	
 	public Observable<TimeTableAppSettings> getSettings() { return settings; }
@@ -31,6 +33,12 @@ public class TimeTableAppContext {
 	public void setLanguage(String key) { settings.set(settings.get().with().language(key).build()); }
 	
 	public ReadOnlyObservable<Language> getLanguage() { return language; }
+	
+	public ReadOnlyObservable<DateTimeFormatter> getDateFormatter() { return dateFormatter; }
+	
+	public ReadOnlyObservable<DateTimeFormatter> getTimeFormatter() { return timeFormatter; }
+	
+	public ReadOnlyObservable<DateTimeFormatter> getDateTimeFormatter() { return dateTimeFormatter; }
 	
 	public String localize(String unlocalized) {
 		return language.get().localize(unlocalized);
