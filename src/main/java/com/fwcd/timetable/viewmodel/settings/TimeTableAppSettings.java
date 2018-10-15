@@ -37,7 +37,7 @@ public class TimeTableAppSettings implements Serializable {
 		
 		public Builder() {
 			instance.language = "English";
-			instance.dateFormat = "yyyy/MM/dd";
+			instance.dateFormat = "dd.MM.yyyy";
 			instance.timeFormat = "HH:mm";
 			instance.dateTimeFormat = instance.dateFormat + " " + instance.timeFormat;
 		}
