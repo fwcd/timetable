@@ -16,6 +16,7 @@
 	"appointmentstart": "Beginn",
 	"appointmentend": "Ende",
 	"recurrence": "Wiederholung",
+	"recurrenceend": "Wiederholungsende",
 	"ignoredate": "Ignoriere Datum",
 	"ignoretime": "Ignoriere Zeit",
 	"newappointment": "Neuer Termin",

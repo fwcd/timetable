@@ -70,7 +70,7 @@ public class AppointmentDetailsView implements FxView {
 			optEnd -> optEnd.orElseNull(),
 			newEnd -> Option.ofNullable(newEnd)
 		);
-		properties.addRow(rowIndex++, localizedPropertyLabel("recurrencend", context), recurrenceEnd);
+		properties.addRow(rowIndex++, localizedPropertyLabel("recurrenceend", context), recurrenceEnd);
 		
 		CheckBox ignoreDate = new CheckBox();
 		FxUtils.bindBidirectionally(model.ignoresDate(), ignoreDate.selectedProperty());
