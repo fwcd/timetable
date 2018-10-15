@@ -1,5 +1,6 @@
 package com.fwcd.timetable.view.calendar.monthview;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,11 @@ public class MonthDayView implements FxView, AutoCloseable {
 		this.date = date;
 		
 		node = new BorderPane();
+		
+		DayOfWeek weekDay = date.getDayOfWeek();
+		if ((weekDay == DayOfWeek.SATURDAY) || (weekDay == DayOfWeek.SUNDAY)) {
+			node.getStyleClass().add("month-day-weekend");
+		}
 		
 		indexLabel = new Label(Integer.toString(date.getDayOfMonth()));
 		indexLabel.setFont(Font.font(null, FontWeight.BOLD, 14));
