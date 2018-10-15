@@ -22,6 +22,8 @@ import javafx.scene.text.Font;
 import tornadofx.control.DateTimePicker;
 
 public class AppointmentDetailsView implements FxView {
+	private static final String DATE_TIME_FORMAT = "dd.MM.yy HH:mm";
+	private static final String DATE_FORMAT = "dd.MM.yy";
 	private final VBox node;
 	
 	public AppointmentDetailsView(CalendarModel calendar, TimeTableAppContext context, AppointmentModel model) {
@@ -42,6 +44,7 @@ public class AppointmentDetailsView implements FxView {
 		int rowIndex = 1;
 		
 		DateTimePicker start = new DateTimePicker();
+		start.setFormat(DATE_TIME_FORMAT);
 		FxUtils.bindBidirectionally(
 			model.getDateTimeInterval(),
 			start.dateTimeValueProperty(),
@@ -51,6 +54,7 @@ public class AppointmentDetailsView implements FxView {
 		properties.addRow(rowIndex++, localizedPropertyLabel("appointmentstart", context), start);
 		
 		DateTimePicker end = new DateTimePicker();
+		end.setFormat(DATE_TIME_FORMAT);
 		FxUtils.bindBidirectionally(
 			model.getDateTimeInterval(),
 			end.dateTimeValueProperty(),
@@ -64,6 +68,7 @@ public class AppointmentDetailsView implements FxView {
 		properties.addRow(rowIndex++, localizedPropertyLabel("recurrence", context), recurrence);
 		
 		DatePicker recurrenceEnd = new DatePicker();
+		FxUtils.setDateFormat(recurrenceEnd, DATE_FORMAT);
 		FxUtils.bindBidirectionally(
 			model.getRecurrenceEnd(),
 			recurrenceEnd.valueProperty(),

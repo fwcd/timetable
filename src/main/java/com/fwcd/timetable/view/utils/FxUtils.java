@@ -1,5 +1,7 @@
 package com.fwcd.timetable.view.utils;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -21,6 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -30,6 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.util.StringConverter;
 
 public final class FxUtils {
 	private FxUtils() {}
@@ -236,5 +240,29 @@ public final class FxUtils {
 		PopOver popOver = new PopOver(content);
 		enableHideOnEscape(popOver);
 		return popOver;
+	}
+	
+	public static void setDateFormat(DatePicker picker, String format) {
+		picker.setConverter(new StringConverter<LocalDate>() {
+			private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+			
+			@Override
+			public String toString(LocalDate object) {
+				if (object == null) {
+					return null;
+				} else {
+					return formatter.format(object);
+				}
+			}
+		
+			@Override
+			public LocalDate fromString(String str) {
+				if (str == null) {
+					return null;
+				} else {
+					return LocalDate.from(formatter.parse(str));
+				}
+			}
+		});
 	}
 }
