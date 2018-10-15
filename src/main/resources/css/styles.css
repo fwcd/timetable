@@ -24,3 +24,7 @@
 .drag-active {
 	-fx-background-color: blue;
 }
+
+.month-day-weekend {
+	-fx-background-color: lightgray;
+}
