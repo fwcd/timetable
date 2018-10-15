@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -37,6 +38,7 @@ public class AppointmentDetailsView implements FxView {
 		location.setFont(Font.font(12));
 		
 		GridPane properties = new GridPane();
+		int rowIndex = 1;
 		
 		DateTimePicker start = new DateTimePicker();
 		FxUtils.bindBidirectionally(
@@ -45,7 +47,7 @@ public class AppointmentDetailsView implements FxView {
 			interval -> interval.getStart(),
 			dateTime -> new LocalDateTimeInterval(dateTime, model.getEnd())
 		);
-		properties.addRow(1, new Label("Start: "), start);
+		properties.addRow(rowIndex++, new Label("Start: "), start);
 		
 		DateTimePicker end = new DateTimePicker();
 		FxUtils.bindBidirectionally(
@@ -54,19 +56,28 @@ public class AppointmentDetailsView implements FxView {
 			interval -> interval.getEnd(),
 			dateTime -> new LocalDateTimeInterval(model.getStart(), dateTime)
 		);
-		properties.addRow(2, new Label("End: "), end);
+		properties.addRow(rowIndex++, new Label("End: "), end);
 		
 		TextField recurrence = new TextField();
 		FxUtils.bindBidirectionally(model.getRecurrence().getRaw(), recurrence.textProperty());
-		properties.addRow(3, new Label("Recurrence: "), recurrence);
+		properties.addRow(rowIndex++, new Label("Recurrence: "), recurrence);
+		
+		DatePicker recurrenceEnd = new DatePicker();
+		FxUtils.bindBidirectionally(
+			model.getRecurrenceEnd(),
+			recurrenceEnd.valueProperty(),
+			optEnd -> optEnd.orElseNull(),
+			newEnd -> Option.ofNullable(newEnd)
+		);
+		properties.addRow(rowIndex++, new Label("Recurrence End: "), recurrenceEnd); // TODO: Localization
 		
 		CheckBox ignoreDate = new CheckBox();
 		FxUtils.bindBidirectionally(model.ignoresDate(), ignoreDate.selectedProperty());
-		properties.addRow(4, new Label("Ignore Date: "), ignoreDate);
+		properties.addRow(rowIndex++, new Label("Ignore Date: "), ignoreDate);
 		
 		CheckBox ignoreTime = new CheckBox();
 		FxUtils.bindBidirectionally(model.ignoresTime(), ignoreTime.selectedProperty());
-		properties.addRow(5, new Label("Ignore Time: "), ignoreTime);
+		properties.addRow(rowIndex++, new Label("Ignore Time: "), ignoreTime);
 		
 		Button deleteButton = FxUtils.buttonOf("Delete Appointment", () -> calendar.getAppointments().remove(model)); // TODO: Localization
 		
