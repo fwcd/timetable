@@ -45,7 +45,7 @@ public class AppointmentView implements FxView {
 		Label timeLabel = new Label();
 		timeLabel.setFont(Font.font(11));
 		timeLabel.setTextFill(fgColor);
-		model.getDateTimeInterval().listenAndFire(it -> timeLabel.setText(formatDateTimeInterval(it, context.getDateTimeFormatter().get())));
+		model.getDateTimeInterval().listenAndFire(it -> timeLabel.setText(formatTimeInterval(it, context.getTimeFormatter().get())));
 		node.getChildren().add(timeLabel);
 		
 		PopOver popOver = FxUtils.newPopOver(new AppointmentDetailsView(calendar, context, model));
@@ -55,7 +55,7 @@ public class AppointmentView implements FxView {
 		});
 	}
 	
-	private String formatDateTimeInterval(LocalDateTimeInterval interval, DateTimeFormatter formatter) {
+	private String formatTimeInterval(LocalDateTimeInterval interval, DateTimeFormatter formatter) {
 		return formatter.format(interval.getStart()) + " - " + formatter.format(interval.getEnd());
 	}
 
