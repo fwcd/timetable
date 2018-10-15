@@ -1,5 +1,6 @@
 package com.fwcd.timetable.model.calendar;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,8 +11,10 @@ import com.fwcd.fructose.Option;
 import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.recurrence.ParsedRecurrence;
+import com.fwcd.timetable.model.utils.PostDeserializable;
 
-public class AppointmentModel implements CalendarEntryModel, Comparable<AppointmentModel> {
+public class AppointmentModel implements Serializable, CalendarEntryModel, Comparable<AppointmentModel>, PostDeserializable {
+	private static final long serialVersionUID = 6135909125862494477L;
 	private final Observable<String> name;
 	private final Observable<Option<Location>> location;
 	private final Observable<LocalDateTimeInterval> dateTimeInterval;
@@ -21,8 +24,12 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	private final ParsedRecurrence recurrence;
 	private final Observable<Option<LocalDate>> recurrenceEnd;
 	
-	private final EventListenerList<AppointmentModel> changeListeners = new EventListenerList<>();
-	private final EventListenerList<AppointmentModel> structuralChangeListeners = new EventListenerList<>();
+	private transient EventListenerList<AppointmentModel> nullableChangeListeners;
+	private transient EventListenerList<AppointmentModel> nullableStructuralChangeListeners;
+	
+	public AppointmentModel() {
+		this("", Option.empty(), LocalDateTime.now(), LocalDateTime.now(), "", false, false, "", Option.empty());
+	}
 	
 	private AppointmentModel(
 		String name,
@@ -50,22 +57,28 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	}
 	
 	private void setupChangeListeners() {
-		name.listen(it -> changeListeners.fire(this));
-		location.listen(it -> changeListeners.fire(this));
-		dateTimeInterval.listen(it -> changeListeners.fire(this));
-		description.listen(it -> changeListeners.fire(this));
-		ignoreDate.listen(it -> changeListeners.fire(this));
-		ignoreTime.listen(it -> changeListeners.fire(this));
-		recurrence.getParsed().listen(it -> changeListeners.fire(this));
-		recurrenceEnd.listen(it -> changeListeners.fire(this));
+		name.listen(it -> getChangeListeners().fire(this));
+		location.listen(it -> getChangeListeners().fire(this));
+		dateTimeInterval.listen(it -> getChangeListeners().fire(this));
+		description.listen(it -> getChangeListeners().fire(this));
+		ignoreDate.listen(it -> getChangeListeners().fire(this));
+		ignoreTime.listen(it -> getChangeListeners().fire(this));
+		recurrence.getParsed().listen(it -> getChangeListeners().fire(this));
+		recurrenceEnd.listen(it -> getChangeListeners().fire(this));
 	}
 	
 	private void setupStructuralChangeListeners() {
-		dateTimeInterval.listen(it -> structuralChangeListeners.fire(this));
-		ignoreDate.listen(it -> structuralChangeListeners.fire(this));
-		ignoreTime.listen(it -> structuralChangeListeners.fire(this));
-		recurrence.getParsed().listen(it -> structuralChangeListeners.fire(this));
-		recurrenceEnd.listen(it -> structuralChangeListeners.fire(this));
+		dateTimeInterval.listen(it -> getStructuralChangeListeners().fire(this));
+		ignoreDate.listen(it -> getStructuralChangeListeners().fire(this));
+		ignoreTime.listen(it -> getStructuralChangeListeners().fire(this));
+		recurrence.getParsed().listen(it -> getStructuralChangeListeners().fire(this));
+		recurrenceEnd.listen(it -> getStructuralChangeListeners().fire(this));
+	}
+	
+	@Override
+	public void postDeserialize() {
+		setupChangeListeners();
+		setupStructuralChangeListeners();
 	}
 	
 	@Override
@@ -104,10 +117,20 @@ public class AppointmentModel implements CalendarEntryModel, Comparable<Appointm
 	public Observable<Option<LocalDate>> getRecurrenceEnd() { return recurrenceEnd; }
 	
 	/** A change listener list that fires whenever any property of this appointment is mutated */
-	public EventListenerList<AppointmentModel> getChangeListeners() { return changeListeners; }
+	public EventListenerList<AppointmentModel> getChangeListeners() {
+		if (nullableChangeListeners == null) {
+			nullableChangeListeners = new EventListenerList<>();
+		}
+		return nullableChangeListeners;
+	}
 	
 	/** A change listener list that fires whenever the "structure" (date, time, recurrence, etc) of this appointment is mutated */
-	public EventListenerList<AppointmentModel> getStructuralChangeListeners() { return structuralChangeListeners; }
+	public EventListenerList<AppointmentModel> getStructuralChangeListeners() {
+		if (nullableStructuralChangeListeners == null) {
+			nullableStructuralChangeListeners = new EventListenerList<>();
+		}
+		return nullableStructuralChangeListeners;
+	}
 	
 	@Override
 	public Observable<String> getDescription() { return description; }

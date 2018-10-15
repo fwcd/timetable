@@ -10,6 +10,7 @@ import java.util.Set;
 import com.fwcd.fructose.Option;
 
 public class MonthlyWeekRecurrence implements Recurrence {
+	private static final long serialVersionUID = 2552822285349700093L;
 	private final LocalDate start;
 	private final Option<LocalDate> end;
 	private final Set<Month> months;

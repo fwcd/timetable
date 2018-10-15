@@ -4,9 +4,13 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
-import com.fwcd.timetable.model.calendar.CalendarCrateModel;
+import com.fwcd.timetable.view.TimeTableAppContext;
+import com.fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
+import com.fwcd.timetable.view.calendar.utils.AppointmentWithCalendar;
+import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,13 +27,15 @@ public class MonthDayView implements FxView, AutoCloseable {
 	private final VBox content;
 	
 	private final LocalDate date;
-	private final CalendarCrateModel calendars;
+	private final CalendarsViewModel calendars;
 	
+	private final TimeTableAppContext context;
 	private final SubscriptionStack subscriptions = new SubscriptionStack();
 	
-	public MonthDayView(CalendarCrateModel calendars, LocalDate date) {
+	public MonthDayView(TimeTableAppContext context, CalendarsViewModel calendars, LocalDate date) {
 		this.calendars = calendars;
 		this.date = date;
+		this.context = context;
 		
 		node = new BorderPane();
 		node.setPadding(new Insets(5));
@@ -51,12 +57,24 @@ public class MonthDayView implements FxView, AutoCloseable {
 	}
 	
 	private void updateView() {
-		content.getChildren().setAll(calendars.getCalendars().stream()
-			.flatMap(it -> it.getAppointments().stream())
-			.filter(it -> it.occursOn(date))
-			.map(it -> new Label(it.getName().get()))
+		content.getChildren().setAll(calendars.getSelectedCalendars().stream()
+			.flatMap(cal -> cal.getAppointments().stream()
+				.filter(app -> app.occursOn(date))
+				.map(app -> new AppointmentWithCalendar(app, cal)))
+			.map(this::appointmentLabelOf)
 			.collect(Collectors.toList())
 		);
+	}
+
+	private Label appointmentLabelOf(AppointmentWithCalendar appWithCal) {
+		Label label = new Label(appWithCal.getAppointment().getName().get());
+		label.setOnMouseClicked(e -> {
+			FxUtils.showIndependentPopOver(
+				FxUtils.newPopOver(new AppointmentDetailsView(appWithCal.getCalendar(), context, appWithCal.getAppointment())),
+				label
+			);
+		});
+		return label;
 	}
 	
 	@Override

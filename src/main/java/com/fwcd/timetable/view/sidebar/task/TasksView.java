@@ -1,10 +1,10 @@
 package com.fwcd.timetable.view.sidebar.task;
 
-import com.fwcd.timetable.model.TimeTableAppModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,10 +16,10 @@ import javafx.scene.layout.HBox;
 public class TasksView implements FxView {
 	private final BorderPane node;
 	
-	public TasksView(TimeTableAppContext context, TimeTableAppModel model) {
+	public TasksView(TimeTableAppContext context, CalendarsViewModel viewModel) {
 		node = new BorderPane();
 		
-		ComboBox<CalendarModel> comboBox = FxUtils.comboBoxOfObservable(model.getCalendarCrate().getCalendars());
+		ComboBox<CalendarModel> comboBox = FxUtils.comboBoxOfObservable(viewModel.getModel().getCalendars());
 		comboBox.valueProperty().addListener((obs, old, selectedCalendar) -> {
 			node.setCenter(new TaskCrateView(context, selectedCalendar.getTaskCrate()).getNode());
 		});

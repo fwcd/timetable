@@ -1,11 +1,12 @@
 package com.fwcd.timetable.model.calendar.recurrence;
 
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 import com.fwcd.fructose.Option;
 
 public class DailyRecurrence implements Recurrence {
+	private static final long serialVersionUID = -2555555069797368936L;
 	private final LocalDate start;
 	private final Option<LocalDate> end;
 	private final int daysBetweenRepeats;
@@ -18,7 +19,8 @@ public class DailyRecurrence implements Recurrence {
 	
 	@Override
 	public boolean matches(LocalDate date) {
-		return (Period.between(start, date).getDays() % daysBetweenRepeats == 0)
+		return (daysBetweenRepeats != 0)
+			&& (ChronoUnit.DAYS.between(start, date) % daysBetweenRepeats == 0)
 			&& (date.compareTo(start) >= 0)
 			&& (end.map(e -> date.compareTo(e) <= 0).orElse(true));
 	}

@@ -1,7 +1,9 @@
 package com.fwcd.timetable.view.utils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
@@ -20,9 +22,13 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 
 public final class FxUtils {
@@ -54,6 +60,30 @@ public final class FxUtils {
 		label.listenAndFire(button::setText);
 		button.setOnAction(e -> action.run());
 		return button;
+	}
+	
+	public static Menu menuOf(ReadOnlyObservable<String> name, MenuItem... items) {
+		return menuOf(name, Arrays.stream(items));
+	}
+	
+	public static Menu menuOf(ReadOnlyObservable<String> name, Stream<? extends MenuItem> items) {
+		Menu menu = new Menu();
+		name.listenAndFire(menu::setText);
+		items.forEach(menu.getItems()::add);
+		return menu;
+	}
+
+	public static MenuItem menuItemOf(ReadOnlyObservable<String> text, Runnable action) {
+		MenuItem item = new MenuItem();
+		item.setOnAction(e -> action.run());
+		text.listenAndFire(item::setText);
+		return item;
+	}
+	
+	public static MenuItem menuItemOf(String name, Runnable action) {
+		MenuItem item = new MenuItem(name);
+		item.setOnAction(e -> action.run());
+		return item;
 	}
 	
 	public static Label labelOf(ReadOnlyObservable<String> text) {
@@ -188,5 +218,23 @@ public final class FxUtils {
 		double x = bounds.getMaxX();
 		double y = bounds.getMaxY() - bounds.getHeight();
 		popOver.show(node.getScene().getWindow(), x, y);
+	}
+
+	public static void enableHideOnEscape(PopOver popOver) {
+		popOver.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+			if (e.getCode() == KeyCode.ESCAPE) {
+				popOver.hide();
+			}
+		});
+	}
+	
+	public static PopOver newPopOver(FxView content) {
+		return newPopOver(content.getNode());
+	}
+	
+	public static PopOver newPopOver(Node content) {
+		PopOver popOver = new PopOver(content);
+		enableHideOnEscape(popOver);
+		return popOver;
 	}
 }

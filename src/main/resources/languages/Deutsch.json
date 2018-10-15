@@ -13,5 +13,14 @@
 	"month": "Monat",
 	"list": "Liste",
 	"today": "Heute",
-	"newappointment": "Neuer Termin"
+	"appointmentstart": "Beginn",
+	"appointmentend": "Ende",
+	"recurrence": "Wiederholung",
+	"ignoredate": "Ignoriere Datum",
+	"ignoretime": "Ignoriere Zeit",
+	"newappointment": "Neuer Termin",
+	"deleteappointment": "Termin löschen",
+	"delete": "Löschen",
+	"open": "Öffnen",
+	"save": "Speichern"
 }

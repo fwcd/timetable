@@ -1,12 +1,17 @@
 package com.fwcd.timetable.view.sidebar.calendar;
 
 import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
+import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -18,13 +23,18 @@ import javafx.scene.text.TextAlignment;
 
 public class CalendarManagerListCell extends ListCell<CalendarModel> {
 	private static final int ICON_RADIUS = 5;
+	private final CalendarsViewModel viewModel;
+	
+	private final StackPane checkBoxNode;
 	private final StackPane iconNode;
 	private final StackPane textNode;
 	
 	private final Label label;
 	private final TextField textField;
 	
-	public CalendarManagerListCell() {
+	public CalendarManagerListCell(TimeTableAppContext context, CalendarsViewModel viewModel) {
+		this.viewModel = viewModel;
+		
 		label = new Label();
 		label.setTextAlignment(TextAlignment.LEFT);
 		
@@ -36,15 +46,26 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 			}
 		});
 		
+		checkBoxNode = new StackPane();
+		checkBoxNode.setAlignment(Pos.CENTER_LEFT);
+		
 		iconNode = new StackPane();
 		iconNode.setAlignment(Pos.CENTER_LEFT);
 		
 		textNode = new StackPane();
 		textNode.setAlignment(Pos.CENTER_LEFT);
 		
-		HBox node = new HBox(iconNode, textNode);
+		HBox node = new HBox(checkBoxNode, iconNode, textNode);
 		node.setSpacing(5);
 		node.setAlignment(Pos.CENTER_LEFT);
+		
+		MenuItem deleteItem = FxUtils.menuItemOf(context.localized("delete"), () -> {
+			CalendarModel calendar = getItem();
+			if (calendar != null) {
+				viewModel.getModel().getCalendars().remove(calendar);
+			}
+		});
+		setContextMenu(new ContextMenu(deleteItem));
 		
 		setGraphic(node);
 		setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
@@ -58,6 +79,7 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		if ((item == null) || empty) {
 			clearContents();
 		} else {
+			showCheckBox(item);
 			setIconColor(FxUtils.toFxColor(item.getColor().get()));
 			if (isEditing()) {
 				textField.setText(item.getName().get());
@@ -106,6 +128,23 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		iconNode.getChildren().clear();
 	}
 	
+	private void showCheckBox(CalendarModel calendar) {
+		CheckBox checkBox = new CheckBox();
+		checkBox.setSelected(viewModel.getSelectedCalendars().contains(calendar));
+		checkBox.selectedProperty().addListener((obs, old, selected) -> {
+			if (selected) {
+				viewModel.getSelectedCalendars().add(calendar);
+			} else {
+				viewModel.getSelectedCalendars().remove(calendar);
+			}
+		});
+		checkBoxNode.getChildren().setAll(checkBox);
+	}
+	
+	private void removeCheckBox() {
+		checkBoxNode.getChildren().clear();
+	}
+	
 	private void setEditModeEnabled(boolean enabled) {
 		if (enabled) {
 			textNode.getChildren().setAll(textField);
@@ -119,5 +158,6 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		label.setText("");
 		setEditModeEnabled(false);
 		removeIcon();
+		removeCheckBox();
 	}
 }

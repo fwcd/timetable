@@ -7,13 +7,11 @@ import java.time.LocalTime;
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
-import com.fwcd.timetable.model.calendar.CalendarCrateModel;
-import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.calendar.popover.NewAppointmentView;
+import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
-
-import org.controlsfx.control.PopOver;
+import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -37,26 +35,27 @@ public class WeekDayView implements FxView {
 	private final StackPane node;
 	private final WeekDayAppointmentsView appointments;
 	private final WeekDayTimeLayouter layouter;
-	private final CalendarCrateModel calendars;
+	private final CalendarsViewModel calendars;
 	
 	private final int dayOffset;
 	private final Observable<Option<LocalDate>> date = new Observable<>(Option.empty());
 	
-	public WeekDayView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarCrateModel calendars, int dayOffset) {
+	public WeekDayView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarsViewModel calendars, int dayOffset) {
 		this.dayOffset = dayOffset;
 		this.layouter = layouter;
 		this.calendars = calendars;
 		
 		node = new StackPane();
+		node.setMinWidth(0);
 		node.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0, 1, 0, 1))));
 		
-		appointments = new WeekDayAppointmentsView(layouter, calendars);
+		appointments = new WeekDayAppointmentsView(layouter, context, calendars);
 		date.listenAndFire(it -> it.ifPresent(appointments::setDate));
 		
 		node.setOnMouseClicked(e -> {
 			NewAppointmentView newAppointmentView = createNewAppointmentView(context, e);
 			double yOffset = -30; // TODO: Dynamic calculation of the y-offset
-			new PopOver(newAppointmentView.getNode())
+			FxUtils.newPopOver(newAppointmentView.getNode())
 				.show(node.getScene().getWindow(), e.getScreenX(), e.getScreenY() + yOffset);
 		});
 		
@@ -68,11 +67,10 @@ public class WeekDayView implements FxView {
 	}
 
 	private NewAppointmentView createNewAppointmentView(TimeTableAppContext context, MouseEvent e) {
-		CalendarModel calendar = /* TODO */ calendars.getCalendars().get(0);
 		LocalDate newDate = date.get().unwrap("Can not create appointment without a date");
 		LocalTime newTime = layouter.toTime(e.getY());
 		LocalDateTime dateTime = LocalDateTime.of(newDate, newTime);
-		return new NewAppointmentView(context, calendar, dateTime);
+		return new NewAppointmentView(context, calendars, dateTime);
 	}
 	
 	private void addHourMarks() {

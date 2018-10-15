@@ -13,5 +13,14 @@
 	"month": "Month",
 	"list": "List",
 	"today": "Today",
-	"newappointment": "New Appointment"
+	"appointmentstart": "Start",
+	"appointmentend": "End",
+	"recurrence": "Recurrence",
+	"ignoredate": "Ignore Date",
+	"ignoretime": "Ignore Time",
+	"newappointment": "New Appointment",
+	"deleteappointment": "Delete Appointment",
+	"delete": "Delete",
+	"open": "Open",
+	"save": "Save"
 }

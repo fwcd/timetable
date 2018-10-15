@@ -5,6 +5,7 @@ import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.model.calendar.Location;
+import com.fwcd.timetable.view.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 
@@ -23,7 +24,7 @@ import tornadofx.control.DateTimePicker;
 public class AppointmentDetailsView implements FxView {
 	private final VBox node;
 	
-	public AppointmentDetailsView(CalendarModel calendar, AppointmentModel model) {
+	public AppointmentDetailsView(CalendarModel calendar, TimeTableAppContext context, AppointmentModel model) {
 		TextField title = new TextField();
 		FxUtils.bindBidirectionally(model.getName(), title.textProperty());
 		title.setFont(Font.font(14));
@@ -47,7 +48,7 @@ public class AppointmentDetailsView implements FxView {
 			interval -> interval.getStart(),
 			dateTime -> new LocalDateTimeInterval(dateTime, model.getEnd())
 		);
-		properties.addRow(rowIndex++, new Label("Start: "), start);
+		properties.addRow(rowIndex++, localizedPropertyLabel("appointmentstart", context), start);
 		
 		DateTimePicker end = new DateTimePicker();
 		FxUtils.bindBidirectionally(
@@ -56,11 +57,11 @@ public class AppointmentDetailsView implements FxView {
 			interval -> interval.getEnd(),
 			dateTime -> new LocalDateTimeInterval(model.getStart(), dateTime)
 		);
-		properties.addRow(rowIndex++, new Label("End: "), end);
+		properties.addRow(rowIndex++, localizedPropertyLabel("appointmentend", context), end);
 		
 		TextField recurrence = new TextField();
 		FxUtils.bindBidirectionally(model.getRecurrence().getRaw(), recurrence.textProperty());
-		properties.addRow(rowIndex++, new Label("Recurrence: "), recurrence);
+		properties.addRow(rowIndex++, localizedPropertyLabel("recurrence", context), recurrence);
 		
 		DatePicker recurrenceEnd = new DatePicker();
 		FxUtils.bindBidirectionally(
@@ -69,17 +70,17 @@ public class AppointmentDetailsView implements FxView {
 			optEnd -> optEnd.orElseNull(),
 			newEnd -> Option.ofNullable(newEnd)
 		);
-		properties.addRow(rowIndex++, new Label("Recurrence End: "), recurrenceEnd); // TODO: Localization
+		properties.addRow(rowIndex++, localizedPropertyLabel("recurrencend", context), recurrenceEnd);
 		
 		CheckBox ignoreDate = new CheckBox();
 		FxUtils.bindBidirectionally(model.ignoresDate(), ignoreDate.selectedProperty());
-		properties.addRow(rowIndex++, new Label("Ignore Date: "), ignoreDate);
+		properties.addRow(rowIndex++, localizedPropertyLabel("ignoredate", context), ignoreDate);
 		
 		CheckBox ignoreTime = new CheckBox();
 		FxUtils.bindBidirectionally(model.ignoresTime(), ignoreTime.selectedProperty());
-		properties.addRow(rowIndex++, new Label("Ignore Time: "), ignoreTime);
+		properties.addRow(rowIndex++, localizedPropertyLabel("ignoretime", context), ignoreTime);
 		
-		Button deleteButton = FxUtils.buttonOf("Delete Appointment", () -> calendar.getAppointments().remove(model)); // TODO: Localization
+		Button deleteButton = FxUtils.buttonOf(context.localized("deleteappointment"), () -> calendar.getAppointments().remove(model));
 		
 		node = new VBox(
 			title,
@@ -88,6 +89,10 @@ public class AppointmentDetailsView implements FxView {
 			deleteButton
 		);
 		node.setPadding(new Insets(10, 10, 10, 10));
+	}
+
+	private Label localizedPropertyLabel(String unlocalized, TimeTableAppContext context) {
+		return FxUtils.labelOf(context.localized(unlocalized), ": ");
 	}
 	
 	@Override
