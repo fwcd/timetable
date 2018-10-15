@@ -8,6 +8,7 @@ import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -31,6 +32,7 @@ public class MonthDayView implements FxView, AutoCloseable {
 		this.date = date;
 		
 		node = new BorderPane();
+		node.setPadding(new Insets(5));
 		
 		DayOfWeek weekDay = date.getDayOfWeek();
 		if ((weekDay == DayOfWeek.SATURDAY) || (weekDay == DayOfWeek.SUNDAY)) {
@@ -38,8 +40,8 @@ public class MonthDayView implements FxView, AutoCloseable {
 		}
 		
 		indexLabel = new Label(Integer.toString(date.getDayOfMonth()));
-		indexLabel.setFont(Font.font(null, FontWeight.BOLD, 14));
-		BorderPane.setAlignment(indexLabel, Pos.TOP_CENTER);
+		indexLabel.setFont(Font.font(null, FontWeight.BOLD, 15));
+		BorderPane.setAlignment(indexLabel, Pos.TOP_LEFT);
 		node.setTop(indexLabel);
 		
 		content = new VBox();
