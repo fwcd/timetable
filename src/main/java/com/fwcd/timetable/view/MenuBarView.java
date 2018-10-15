@@ -34,6 +34,10 @@ public class MenuBarView implements FxView {
 					.map(key -> FxUtils.menuItemOf(key, () -> context.getLanguageManager().setLanguage(key)))
 			)
 		);
+		
+		if (System.getProperty("os.name").contains("Mac")) {
+			node.setUseSystemMenuBar(true);
+		}
 	}
 	
 	private void showOpenDialog() {
