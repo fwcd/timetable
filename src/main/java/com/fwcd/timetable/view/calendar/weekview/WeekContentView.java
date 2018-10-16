@@ -17,7 +17,6 @@ import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
