@@ -10,11 +10,10 @@ import java.util.List;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
-import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
-import javafx.scene.Node;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -24,6 +23,7 @@ import javafx.scene.layout.RowConstraints;
 public class WeekContentView implements FxView {
 	private static final int MIN_DAY_WIDTH = 30;
 	private final GridPane node;
+	private final WeekTimeAxisView timeAxis;
 	private final List<WeekDayView> days = new ArrayList<>();
 	private final Observable<LocalDate> weekStart;
 	
@@ -39,6 +39,8 @@ public class WeekContentView implements FxView {
 		
 		weekStart = new Observable<>(currentWeekStart());
 		weekStart.listen(this::updateWeekStart);
+		
+		timeAxis = new WeekTimeAxisView(context, timeLayouter);
 		setupView(context);
 	}
 	
@@ -49,7 +51,7 @@ public class WeekContentView implements FxView {
 		
 		ColumnConstraints timeAxisColConstraints = new ColumnConstraints();
 		timeAxisColConstraints.setHgrow(Priority.NEVER);
-		node.addColumn(0, new WeekTimeAxisView(context, timeLayouter).getNode());
+		node.addColumn(0, timeAxis.getNode());
 		node.getColumnConstraints().add(timeAxisColConstraints);
 		
 		for (int i = 0; i < CalendarConstants.DAYS_OF_WEEK; i++) {
@@ -85,6 +87,8 @@ public class WeekContentView implements FxView {
 
 	private LocalDate currentWeekStart() { return LocalDate.now().with(ChronoField.DAY_OF_WEEK, DayOfWeek.MONDAY.getValue()); }
 	
+	public WeekTimeAxisView getTimeAxis() { return timeAxis; }
+	
 	@Override
-	public Node getNode() { return node; }
+	public GridPane getNode() { return node; }
 }

@@ -7,9 +7,9 @@ import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 public class WeekTimeAxisView implements FxView {
@@ -28,5 +28,5 @@ public class WeekTimeAxisView implements FxView {
 	}
 	
 	@Override
-	public Node getNode() { return node; }
+	public Pane getNode() { return node; }
 }

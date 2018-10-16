@@ -32,5 +32,12 @@
 	"timeformat": "Time Format",
 	"datetimeformat": "Date and Time Format",
 	"reset": "Reset",
-	"changecolor": "Change Color"
+	"changecolor": "Change Color",
+	"monday": "Monday",
+	"tuesday": "Tuesday",
+	"wednesday": "Wednesday",
+	"thursday": "Thursday",
+	"friday": "Friday",
+	"saturday": "Saturday",
+	"sunday": "Sunday"
 }

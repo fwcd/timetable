@@ -14,9 +14,7 @@ public class Language implements Serializable {
 		this.mappings = mappings;
 	}
 	
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 	
 	public String localize(String key) {
 		String localized = mappings.get(key);
