@@ -16,7 +16,6 @@ public class WeekView implements FxNavigableView {
 	private final Node navigatorNode;
 	private final BorderPane contentNode;
 	
-	private final WeekHeaderView header;
 	private final WeekContentView content;
 	private final ScrollPane scrollPane;
 	private final WeekDayTimeLayouter timeLayouter = new WeekDayTimeLayouter();
@@ -24,7 +23,6 @@ public class WeekView implements FxNavigableView {
 	public WeekView(TimeTableAppContext context, CalendarsViewModel calendars) {
 		content = new WeekContentView(timeLayouter, context, calendars);
 		scrollPane = new ScrollPane(content.getNode());
-		header = new WeekHeaderView(context, content);
 		navigatorNode = new WeekNavigatorView(context, content).getNode();
 		
 		FxUtils.setVerticalScrollSpeed(scrollPane, 2);
@@ -37,7 +35,7 @@ public class WeekView implements FxNavigableView {
 		scrollPane.setVvalue((normalizedValue * (vmax - vmin)) + vmin);
 		
 		contentNode = new BorderPane();
-		contentNode.setTop(header.getNode());
+		contentNode.setTop(content.getHeaderNode());
 		contentNode.setCenter(scrollPane);
 	}
 	

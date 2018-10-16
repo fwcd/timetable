@@ -10,19 +10,25 @@ import java.util.List;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
+import com.fwcd.timetable.view.utils.FxHeaderedView;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
+import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 
-public class WeekContentView implements FxView {
+public class WeekContentView implements FxView, FxHeaderedView {
 	private static final int MIN_DAY_WIDTH = 30;
 	private final GridPane node;
+	private final Node headerNode;
+	private final GridPane headerGrid;
 	private final WeekTimeAxisView timeAxis;
 	private final List<WeekDayView> days = new ArrayList<>();
 	private final Observable<LocalDate> weekStart;
@@ -36,6 +42,11 @@ public class WeekContentView implements FxView {
 		
 		node = new GridPane();
 		node.setMinWidth(Region.USE_PREF_SIZE);
+		
+		headerGrid = new GridPane();
+		headerNode = new AnchorPane(headerGrid);
+		AnchorPane.setLeftAnchor(headerGrid, 0D);
+		AnchorPane.setRightAnchor(headerGrid, 0D);
 		
 		weekStart = new Observable<>(currentWeekStart());
 		weekStart.listen(this::updateWeekStart);
@@ -51,21 +62,30 @@ public class WeekContentView implements FxView {
 		
 		ColumnConstraints timeAxisColConstraints = new ColumnConstraints();
 		timeAxisColConstraints.setHgrow(Priority.NEVER);
+		
+		timeAxis.getNode().widthProperty().addListener((obs, o, n) -> {
+			Platform.runLater(() -> AnchorPane.setLeftAnchor(headerGrid, n.doubleValue()));
+		});
+		
 		node.addColumn(0, timeAxis.getNode());
 		node.getColumnConstraints().add(timeAxisColConstraints);
 		
 		for (int i = 0; i < CalendarConstants.DAYS_OF_WEEK; i++) {
-			WeekDayView day = new WeekDayView(timeLayouter, context, calendars, i);
-			day.setWeekStart(weekStart.get());
-			
 			ColumnConstraints colConstraints = new ColumnConstraints();
 			colConstraints.setMinWidth(MIN_DAY_WIDTH);
 			colConstraints.setPrefWidth(MIN_DAY_WIDTH);
 			colConstraints.setHgrow(Priority.ALWAYS);
 			node.getColumnConstraints().add(colConstraints);
+			headerGrid.getColumnConstraints().add(colConstraints);
 			
+			WeekDayView day = new WeekDayView(timeLayouter, context, calendars, i);
+			day.setWeekStart(weekStart.get());
 			days.add(day);
 			node.addColumn(i + 1, day.getNode());
+			
+			WeekDayHeaderView dayHeader = new WeekDayHeaderView(context, calendars, i);
+			dayHeader.setWeekStart(weekStart.get());
+			headerGrid.addColumn(i, dayHeader.getNode());
 		}
 	}
 	
@@ -91,4 +111,7 @@ public class WeekContentView implements FxView {
 	
 	@Override
 	public GridPane getNode() { return node; }
+
+	@Override
+	public Node getHeaderNode() { return headerNode; }
 }
