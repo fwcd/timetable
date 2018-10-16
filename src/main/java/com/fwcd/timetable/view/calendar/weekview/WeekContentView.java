@@ -27,8 +27,7 @@ import javafx.scene.layout.RowConstraints;
 public class WeekContentView implements FxView, FxHeaderedView {
 	private static final int MIN_DAY_WIDTH = 30;
 	private final GridPane node;
-	private final Node headerNode;
-	private final GridPane headerGrid;
+	private final GridPane headerNode;
 	private final WeekTimeAxisView timeAxis;
 	private final List<WeekDayView> days = new ArrayList<>();
 	private final Observable<LocalDate> weekStart;
@@ -43,10 +42,7 @@ public class WeekContentView implements FxView, FxHeaderedView {
 		node = new GridPane();
 		node.setMinWidth(Region.USE_PREF_SIZE);
 		
-		headerGrid = new GridPane();
-		headerNode = new AnchorPane(headerGrid);
-		AnchorPane.setLeftAnchor(headerGrid, 0D);
-		AnchorPane.setRightAnchor(headerGrid, 0D);
+		headerNode = new GridPane();
 		
 		weekStart = new Observable<>(currentWeekStart());
 		weekStart.listen(this::updateWeekStart);
@@ -63,9 +59,12 @@ public class WeekContentView implements FxView, FxHeaderedView {
 		ColumnConstraints timeAxisColConstraints = new ColumnConstraints();
 		timeAxisColConstraints.setHgrow(Priority.NEVER);
 		
+		Region cornerSpacer = new Region();
 		timeAxis.getNode().widthProperty().addListener((obs, o, n) -> {
-			Platform.runLater(() -> AnchorPane.setLeftAnchor(headerGrid, n.doubleValue()));
+			Platform.runLater(() -> cornerSpacer.setMinWidth(n.doubleValue()));
 		});
+		headerNode.addColumn(0, cornerSpacer);
+		headerNode.getColumnConstraints().add(new ColumnConstraints());
 		
 		node.addColumn(0, timeAxis.getNode());
 		node.getColumnConstraints().add(timeAxisColConstraints);
@@ -76,7 +75,7 @@ public class WeekContentView implements FxView, FxHeaderedView {
 			colConstraints.setPrefWidth(MIN_DAY_WIDTH);
 			colConstraints.setHgrow(Priority.ALWAYS);
 			node.getColumnConstraints().add(colConstraints);
-			headerGrid.getColumnConstraints().add(colConstraints);
+			headerNode.getColumnConstraints().add(colConstraints);
 			
 			WeekDayView day = new WeekDayView(timeLayouter, context, calendars, i);
 			day.setWeekStart(weekStart.get());
@@ -85,7 +84,7 @@ public class WeekContentView implements FxView, FxHeaderedView {
 			
 			WeekDayHeaderView dayHeader = new WeekDayHeaderView(context, calendars, i);
 			dayHeader.setWeekStart(weekStart.get());
-			headerGrid.addColumn(i, dayHeader.getNode());
+			headerNode.addColumn(i + 1, dayHeader.getNode());
 		}
 	}
 	
