@@ -31,6 +31,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -280,5 +282,14 @@ public final class FxUtils {
 		ColorPicker colorPicker = new ColorPicker();
 		FxUtils.bindBidirectionally(color, colorPicker.valueProperty(), FxUtils::toFxColor, FxUtils::toDrawColor);
 		FxUtils.showIndependentPopOver(FxUtils.newPopOver(colorPicker), node);
+	}
+	
+	public static void expandSingleNodes(TreeView<?> node) {
+		TreeItem<?> item = node.getRoot();
+		while (item.getChildren().size() == 1) {
+			item.setExpanded(true);
+			item = item.getChildren().get(0);
+		}
+		item.setExpanded(true);
 	}
 }
