@@ -7,7 +7,7 @@ import com.fwcd.timetable.model.calendar.recurrence.Recurrence;
 import com.fwcd.timetable.model.calendar.recurrence.WeeklyRecurrence;
 import com.fwcd.timetable.model.calendar.recurrence.YearlyRecurrence;
 import com.fwcd.timetable.model.calendar.task.TaskModel;
-import com.fwcd.timetable.model.utils.GsonUtils;
+import com.fwcd.timetable.model.json.GsonUtils;
 import com.google.gson.Gson;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 

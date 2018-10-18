@@ -1,4 +1,4 @@
-package com.fwcd.timetable.model.utils;
+package com.fwcd.timetable.model.json;
 
 import java.io.IOException;
 

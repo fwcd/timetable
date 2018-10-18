@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import com.fwcd.fructose.io.InputStreamable;
-import com.fwcd.timetable.model.utils.GsonUtils;
+import com.fwcd.timetable.model.json.GsonUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

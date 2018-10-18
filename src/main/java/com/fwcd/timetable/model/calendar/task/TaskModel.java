@@ -7,7 +7,7 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import com.fwcd.timetable.model.calendar.CommonEntryType;
-import com.fwcd.timetable.model.utils.PostDeserializable;
+import com.fwcd.timetable.model.json.PostDeserializable;
 
 public class TaskModel implements CalendarEntryModel, Serializable, PostDeserializable {
 	private static final long serialVersionUID = -1219052993628334319L;

@@ -11,7 +11,7 @@ import com.fwcd.fructose.Option;
 import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.recurrence.ParsedRecurrence;
-import com.fwcd.timetable.model.utils.PostDeserializable;
+import com.fwcd.timetable.model.json.PostDeserializable;
 
 public class AppointmentModel implements Serializable, CalendarEntryModel, Comparable<AppointmentModel>, PostDeserializable {
 	private static final long serialVersionUID = 6135909125862494477L;

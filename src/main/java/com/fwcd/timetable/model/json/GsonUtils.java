@@ -1,4 +1,4 @@
-package com.fwcd.timetable.model.utils;
+package com.fwcd.timetable.model.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

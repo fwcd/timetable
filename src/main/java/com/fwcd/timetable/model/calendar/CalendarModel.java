@@ -11,7 +11,7 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.draw.DrawColor;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.task.TaskCrateModel;
-import com.fwcd.timetable.model.utils.PostDeserializable;
+import com.fwcd.timetable.model.json.PostDeserializable;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
 
 public class CalendarModel implements Serializable, PostDeserializable {
