@@ -18,6 +18,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuBar;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.stage.FileChooser;
 
 public class MenuBarView implements FxView {
@@ -32,11 +34,11 @@ public class MenuBarView implements FxView {
 		
 		node = new MenuBar(
 			FxUtils.menuOf(context.localized("filemenu"),
-				FxUtils.menuItemOf(context.localized("open"), this::showOpenDialog),
-				FxUtils.menuItemOf(context.localized("save"), this::showSaveDialog)
+				FxUtils.menuItemOf(context.localized("open"), this::showOpenDialog, new KeyCodeCombination(KeyCode.O, FxUtils.CTRL_OR_CMD_DOWN)),
+				FxUtils.menuItemOf(context.localized("save"), this::showSaveDialog, new KeyCodeCombination(KeyCode.S, FxUtils.CTRL_OR_CMD_DOWN))
 			),
 			FxUtils.menuOf(context.localized("editmenu"),
-				FxUtils.menuItemOf(context.localized("settings"), this::showSettings)
+				FxUtils.menuItemOf(context.localized("settings"), this::showSettings, new KeyCodeCombination(KeyCode.COMMA, FxUtils.CTRL_OR_CMD_DOWN))
 			),
 			FxUtils.menuOf(context.localized("languagemenu"),
 				context.getLanguageManager().getLanguageKeys().stream()
@@ -44,7 +46,7 @@ public class MenuBarView implements FxView {
 			)
 		);
 		
-		if (System.getProperty("os.name").contains("Mac")) {
+		if (FxUtils.isMacOS()) {
 			node.setUseSystemMenuBar(true);
 		}
 	}

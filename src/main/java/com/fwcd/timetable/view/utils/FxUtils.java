@@ -34,12 +34,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCombination.Modifier;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
 public final class FxUtils {
+	public static final Modifier CTRL_OR_CMD_DOWN = isMacOS() ? KeyCombination.META_DOWN : KeyCombination.CONTROL_DOWN;
+
 	private FxUtils() {}
+	
+	public static boolean isMacOS() {
+		return System.getProperty("os.name").contains("Mac");
+	}
 	
 	public static void setVerticalScrollSpeed(ScrollPane pane, int multiplier) {
 		// Source: https://stackoverflow.com/questions/32739269/how-do-i-change-the-amount-by-which-scrollpane-scrolls
@@ -86,10 +94,22 @@ public final class FxUtils {
 		text.listenAndFire(item::setText);
 		return item;
 	}
+
+	public static MenuItem menuItemOf(ReadOnlyObservable<String> text, Runnable action, KeyCombination accelerator) {
+		MenuItem item = menuItemOf(text, action);
+		item.setAccelerator(accelerator);
+		return item;
+	}
 	
 	public static MenuItem menuItemOf(String name, Runnable action) {
 		MenuItem item = new MenuItem(name);
 		item.setOnAction(e -> action.run());
+		return item;
+	}
+	
+	public static MenuItem menuItemOf(String name, Runnable action, KeyCombination accelerator) {
+		MenuItem item = menuItemOf(name, action);
+		item.setAccelerator(accelerator);
 		return item;
 	}
 	
