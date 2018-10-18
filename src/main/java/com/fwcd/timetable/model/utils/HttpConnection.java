@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.nio.charset.Charset;
 import java.util.stream.Stream;
 
 import com.fwcd.fructose.Observable;
@@ -43,9 +44,9 @@ public class HttpConnection implements AutoCloseable {
 		return str.toString();
 	}
 	
-	public Stream<String> readLines() throws IOException {
+	public Stream<String> readLines(Charset charset) throws IOException {
 		Stream.Builder<String> streamBuilder = Stream.builder();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, charset));
 		
 		String line = reader.readLine();
 		while (line != null) {
