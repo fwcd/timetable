@@ -1,6 +1,6 @@
 package com.fwcd.timetable.model.query;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Stream;
 
 import com.fwcd.fructose.Option;
@@ -11,7 +11,9 @@ public interface QueryOutputNode {
 	
 	Option<AppointmentModel> asAppointment();
 	
-	List<? extends QueryOutputNode> getChilds();
+	Collection<? extends QueryOutputNode> getChilds();
+	
+	boolean isHighlighted();
 	
 	default Stream<AppointmentModel> streamAppointments() {
 		return Stream.concat(
