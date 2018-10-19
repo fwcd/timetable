@@ -19,6 +19,7 @@ import com.fwcd.timetable.model.json.GsonUtils;
 import com.fwcd.timetable.model.language.Language;
 import com.fwcd.timetable.model.language.LanguageManager;
 import com.fwcd.timetable.viewmodel.settings.TimeTableAppSettings;
+import com.fwcd.timetable.viewmodel.utils.FileSaveState;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
@@ -32,6 +33,7 @@ public class TimeTableAppContext {
 	private final Observable<DateTimeFormatter> timeFormatter = new Observable<>(DateTimeFormatter.ISO_TIME);
 	private final Observable<DateTimeFormatter> dateTimeFormatter = new Observable<>(DateTimeFormatter.ISO_DATE_TIME);
 	
+	private final FileSaveState fileSaveState = new FileSaveState();
 	private final Path configDirectory = Paths.get(System.getProperty("user.home"), ".timetable");
 	private final Path savedSettingsPath = configDirectory.resolve("settings.json");
 	private final boolean autoSaveSettingsEnabled = true;
@@ -65,6 +67,8 @@ public class TimeTableAppContext {
 	public ReadOnlyObservable<DateTimeFormatter> getTimeFormatter() { return timeFormatter; }
 	
 	public ReadOnlyObservable<DateTimeFormatter> getDateTimeFormatter() { return dateTimeFormatter; }
+	
+	public FileSaveState getFileSaveState() { return fileSaveState; }
 	
 	private Option<TimeTableAppSettings> loadSettings() {
 		if (Files.exists(savedSettingsPath)) {

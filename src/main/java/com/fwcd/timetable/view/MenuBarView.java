@@ -42,6 +42,7 @@ public class MenuBarView implements FxView {
 			writer -> viewModel.getCalendars().getModel().saveAsJsonTo(writer),
 			this::showSaveDialog,
 			this::showOpenDialog,
+			context.getFileSaveState(),
 			StandardCharsets.UTF_8
 		);
 		

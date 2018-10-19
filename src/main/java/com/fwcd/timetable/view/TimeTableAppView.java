@@ -13,10 +13,8 @@ import javafx.scene.layout.BorderPane;
 
 public class TimeTableAppView implements FxParentView {
 	private final BorderPane node;
-	private final TimeTableAppContext context = new TimeTableAppContext();
-	private final TimeTableAppViewModel viewModel = new TimeTableAppViewModel();
 	
-	public TimeTableAppView() {
+	public TimeTableAppView(TimeTableAppContext context, TimeTableAppViewModel viewModel) {
 		node = new BorderPane();
 		
 		CalendarsView calendar = new CalendarsView(context, viewModel.getCalendars());
