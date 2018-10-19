@@ -28,6 +28,7 @@ public class QueryOutputTreeCell extends TreeCell<QueryOutputNode> {
 		} else {
 			Option<AppointmentModel> appointment = item.asAppointment();
 			if (appointment.isPresent()) {
+				cell.setShowTitle(item.exposesAppointmentTitle());
 				cell.updateItem(appointment.unwrap());
 		
 				setText("");

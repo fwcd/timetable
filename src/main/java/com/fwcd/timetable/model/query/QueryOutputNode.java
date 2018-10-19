@@ -15,6 +15,8 @@ public interface QueryOutputNode {
 	
 	boolean isHighlighted();
 	
+	boolean exposesAppointmentTitle();
+	
 	default Stream<AppointmentModel> streamAppointments() {
 		return Stream.concat(
 			asAppointment().stream(),

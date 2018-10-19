@@ -27,6 +27,8 @@ public class CalendarEntryCell implements FxView {
 	
 	private final SubscriptionStack itemSubscriptions = new SubscriptionStack();
 	private Option<CalendarEntryModel> currentItem = Option.empty();
+	private boolean showTitle = true;
+	private boolean showSubtitle = true;
 	
 	public CalendarEntryCell(TimeTableAppContext context) {
 		this.context = context;
@@ -46,21 +48,36 @@ public class CalendarEntryCell implements FxView {
 		});
 	}
 	
+	public void setShowTitle(boolean showTitle) {
+		this.showTitle = showTitle;
+	}
+	
+	public void setShowSubtitle(boolean showTitle) {
+		this.showTitle = showTitle;
+	}
+	
 	public void updateItem(CalendarEntryModel item) {
 		currentItem = Option.of(item);
 		itemSubscriptions.unsubscribeAll();
 		
-		if (item != null) {
+		if (item == null) {
+			node.getChildren().clear();
+		} else {
 			CalendarEntryInfoProvider infoProvider = new CalendarEntryInfoProvider(context);
 			item.accept(infoProvider);
 			
 			itemSubscriptions.push(item.getName().subscribeAndFire(name -> titleLabel.setText(titlePrefixOf(item) + name)));
 			itemSubscriptions.push(infoProvider.getInfo().subscribeAndFire(info -> {
 				subtitleLabel.setText(info);
-				if (info.isEmpty()) {
-					node.getChildren().setAll(titleLabel);
-				} else {
-					node.getChildren().setAll(titleLabel, subtitleLabel);
+				
+				if (showTitle) {
+					if (showSubtitle && !info.isEmpty()) {
+						node.getChildren().setAll(titleLabel, subtitleLabel);
+					} else {
+						node.getChildren().setAll(titleLabel);
+					}
+				} else if (showSubtitle) {
+					node.getChildren().setAll(subtitleLabel);
 				}
 			}));
 			itemSubscriptions.moveAll(infoProvider.getSubscriptions());
