@@ -7,9 +7,12 @@ import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TreeCell;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class QueryOutputTreeCell extends TreeCell<QueryOutputNode> {
 	private final CalendarEntryCell cell;
+	private boolean isBold = false;
 	
 	public QueryOutputTreeCell(TimeTableAppContext context) {
 		cell = new CalendarEntryCell(context);
@@ -31,10 +34,19 @@ public class QueryOutputTreeCell extends TreeCell<QueryOutputNode> {
 				setGraphic(cell.getNode());
 				setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 			} else {
+				setBold(item.isHighlighted());
 				setText(item.getName());
 				setGraphic(null);
 				setContentDisplay(ContentDisplay.TEXT_ONLY);
 			}
 		}
+	}
+	
+	private void setBold(boolean bold) {
+		if (bold != isBold) {
+			double fontSize = getFont().getSize();
+			setFont(Font.font(null, bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize));
+		}
+		isBold = bold;
 	}
 }
