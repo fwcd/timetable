@@ -7,6 +7,7 @@ import com.fwcd.timetable.model.calendar.CalendarSerializationUtils;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.calendar.listview.CalendarListView;
 import com.fwcd.timetable.view.calendar.monthview.MonthView;
+import com.fwcd.timetable.view.calendar.tableview.CalendarTableView;
 import com.fwcd.timetable.view.calendar.weekview.WeekView;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.NavigableTabPane;
@@ -23,16 +24,19 @@ public class CalendarsView implements FxView {
 	private final WeekView weekView;
 	private final MonthView monthView;
 	private final CalendarListView listView;
+	private final CalendarTableView tableView;
 	
 	public CalendarsView(TimeTableAppContext context, CalendarsViewModel viewModel) {
 		weekView = new WeekView(context, viewModel);
 		monthView = new MonthView(context, viewModel);
 		listView = new CalendarListView(context, viewModel);
+		tableView = new CalendarTableView(context, viewModel);
 		
 		NavigableTabPane tabPane = new NavigableTabPane();
 		tabPane.addTab(context.localized("week"), weekView);
 		tabPane.addTab(context.localized("month"), monthView);
 		tabPane.addTab(context.localized("list"), listView);
+		tabPane.addTab(context.localized("table"), tableView);
 		node = tabPane.getNode();
 		node.setOnDragOver(e -> {
 			e.acceptTransferModes(TransferMode.COPY);
