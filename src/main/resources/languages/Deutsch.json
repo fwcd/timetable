@@ -31,6 +31,7 @@
 	"dateformat": "Datumsformat",
 	"timeformat": "Zeitformat",
 	"datetimeformat": "Datums- und Zeitformat",
+	"yearmonthformat": "Jahres- und Monatsformat",
 	"reset": "Zurücksetzen",
 	"changecolor": "Farbe ändern",
 	"monday": "Montag",

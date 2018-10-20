@@ -32,6 +32,7 @@ public class TimeTableAppContext {
 	private final Observable<DateTimeFormatter> dateFormatter = new Observable<>(DateTimeFormatter.ISO_DATE);
 	private final Observable<DateTimeFormatter> timeFormatter = new Observable<>(DateTimeFormatter.ISO_TIME);
 	private final Observable<DateTimeFormatter> dateTimeFormatter = new Observable<>(DateTimeFormatter.ISO_DATE_TIME);
+	private final Observable<DateTimeFormatter> yearMonthFormatter = new Observable<>(DateTimeFormatter.ofPattern("MM.yyyy"));
 	
 	private final FileSaveState fileSaveState = new FileSaveState();
 	private final Path configDirectory = Paths.get(System.getProperty("user.home"), ".timetable");
@@ -45,6 +46,7 @@ public class TimeTableAppContext {
 			dateFormatter.set(DateTimeFormatter.ofPattern(it.getDateFormat()));
 			timeFormatter.set(DateTimeFormatter.ofPattern(it.getTimeFormat()));
 			dateTimeFormatter.set(DateTimeFormatter.ofPattern(it.getDateTimeFormat()));
+			yearMonthFormatter.set(DateTimeFormatter.ofPattern(it.getYearMonthFormat()));
 			
 			if (autoSaveSettingsEnabled) {
 				saveSettings();
@@ -67,6 +69,8 @@ public class TimeTableAppContext {
 	public ReadOnlyObservable<DateTimeFormatter> getTimeFormatter() { return timeFormatter; }
 	
 	public ReadOnlyObservable<DateTimeFormatter> getDateTimeFormatter() { return dateTimeFormatter; }
+	
+	public ReadOnlyObservable<DateTimeFormatter> getYearMonthFormatter() { return yearMonthFormatter; }
 	
 	public FileSaveState getFileSaveState() { return fileSaveState; }
 	

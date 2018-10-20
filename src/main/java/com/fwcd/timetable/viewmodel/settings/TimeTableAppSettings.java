@@ -8,12 +8,13 @@ import java.util.Objects;
  */
 public class TimeTableAppSettings implements Serializable {
 	private static final long serialVersionUID = 1382008053572958741L;
-	private String language;
-	private String dateFormat;
-	private String timeFormat;
-	private String dateTimeFormat;
+	private String language = "English";
+	private String dateFormat = "dd.MM.yyyy";
+	private String timeFormat = "HH:mm";
+	private String dateTimeFormat = dateFormat + " " + timeFormat;
+	private String yearMonthFormat = "MM.yyyy";
 	
-	private TimeTableAppSettings() {}
+	public TimeTableAppSettings() {}
 	
 	public String getLanguage() { return Objects.requireNonNull(language); }
 	
@@ -22,6 +23,8 @@ public class TimeTableAppSettings implements Serializable {
 	public String getTimeFormat() { return Objects.requireNonNull(timeFormat); }
 	
 	public String getDateTimeFormat() { return Objects.requireNonNull(dateTimeFormat); }
+	
+	public String getYearMonthFormat() { return Objects.requireNonNull(yearMonthFormat); }
 	
 	public Builder with() { return new Builder(this); }
 	
@@ -35,12 +38,7 @@ public class TimeTableAppSettings implements Serializable {
 			instance.dateTimeFormat = copied.dateTimeFormat;
 		}
 		
-		public Builder() {
-			instance.language = "English";
-			instance.dateFormat = "dd.MM.yyyy";
-			instance.timeFormat = "HH:mm";
-			instance.dateTimeFormat = instance.dateFormat + " " + instance.timeFormat;
-		}
+		public Builder() {}
 		
 		public Builder language(String language) {
 			instance.language = language;
@@ -59,6 +57,11 @@ public class TimeTableAppSettings implements Serializable {
 		
 		public Builder dateTimeFormat(String dateTimeFormat) {
 			instance.dateTimeFormat = dateTimeFormat;
+			return this;
+		}
+		
+		public Builder yearMonthFormat(String yearMonthFormat) {
+			instance.yearMonthFormat = yearMonthFormat;
 			return this;
 		}
 		

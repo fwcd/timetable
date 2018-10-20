@@ -35,7 +35,7 @@ public class NavigableTabPane implements FxView {
 		if (navigatorBar == null) {
 			navigationPane.getChildren().clear();
 		} else {
-			navigationPane.getChildren().add(navigatorBar);
+			navigationPane.getChildren().setAll(navigatorBar);
 		}
 	}
 	

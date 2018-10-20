@@ -29,6 +29,7 @@ public class SettingsView implements FxView {
 		node.addRow(rowIndex++, localizedPropertyLabel("dateformat", context), boundTextField(TimeTableAppSettings::getDateFormat, Builder::dateFormat));
 		node.addRow(rowIndex++, localizedPropertyLabel("timeformat", context), boundTextField(TimeTableAppSettings::getTimeFormat, Builder::timeFormat));
 		node.addRow(rowIndex++, localizedPropertyLabel("datetimeformat", context), boundTextField(TimeTableAppSettings::getDateTimeFormat, Builder::dateTimeFormat));
+		node.addRow(rowIndex++, localizedPropertyLabel("yearmonthformat", context), boundTextField(TimeTableAppSettings::getYearMonthFormat, Builder::yearMonthFormat));
 		node.addRow(rowIndex++, FxUtils.buttonOf(context.localized("reset"), context::resetSettings));
 	}
 	
