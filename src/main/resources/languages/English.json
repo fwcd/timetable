@@ -67,5 +67,6 @@
 	"eachxyears": "each {} years",
 	"everyxth": "every {}.",
 	"untilx": "until {}",
-	"day": "day"
+	"day": "day",
+	"exceptfor": "except for"
 }
