@@ -24,3 +24,4 @@
 * IO
     * Ability to save calendars separately
     * CalDAV support
+    * Git integration
