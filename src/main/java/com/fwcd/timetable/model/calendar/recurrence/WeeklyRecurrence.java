@@ -2,10 +2,12 @@ package com.fwcd.timetable.model.calendar.recurrence;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 import com.fwcd.fructose.Option;
+import com.fwcd.timetable.model.language.Language;
 
 public class WeeklyRecurrence implements Recurrence {
 	private static final long serialVersionUID = -4477528751020266582L;
@@ -27,5 +29,14 @@ public class WeeklyRecurrence implements Recurrence {
 			&& (ChronoUnit.WEEKS.between(start, date) % weeksBetweenRepeats == 0)
 			&& (date.compareTo(start) >= 0)
 			&& (end.map(e -> date.compareTo(e) <= 0).orElse(true));
+	}
+	
+	@Override
+	public String describeWith(Language language, DateTimeFormatter dateFormatter) {
+		// TODO: Specify week days
+		return ((weeksBetweenRepeats == 1)
+				? language.localize("weekly")
+				: language.localize("eachxweeks", weeksBetweenRepeats))
+			+ end.map(it -> " " + language.localize("untilx", dateFormatter.format(it))).orElse("");
 	}
 }

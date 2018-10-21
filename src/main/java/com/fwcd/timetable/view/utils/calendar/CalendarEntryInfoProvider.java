@@ -31,6 +31,7 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 		subscriptions.add(appointment.getLocation().subscribe(v -> updater.run()));
 		subscriptions.add(appointment.ignoresDate().subscribe(v -> updater.run()));
 		subscriptions.add(appointment.ignoresTime().subscribe(v -> updater.run()));
+		subscriptions.add(appointment.getRecurrence().getParsed().subscribe(v -> updater.run()));
 		
 		updater.run();
 	}
@@ -73,6 +74,10 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 				.append(" - ")
 				.append(timeFormatter.format(appointment.getEndTime()));
 		}
+			
+		appointment.getRecurrence().getParsed().get()
+			.map(it -> it.describeWith(context.getLanguage().get(), dateFormatter))
+			.ifPresent(recurrence -> str.append(" - ").append(recurrence));
 		
 		appointment.getLocation().get()
 			.map(Location::getLabel)

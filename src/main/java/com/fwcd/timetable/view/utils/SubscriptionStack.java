@@ -27,7 +27,7 @@ public class SubscriptionStack {
 	}
 	
 	/** Moves all subscriptions in the provided collection to this queue. */
-	public void moveAll(Iterable<Subscription> pushed) {
+	public void takeAll(Iterable<Subscription> pushed) {
 		Iterator<Subscription> iterator = pushed.iterator();
 		while (iterator.hasNext()) {
 			subscriptions.push(iterator.next());

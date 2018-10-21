@@ -1,9 +1,11 @@
 package com.fwcd.timetable.model.calendar.recurrence;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import com.fwcd.fructose.Option;
+import com.fwcd.timetable.model.language.Language;
 
 public class DailyRecurrence implements Recurrence {
 	private static final long serialVersionUID = -2555555069797368936L;
@@ -23,5 +25,13 @@ public class DailyRecurrence implements Recurrence {
 			&& (ChronoUnit.DAYS.between(start, date) % daysBetweenRepeats == 0)
 			&& (date.compareTo(start) >= 0)
 			&& (end.map(e -> date.compareTo(e) <= 0).orElse(true));
+	}
+	
+	@Override
+	public String describeWith(Language language, DateTimeFormatter dateFormatter) {
+		return ((daysBetweenRepeats == 1)
+				? language.localize("daily")
+				: language.localize("eachxdays", daysBetweenRepeats))
+			+ end.map(it -> " " + language.localize("untilx", dateFormatter.format(it))).orElse("");
 	}
 }

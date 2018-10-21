@@ -80,7 +80,7 @@ public class CalendarEntryCell implements FxView {
 					node.getChildren().setAll(subtitleLabel);
 				}
 			}));
-			itemSubscriptions.moveAll(infoProvider.getSubscriptions());
+			itemSubscriptions.takeAll(infoProvider.getSubscriptions());
 		}
 	}
 	
