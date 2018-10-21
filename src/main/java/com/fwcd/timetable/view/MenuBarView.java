@@ -11,6 +11,7 @@ import com.fwcd.timetable.view.print.CalendarPrinter;
 import com.fwcd.timetable.view.settings.SettingsView;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.view.utils.RetentionFileChooser;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.TimeTableAppViewModel;
 import com.fwcd.timetable.viewmodel.utils.FileSaveManager;
@@ -22,14 +23,13 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.stage.FileChooser;
 
 public class MenuBarView implements FxView {
 	private final MenuBar node;
 	private final TimeTableAppContext context;
 	private final TimeTableAppViewModel viewModel;
 	
-	private final FileChooser fileChooser = new FileChooser();
+	private final RetentionFileChooser fileChooser = new RetentionFileChooser();
 	private final FileSaveManager fileSaveManager;
 	private final CalendarPrinter printer;
 	
@@ -73,11 +73,11 @@ public class MenuBarView implements FxView {
 	}
 	
 	private Option<Path> showOpenDialog() {
-		return Option.ofNullable(fileChooser.showOpenDialog(node.getScene().getWindow())).map(File::toPath);
+		return fileChooser.showOpenDialog(node.getScene().getWindow());
 	}
 	
 	private Option<Path> showSaveDialog() {
-		return Option.ofNullable(fileChooser.showSaveDialog(node.getScene().getWindow())).map(File::toPath);
+		return fileChooser.showSaveDialog(node.getScene().getWindow());
 	}
 	
 	private void open() {
