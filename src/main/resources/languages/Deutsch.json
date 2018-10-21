@@ -41,5 +41,8 @@
 	"friday": "Freitag",
 	"saturday": "Samstag",
 	"sunday": "Sonntag",
-	"table": "Tabelle"
+	"table": "Tabelle",
+	"print": "Drucken",
+	"noprinterfound": "Kein Drucker wurde gefunden",
+	"warning": "Warnung"
 }

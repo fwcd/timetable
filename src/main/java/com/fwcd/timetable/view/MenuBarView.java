@@ -7,6 +7,7 @@ import java.nio.file.Path;
 
 import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarCrateModel;
+import com.fwcd.timetable.view.print.CalendarPrinter;
 import com.fwcd.timetable.view.settings.SettingsView;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
@@ -26,13 +27,17 @@ import javafx.stage.FileChooser;
 public class MenuBarView implements FxView {
 	private final MenuBar node;
 	private final TimeTableAppContext context;
+	private final TimeTableAppViewModel viewModel;
 	
 	private final FileChooser fileChooser = new FileChooser();
 	private final FileSaveManager fileSaveManager;
+	private final CalendarPrinter printer;
 	
 	public MenuBarView(TimeTableAppContext context, TimeTableAppViewModel viewModel) {
 		this.context = context;
+		this.viewModel = viewModel;
 		
+		printer = new CalendarPrinter(context);
 		fileSaveManager = new FileSaveManager(
 			reader -> {
 				CalendarCrateModel crate = viewModel.getCalendars().getModel();
@@ -50,7 +55,8 @@ public class MenuBarView implements FxView {
 			FxUtils.menuOf(context.localized("filemenu"),
 				FxUtils.menuItemOf(context.localized("open"), this::open, new KeyCodeCombination(KeyCode.O, FxUtils.CTRL_OR_CMD_DOWN)),
 				FxUtils.menuItemOf(context.localized("save"), this::save, new KeyCodeCombination(KeyCode.S, FxUtils.CTRL_OR_CMD_DOWN)),
-				FxUtils.menuItemOf(context.localized("saveas"), this::saveAs, new KeyCodeCombination(KeyCode.S, FxUtils.CTRL_OR_CMD_DOWN,  KeyCombination.SHIFT_DOWN))
+				FxUtils.menuItemOf(context.localized("saveas"), this::saveAs, new KeyCodeCombination(KeyCode.S, FxUtils.CTRL_OR_CMD_DOWN, KeyCombination.SHIFT_DOWN)),
+				FxUtils.menuItemOf(context.localized("print"), this::print, new KeyCodeCombination(KeyCode.P, FxUtils.CTRL_OR_CMD_DOWN))
 			),
 			FxUtils.menuOf(context.localized("editmenu"),
 				FxUtils.menuItemOf(context.localized("settings"), this::showSettings, new KeyCodeCombination(KeyCode.COMMA, FxUtils.CTRL_OR_CMD_DOWN))
@@ -96,6 +102,10 @@ public class MenuBarView implements FxView {
 		} catch (IOException e) {
 			FxUtils.showExceptionAlert(context.localize("error"), e);
 		}
+	}
+	
+	private void print() {
+		printer.showPrintDialog(node.getScene().getWindow(), viewModel.getCalendars());
 	}
 	
 	private void showSettings() {

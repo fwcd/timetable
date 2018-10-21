@@ -41,5 +41,8 @@
 	"friday": "Friday",
 	"saturday": "Saturday",
 	"sunday": "Sunday",
-	"table": "Table"
+	"table": "Table",
+	"print": "Print",
+	"noprinterfound": "No printer was found",
+	"warning": "Warning"
 }
