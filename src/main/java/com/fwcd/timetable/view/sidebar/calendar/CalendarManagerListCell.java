@@ -139,7 +139,9 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 	
 	private void showCheckBox(CalendarModel calendar) {
 		CheckBox checkBox = new CheckBox();
-		checkBox.setSelected(viewModel.getSelectedCalendars().contains(calendar));
+		itemSubscriptions.push(viewModel.getSelectedCalendars().subscribeAndFire(it -> {
+			checkBox.setSelected(it.contains(calendar));
+		}));
 		checkBox.selectedProperty().addListener((obs, old, selected) -> {
 			if (selected) {
 				viewModel.getSelectedCalendars().add(calendar);
