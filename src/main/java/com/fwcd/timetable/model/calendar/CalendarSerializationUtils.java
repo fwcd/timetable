@@ -1,6 +1,7 @@
 package com.fwcd.timetable.model.calendar;
 
 import com.fwcd.timetable.model.calendar.recurrence.DailyRecurrence;
+import com.fwcd.timetable.model.calendar.recurrence.ExcludingRecurrence;
 import com.fwcd.timetable.model.calendar.recurrence.MonthlyDayRecurrence;
 import com.fwcd.timetable.model.calendar.recurrence.MonthlyWeekRecurrence;
 import com.fwcd.timetable.model.calendar.recurrence.Recurrence;
@@ -24,7 +25,8 @@ public class CalendarSerializationUtils {
 				.registerSubtype(MonthlyDayRecurrence.class)
 				.registerSubtype(MonthlyWeekRecurrence.class)
 				.registerSubtype(WeeklyRecurrence.class)
-				.registerSubtype(YearlyRecurrence.class))
+				.registerSubtype(YearlyRecurrence.class)
+				.registerSubtype(ExcludingRecurrence.class))
 			.create();
 	}
 }

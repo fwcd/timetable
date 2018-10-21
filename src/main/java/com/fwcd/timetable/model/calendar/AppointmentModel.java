@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Collections;
+import java.util.Set;
 
 import com.fwcd.fructose.EventListenerList;
 import com.fwcd.fructose.Observable;
@@ -28,7 +30,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	private transient EventListenerList<AppointmentModel> nullableStructuralChangeListeners;
 	
 	public AppointmentModel() {
-		this("", Option.empty(), LocalDateTime.now(), LocalDateTime.now(), "", false, false, "", Option.empty());
+		this("", Option.empty(), LocalDateTime.now(), LocalDateTime.now(), "", false, false, "", Collections.emptySet(), Option.empty());
 	}
 	
 	private AppointmentModel(
@@ -40,6 +42,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		boolean ignoreDate,
 		boolean ignoreTime,
 		String rawRecurrence,
+		Set<LocalDate> excludes,
 		Option<LocalDate> recurrenceEnd
 	) {
 		this.name = new Observable<>(name);
@@ -49,7 +52,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		this.ignoreDate = new Observable<>(ignoreDate);
 		this.ignoreTime = new Observable<>(ignoreTime);
 		this.recurrenceEnd = new Observable<>(recurrenceEnd);
-		recurrence = new ParsedRecurrence(dateTimeInterval, this.recurrenceEnd);
+		recurrence = new ParsedRecurrence(dateTimeInterval, this.recurrenceEnd, excludes);
 		recurrence.getRaw().set(rawRecurrence);
 		
 		setupChangeListeners();
@@ -181,6 +184,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		private Option<Location> location = Option.empty();
 		private LocalDateTime start = LocalDateTime.now();
 		private LocalDateTime end = LocalDateTime.now();
+		private Set<LocalDate> excludes = Collections.emptySet();
 		private String description = "";
 		private boolean ignoreDate = false;
 		private boolean ignoreTime = false;
@@ -245,6 +249,11 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 			this.rawRecurrence = rawRecurrence;
 			return this;
 		}
+
+		public Builder excludes(Set<LocalDate> excludes) {
+			this.excludes = excludes;
+			return this;
+		}
 		
 		public Builder recurrenceEnd(LocalDate recurrenceEnd) {
 			this.recurrenceEnd = Option.of(recurrenceEnd);
@@ -252,7 +261,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		}
 		
 		public AppointmentModel build() {
-			return new AppointmentModel(name, location, start, end, description, ignoreDate, ignoreTime, rawRecurrence, recurrenceEnd);
+			return new AppointmentModel(name, location, start, end, description, ignoreDate, ignoreTime, rawRecurrence, excludes, recurrenceEnd);
 		}
 	}
 }

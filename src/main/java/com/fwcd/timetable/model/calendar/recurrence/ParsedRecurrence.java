@@ -41,27 +41,34 @@ public class ParsedRecurrence implements Serializable {
 	private final Observable<String> raw = new Observable<>("");
 	private final Observable<Option<Recurrence>> parsed = new Observable<>(Option.empty());
 	
-	public ParsedRecurrence(ReadOnlyObservable<LocalDateTimeInterval> dateTimeInterval, ReadOnlyObservable<Option<LocalDate>> recurrenceEnd) {
+	public ParsedRecurrence(ReadOnlyObservable<LocalDateTimeInterval> dateTimeInterval, ReadOnlyObservable<Option<LocalDate>> recurrenceEnd, Set<LocalDate> excludes) {
 		ObservableUtils.triListen(dateTimeInterval, raw, recurrenceEnd, (dates, str, recEnd) -> {
-			parsed.set(parse(str, dates.getStart().toLocalDate(), recEnd));
+			parsed.set(parse(str, dates.getStart().toLocalDate(), recEnd, excludes));
 		});
 	}
 	
-	private Option<Recurrence> parse(String str, LocalDate start, Option<LocalDate> end) {
+	private Option<Recurrence> parse(String str, LocalDate start, Option<LocalDate> end, Set<LocalDate> excludes) {
 		Matcher matcher = RECURRENCE_PATTERN.matcher(str);
+		Option<Recurrence> result = Option.empty();
+		
 		if (matcher.find()) {
 			String modechar = matcher.group(1);
 			int distance = Integer.parseInt(matcher.group(2));
 			Option<String> args = Option.ofNullable(matcher.group(3));
 			switch (modechar) {
-				case "d": return Option.of(new DailyRecurrence(start, end, distance));
-				case "w": return args.flatMap(it -> parseWeeklyRecurrence(it, start, end, distance));
-				case "m": return args.flatMap(it -> parseMonthlyRecurrence(it, start, end, distance));
-				case "y": return Option.of(new YearlyRecurrence(start, end, distance));
+				case "d": result = Option.of(new DailyRecurrence(start, end, distance)); break;
+				case "w": result = args.flatMap(it -> parseWeeklyRecurrence(it, start, end, distance)); break;
+				case "m": result = args.flatMap(it -> parseMonthlyRecurrence(it, start, end, distance)); break;
+				case "y": result = Option.of(new YearlyRecurrence(start, end, distance)); break;
 				default: break;
 			}
 		}
-		return Option.empty();
+		
+		if (excludes.size() > 0) {
+			return result.map(it -> new ExcludingRecurrence(it, excludes));
+		} else {
+			return result;
+		}
 	}
 	
 	private Option<Recurrence> parseWeeklyRecurrence(String args, LocalDate start, Option<LocalDate> end, int weeksBetweenRepeats) {
