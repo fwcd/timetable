@@ -4,28 +4,34 @@
 	-fx-background: rgb(34, 34, 34);
 }
 
-.tab-label {
+.tab-label, .button {
 	-fx-text-fill: white;
 }
 
-.tab {
+.tab, .button, .list-cell:even {
 	-fx-background-color: rgb(46, 46, 46);
 }
 
-.tab:selected {
-	-fx-background-color: rgb(97, 97, 97);
-}
-
-.list-view .list-cell:even {
-	-fx-background-color: rgb(46, 46, 46);
-}
-
-.list-cell:odd {
+.list-cell:odd, .combo-box .list-cell:hover {
 	-fx-background-color: rgb(53, 53, 53);
+}
+
+.tab:selected, .button:hover, .list-cell:selected {
+	-fx-background-color: rgb(97, 97, 97);
 }
 
 .list-cell {
 	-fx-text-fill: white;
+}
+
+/* ControlsFX */
+
+.popover > .content {
+	-fx-background-color: rgb(54, 54, 54);
+}
+
+.popover > .border {
+	-fx-fill: rgb(54, 54, 54) !important;
 }
 
 /* TimeTable */
