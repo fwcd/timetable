@@ -8,19 +8,33 @@
 	-fx-text-fill: white;
 }
 
-.tab, .button, .list-cell:even {
+.tab,
+.button,
+.list-cell:even,
+.text-field,
+.date-picker-popup > .month-year-pane,
+.split-pane-divider,
+.scroll-bar {
 	-fx-background-color: rgb(46, 46, 46);
 }
 
-.list-cell:odd, .combo-box .list-cell:hover {
+.list-cell:odd,
+.combo-box .list-cell:hover {
 	-fx-background-color: rgb(53, 53, 53);
 }
 
-.tab:selected, .button:hover, .list-cell:selected {
+.tab:selected,
+.button:hover,
+.list-cell:selected {
 	-fx-background-color: rgb(97, 97, 97);
 }
 
-.list-cell {
+.scroll-bar .thumb {
+	-fx-background-color: rgb(128, 128, 128);
+}
+ 
+.list-cell,
+.text-field {
 	-fx-text-fill: white;
 }
 
@@ -50,7 +64,7 @@
 }
 
 .month-day-weekend {
-	-fx-background-color: lightgray;
+	-fx-background-color: rgb(68, 68, 68);
 }
 
 .week-day {

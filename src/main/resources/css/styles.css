@@ -1,3 +1,9 @@
+/* JavaFX */
+
+.scroll-pane, .split-pane {
+	-fx-padding: 0;
+}
+
 /* TimeTable */
 
 .progress-bar {
