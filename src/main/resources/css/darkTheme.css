@@ -1,0 +1,38 @@
+/* JavaFX controls */
+
+.root {
+	-fx-background: rgb(34, 34, 34);
+}
+
+/* TimeTable */
+
+.progress-bar > .bar {
+	-fx-background-color: orange;
+}
+
+.appointment {
+	/* -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 0, 0); */
+}
+
+.current-time-indicator {
+	-fx-fill: orange;
+	-fx-stroke: orange;
+}
+
+.drag-active {
+	-fx-background-color: orange;
+}
+
+.month-day-weekend {
+	-fx-background-color: lightgray;
+}
+
+.week-day {
+	-fx-border-style: solid;
+	-fx-border-width: 0 1px 0 1px;
+	-fx-border-color: rgb(65, 65, 65);
+}
+
+.hour-mark {
+	-fx-stroke: rgb(65, 65, 65);
+}

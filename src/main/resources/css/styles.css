@@ -1,0 +1,19 @@
+/* TimeTable */
+
+.progress-bar {
+	-fx-background-color: transparent;
+}
+
+.progress-bar > .track {
+	-fx-background-color: transparent;
+}
+
+.progress-bar > .bar {
+	-fx-background-insets: 0 0 0 0;
+	-fx-padding: 0.15em;
+}
+
+.week-day {
+	-fx-border-style: solid;
+	-fx-border-width: 0 1px 0 1px;
+}

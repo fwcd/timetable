@@ -11,6 +11,7 @@ public class ThemeManager {
 	
 	public ThemeManager() {
 		addTheme(new Theme(ThemeKey.LIGHT, "/css/lightTheme.css"));
+		addTheme(new Theme(ThemeKey.DARK, "/css/darkTheme.css"));
 	}
 	
 	public Option<Theme> getTheme(String key) { return Option.ofNullable(themes.get(key)); }

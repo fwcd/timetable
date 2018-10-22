@@ -1,15 +1,7 @@
-.progress-bar {
-	-fx-background-color: transparent;
-}
-
-.progress-bar > .track {
-	-fx-background-color: transparent;
-}
+/* TimeTable */
 
 .progress-bar > .bar {
 	-fx-background-color: blue;
-	-fx-background-insets: 0 0 0 0;
-	-fx-padding: 0.15em;
 }
 
 .appointment {
@@ -31,8 +23,6 @@
 
 .week-day {
 	-fx-border-style: solid;
-	-fx-border-width: 0 1px 0 1px;
-	-fx-border-color: rgb(224, 224, 224);
 }
 
 .hour-mark {
