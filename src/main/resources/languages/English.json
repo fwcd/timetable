@@ -74,5 +74,7 @@
 	"theme": "Theme",
 	"thememenu": "Theme",
 	"lighttheme": "Light",
-	"darktheme": "Dark"
+	"darktheme": "Dark",
+	"debugmenu": "Debug",
+	"reloadcss": "Reload CSS"
 }

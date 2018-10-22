@@ -3,6 +3,8 @@ package com.fwcd.timetable.view;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarCrateModel;
@@ -15,6 +17,7 @@ import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.TimeTableAppViewModel;
 import com.fwcd.timetable.viewmodel.utils.FileSaveManager;
 
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -67,6 +70,9 @@ public class MenuBarView implements FxView {
 			FxUtils.menuOf(context.localized("thememenu"),
 				context.getThemeManager().getThemeKeys().stream()
 					.map(key -> FxUtils.menuItemOf(context.localize(key), () -> context.setTheme(key)))
+			),
+			FxUtils.menuOf(context.localized("debugmenu"),
+				FxUtils.menuItemOf(context.localized("reloadcss"), this::reloadCss)
 			)
 		);
 		
@@ -81,6 +87,14 @@ public class MenuBarView implements FxView {
 	
 	private Option<Path> showSaveDialog() {
 		return fileChooser.showSaveDialog(node.getScene().getWindow());
+	}
+	
+	private void reloadCss() {
+		ObservableList<String> stylesheets = node.getScene().getStylesheets();
+		List<String> cssPaths = new ArrayList<>(stylesheets);
+		
+		stylesheets.clear();
+		stylesheets.addAll(cssPaths);
 	}
 	
 	private void open() {
