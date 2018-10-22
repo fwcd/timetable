@@ -28,3 +28,13 @@
 .month-day-weekend {
 	-fx-background-color: lightgray;
 }
+
+.week-day {
+	-fx-border-style: solid;
+	-fx-border-width: 0 1px 0 1px;
+	-fx-border-color: rgb(224, 224, 224);
+}
+
+.hour-mark {
+	-fx-stroke: rgb(224, 224, 224);
+}

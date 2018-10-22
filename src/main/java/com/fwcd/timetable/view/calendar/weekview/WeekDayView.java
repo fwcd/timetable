@@ -31,7 +31,6 @@ import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 public class WeekDayView implements FxView {
-	private static final Color BORDER_COLOR = new Color(0.9, 0.9, 0.9, 1);
 	private final StackPane node;
 	private final WeekDayAppointmentsView appointments;
 	private final WeekDayTimeLayouter layouter;
@@ -47,7 +46,7 @@ public class WeekDayView implements FxView {
 		
 		node = new StackPane();
 		node.setMinWidth(0);
-		node.setBorder(new Border(new BorderStroke(BORDER_COLOR, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0, 1, 0, 1))));
+		node.getStyleClass().add("week-day");
 		
 		appointments = new WeekDayAppointmentsView(layouter, context, calendars);
 		date.listenAndFire(it -> it.ifPresent(appointments::setDate));
@@ -79,10 +78,10 @@ public class WeekDayView implements FxView {
 		for (int hour = 0; hour < CalendarConstants.HOURS_OF_DAY; hour++) {
 			double y = layouter.toPixelY(LocalTime.of(hour, 0));
 			Line mark = new Line();
-			mark.setStroke(BORDER_COLOR);
 			mark.setStartY(y);
 			mark.setEndY(y);
 			mark.endXProperty().bind(node.widthProperty());
+			mark.getStyleClass().add("hour-mark");
 			hourMarks.getChildren().add(mark);
 		}
 		
