@@ -4,14 +4,14 @@
 	-fx-background: rgb(34, 34, 34);
 }
 
+.tab-label {
+	-fx-text-fill: white;
+}
+
 /* TimeTable */
 
 .progress-bar > .bar {
 	-fx-background-color: orange;
-}
-
-.appointment {
-	/* -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 0, 0); */
 }
 
 .current-time-indicator {
