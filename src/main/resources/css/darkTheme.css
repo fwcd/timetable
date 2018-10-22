@@ -14,7 +14,10 @@
 .text-field,
 .date-picker-popup > .month-year-pane,
 .split-pane-divider,
-.scroll-bar {
+.scroll-bar,
+.scroll-pane,
+.menu-bar,
+.context-menu {
 	-fx-background-color: rgb(46, 46, 46);
 }
 
@@ -34,8 +37,15 @@
 }
  
 .list-cell,
-.text-field {
+.text-field,
+.menu .label,
+.menu-item .label {
 	-fx-text-fill: white;
+}
+
+.list-view,
+.scroll-bar > .track {
+	-fx-padding: 0;
 }
 
 /* ControlsFX */

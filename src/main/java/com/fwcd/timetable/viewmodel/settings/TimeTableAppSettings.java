@@ -42,6 +42,8 @@ public class TimeTableAppSettings implements Serializable {
 			instance.dateFormat = copied.dateFormat;
 			instance.timeFormat = copied.timeFormat;
 			instance.dateTimeFormat = copied.dateTimeFormat;
+			instance.yearMonthFormat = copied.yearMonthFormat;
+			instance.theme = copied.theme;
 		}
 		
 		public Builder() {}
