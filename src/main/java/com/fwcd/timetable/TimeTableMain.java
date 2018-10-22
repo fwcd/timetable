@@ -36,7 +36,7 @@ public class TimeTableMain extends Application {
 			stage.setTitle(title.toString());
 		});
 		
-		context.getTheme().listenAndFire(it -> scene.getStylesheets().setAll(it.getCssResourcePath()));
+		context.getTheme().listenAndFire(it -> scene.getStylesheets().setAll("/css/styles.css", it.getCssResourcePath()));
 		
 		stage.setScene(scene);
 		stage.show();
