@@ -40,6 +40,7 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		this.viewModel = viewModel;
 		
 		label = new Label();
+		label.getStyleClass().add("entry-cell-label");
 		label.setTextAlignment(TextAlignment.LEFT);
 		
 		textField = new TextField();
@@ -60,6 +61,7 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		textNode.setAlignment(Pos.CENTER_LEFT);
 		
 		HBox node = new HBox(checkBoxNode, iconNode, textNode);
+		node.getStyleClass().add("entry-cell");
 		node.setSpacing(5);
 		node.setAlignment(Pos.CENTER_LEFT);
 		

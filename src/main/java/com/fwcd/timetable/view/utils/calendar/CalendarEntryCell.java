@@ -14,8 +14,6 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class CalendarEntryCell implements FxView {
 	private static final Gson GSON = CalendarSerializationUtils.newGson();
@@ -33,10 +31,11 @@ public class CalendarEntryCell implements FxView {
 	public CalendarEntryCell(TimeTableAppContext context) {
 		this.context = context;
 		
-		titleLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
-		subtitleLabel.setFont(Font.font(12));
+		titleLabel.getStyleClass().addAll("entry-cell-label", "title-cell-label");
+		subtitleLabel.getStyleClass().addAll("entry-cell-label", "subtitle-cell-label");
 		
 		node = new VBox(titleLabel);
+		node.getStyleClass().add("entry-cell");
 		node.setOnDragDetected(e -> {
 			if (currentItem.isPresent()) {
 				Dragboard dragboard = node.startDragAndDrop(TransferMode.COPY);

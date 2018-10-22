@@ -16,6 +16,18 @@
 	-fx-background-color: rgb(97, 97, 97);
 }
 
+.list-view .list-cell:even {
+	-fx-background-color: rgb(46, 46, 46);
+}
+
+.list-cell:odd {
+	-fx-background-color: rgb(53, 53, 53);
+}
+
+.list-cell {
+	-fx-text-fill: white;
+}
+
 /* TimeTable */
 
 .progress-bar > .bar {
@@ -43,4 +55,8 @@
 
 .hour-mark {
 	-fx-stroke: rgb(65, 65, 65);
+}
+
+.entry-cell-label {
+	-fx-text-fill: white;
 }

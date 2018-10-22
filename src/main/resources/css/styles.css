@@ -17,3 +17,11 @@
 	-fx-border-style: solid;
 	-fx-border-width: 0 1px 0 1px;
 }
+
+.entry-cell-label {
+	-font-size: 12px;
+}
+
+.title-cell-label {
+	-fx-font-weight: bold;
+}
