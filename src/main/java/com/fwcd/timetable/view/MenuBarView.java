@@ -63,6 +63,10 @@ public class MenuBarView implements FxView {
 			FxUtils.menuOf(context.localized("languagemenu"),
 				context.getLanguageManager().getLanguageKeys().stream()
 					.map(key -> FxUtils.menuItemOf(key, () -> context.setLanguage(key)))
+			),
+			FxUtils.menuOf(context.localized("thememenu"),
+				context.getThemeManager().getThemeKeys().stream()
+					.map(key -> FxUtils.menuItemOf(context.localize(key), () -> context.setTheme(key)))
 			)
 		);
 		

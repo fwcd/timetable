@@ -26,6 +26,7 @@ public class SettingsView implements FxView {
 		node = new GridPane();
 		
 		node.addRow(rowIndex++, localizedPropertyLabel("language", context), boundTextField(TimeTableAppSettings::getLanguage, Builder::language));
+		node.addRow(rowIndex++, localizedPropertyLabel("theme", context), boundTextField(TimeTableAppSettings::getTheme, Builder::theme));
 		node.addRow(rowIndex++, localizedPropertyLabel("dateformat", context), boundTextField(TimeTableAppSettings::getDateFormat, Builder::dateFormat));
 		node.addRow(rowIndex++, localizedPropertyLabel("timeformat", context), boundTextField(TimeTableAppSettings::getTimeFormat, Builder::timeFormat));
 		node.addRow(rowIndex++, localizedPropertyLabel("datetimeformat", context), boundTextField(TimeTableAppSettings::getDateTimeFormat, Builder::dateTimeFormat));

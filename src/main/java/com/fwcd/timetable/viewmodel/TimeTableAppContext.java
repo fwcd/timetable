@@ -19,6 +19,8 @@ import com.fwcd.timetable.model.json.GsonUtils;
 import com.fwcd.timetable.model.language.Language;
 import com.fwcd.timetable.model.language.LanguageManager;
 import com.fwcd.timetable.viewmodel.settings.TimeTableAppSettings;
+import com.fwcd.timetable.viewmodel.theme.Theme;
+import com.fwcd.timetable.viewmodel.theme.ThemeManager;
 import com.fwcd.timetable.viewmodel.utils.FileSaveState;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -26,9 +28,11 @@ import com.google.gson.JsonParseException;
 public class TimeTableAppContext {
 	private static final Gson GSON = GsonUtils.newGson();
 	private final LanguageManager languageManager = new LanguageManager();
+	private final ThemeManager themeManager = new ThemeManager();
 	
 	private final Observable<TimeTableAppSettings> settings;
 	private final Observable<Language> language = new Observable<>(new Language("", Collections.emptyMap()));
+	private final Observable<Theme> theme = new Observable<>(new Theme("", ""));
 	private final Observable<DateTimeFormatter> dateFormatter = new Observable<>(DateTimeFormatter.ISO_DATE);
 	private final Observable<DateTimeFormatter> timeFormatter = new Observable<>(DateTimeFormatter.ISO_TIME);
 	private final Observable<DateTimeFormatter> dateTimeFormatter = new Observable<>(DateTimeFormatter.ISO_DATE_TIME);
@@ -43,6 +47,8 @@ public class TimeTableAppContext {
 		settings = new Observable<>(loadSettings().orElseGet(() -> new TimeTableAppSettings.Builder().build()));
 		settings.listenAndFire(it -> {
 			languageManager.getLanguage(it.getLanguage()).ifPresent(language::set);
+			themeManager.getTheme(it.getTheme()).ifPresent(theme::set);
+			
 			dateFormatter.set(DateTimeFormatter.ofPattern(it.getDateFormat()));
 			timeFormatter.set(DateTimeFormatter.ofPattern(it.getTimeFormat()));
 			dateTimeFormatter.set(DateTimeFormatter.ofPattern(it.getDateTimeFormat()));
@@ -60,9 +66,15 @@ public class TimeTableAppContext {
 	
 	public LanguageManager getLanguageManager() { return languageManager; }
 	
+	public ThemeManager getThemeManager() { return themeManager; }
+	
 	public void setLanguage(String key) { settings.set(settings.get().with().language(key).build()); }
+
+	public void setTheme(String key) { settings.set(settings.get().with().theme(key).build()); }
 	
 	public ReadOnlyObservable<Language> getLanguage() { return language; }
+	
+	public ReadOnlyObservable<Theme> getTheme() { return theme; }
 	
 	public ReadOnlyObservable<DateTimeFormatter> getDateFormatter() { return dateFormatter; }
 	

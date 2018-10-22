@@ -12,8 +12,8 @@ public class LanguageManager {
 	private final LanguageParser parser = new LanguageParser();
 	
 	public LanguageManager() {
-		addLanguage(readResourceLanguage("English", "English.json"));
-		addLanguage(readResourceLanguage("Deutsch", "Deutsch.json"));
+		addLanguage(readResourceLanguage(LanguageKey.ENGLISH, "English.json"));
+		addLanguage(readResourceLanguage(LanguageKey.DEUTSCH, "Deutsch.json"));
 	}
 	
 	public Option<Language> getLanguage(String key) { return Option.ofNullable(languages.get(key)); }

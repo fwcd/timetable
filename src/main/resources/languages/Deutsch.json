@@ -70,5 +70,8 @@
 	"everyxth": "jeden {}.",
 	"untilx": "bis {}",
 	"day": "Tag",
-	"exceptfor": "bis auf"
+	"exceptfor": "bis auf",
+	"theme": "Theme",
+	"thememenu": "Theme",
+	"lighttheme": "Hell"
 }

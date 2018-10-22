@@ -70,5 +70,8 @@
 	"everyxth": "every {}.",
 	"untilx": "until {}",
 	"day": "day",
-	"exceptfor": "except for"
+	"exceptfor": "except for",
+	"theme": "Theme",
+	"thememenu": "Theme",
+	"lighttheme": "Light"
 }

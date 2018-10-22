@@ -2,8 +2,10 @@ package com.fwcd.timetable.model.language;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class Language implements Serializable {
 	private static final long serialVersionUID = -3794484912692629155L;
@@ -16,6 +18,22 @@ public class Language implements Serializable {
 	}
 	
 	public String getName() { return name; }
+	
+	public String unlocalize(String name) {
+		List<String> result = mappings.entrySet()
+			.stream()
+			.map(Map.Entry::getKey)
+			.filter(it -> it.equals(name))
+			.collect(Collectors.toList());
+		
+		if (result.size() > 1) {
+			throw new IllegalArgumentException("The localized language value '" + name + "' is ambiguous. Possible keys are: " + result);
+		} else if (result.size() < 1) {
+			throw new IllegalArgumentException("The localized language value '" + name + "' is not mapped by a key.");
+		}
+		
+		return result.get(0);
+	}
 	
 	/**
 	 * Localizes a string, replacing {}s with the
