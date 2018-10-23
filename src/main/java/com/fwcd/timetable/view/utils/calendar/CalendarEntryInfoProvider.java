@@ -45,6 +45,10 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 		DateTimeFormatter timeFormatter = context.getTimeFormatter().get();
 		DateTimeFormatter dateTimeFormatter = context.getDateTimeFormatter().get();
 		
+		appointment.getRecurrence().getParsed().get()
+			.map(it -> it.describeWith(context.getLanguage().get(), dateFormatter))
+			.ifPresent(recurrence -> str.append(recurrence).append(", "));
+		
 		if (!ignoreDate && !ignoreTime) {
 			LocalDateTime start = appointment.getStart();
 			LocalDateTime end = appointment.getEnd();
@@ -74,15 +78,11 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 				.append(" - ")
 				.append(timeFormatter.format(appointment.getEndTime()));
 		}
-			
-		appointment.getRecurrence().getParsed().get()
-			.map(it -> it.describeWith(context.getLanguage().get(), dateFormatter))
-			.ifPresent(recurrence -> str.append(" - ").append(recurrence));
 		
 		appointment.getLocation().get()
 			.map(Location::getLabel)
 			.filter(it -> !it.isEmpty())
-			.ifPresent(location -> str.append(" - ").append(location));
+			.ifPresent(location -> str.append(", ").append(location));
 		
 		return str.toString();
 	}

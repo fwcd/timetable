@@ -76,5 +76,12 @@
 	"lighttheme": "Hell",
 	"darktheme": "Dunkel",
 	"debugmenu": "Debug",
-	"reloadcss": "CSS neu laden"
+	"reloadcss": "CSS neu laden",
+	"onmondays": "montags",
+	"ontuesdays": "dienstags",
+	"onwednesdays": "mittwochs",
+	"onthursdays": "donnerstags",
+	"onfridays": "freitags",
+	"onsaturdays": "samstags",
+	"onsundays": "sonntags"
 }

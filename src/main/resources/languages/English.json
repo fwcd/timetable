@@ -76,5 +76,12 @@
 	"lighttheme": "Light",
 	"darktheme": "Dark",
 	"debugmenu": "Debug",
-	"reloadcss": "Reload CSS"
+	"reloadcss": "Reload CSS",
+	"onmondays": "on Mondays",
+	"ontuesdays": "on Tuesdays",
+	"onwednesdays": "on Wednesdays",
+	"onthursdays": "on Thursdays",
+	"onfridays": "on Fridays",
+	"onsaturdays": "on Saturdays",
+	"onsundays": "on Sundays"
 }

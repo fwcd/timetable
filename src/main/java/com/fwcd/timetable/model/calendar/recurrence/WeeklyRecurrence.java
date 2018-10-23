@@ -35,8 +35,28 @@ public class WeeklyRecurrence implements Recurrence {
 	public String describeWith(Language language, DateTimeFormatter dateFormatter) {
 		// TODO: Specify week days
 		return ((weeksBetweenRepeats == 1)
-				? language.localize("weekly")
+				? describeWeeklyRepetition(language)
 				: language.localize("eachxweeks", weeksBetweenRepeats))
 			+ end.map(it -> " " + language.localize("untilx", dateFormatter.format(it))).orElse("");
+	}
+
+	private String describeWeeklyRepetition(Language language) {
+		String key;
+		if (weekDays.size() == 1) {
+			DayOfWeek day = weekDays.iterator().next();
+			switch (day) {
+				case MONDAY: key = "onmondays"; break;
+				case TUESDAY: key = "ontuesdays"; break;
+				case WEDNESDAY: key = "onwednesdays"; break;
+				case THURSDAY: key = "onthursdays"; break;
+				case FRIDAY: key = "onfridays"; break;
+				case SATURDAY: key = "onsaturdays"; break;
+				case SUNDAY: key = "onsundays"; break;
+				default: throw new IllegalStateException("Invalid week day: " + day);
+			}
+		} else {
+			key = "weekly";
+		}
+		return language.localize(key);
 	}
 }
