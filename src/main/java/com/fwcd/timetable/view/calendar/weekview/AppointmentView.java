@@ -2,9 +2,11 @@ package com.fwcd.timetable.view.calendar.weekview;
 
 import java.time.format.DateTimeFormatter;
 
+import com.fwcd.fructose.Option;
 import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.timetable.model.calendar.Location;
 import com.fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
@@ -40,6 +42,19 @@ public class AppointmentView implements FxView {
 		nameLabel.setWrapText(true);
 		model.getName().listenAndFire(nameLabel::setText);
 		node.getChildren().add(nameLabel);
+		
+		Label locationLabel = new Label();
+		locationLabel.setFont(Font.font(11));
+		locationLabel.setTextFill(fgColor);
+		locationLabel.managedProperty().bind(locationLabel.visibleProperty()); // Do not occupy space if the label is not visible
+		model.getLocation().listenAndFire(it -> {
+			Option<String> location = it
+				.map(Location::getLabel)
+				.filter(s -> !s.isEmpty());
+			location.ifPresent(locationLabel::setText);
+			locationLabel.setVisible(location.isPresent());
+		});
+		node.getChildren().add(locationLabel);
 		
 		Label timeLabel = new Label();
 		timeLabel.setFont(Font.font(11));
