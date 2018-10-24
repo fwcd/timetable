@@ -86,7 +86,7 @@ public class WeekDayView implements FxView {
 		CurrentTimeIndicator indicator = new CurrentTimeIndicator();
 		Pane indicatorNode = indicator.getNode();
 		AnchorPane anchor = new AnchorPane(indicatorNode);
-		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.01) /* FIXME */, e -> updateIndicatorY(indicatorNode)));
+		Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), e -> updateIndicatorY(indicatorNode)));
 		
 		updateIndicatorY(indicatorNode);
 		
