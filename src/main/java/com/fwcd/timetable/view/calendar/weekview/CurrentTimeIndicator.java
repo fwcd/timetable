@@ -21,11 +21,13 @@ public class CurrentTimeIndicator implements FxView {
 		
 		Circle circle = new Circle(0, 0, CIRCLE_RADIUS);
 		StackPane.setAlignment(circle, Pos.CENTER_LEFT);
+		circle.setManaged(false);
 		circle.getStyleClass().add("current-time-indicator");
 		childs.add(circle);
 		
 		Line line = new Line();
 		StackPane.setAlignment(line, Pos.CENTER_RIGHT);
+		line.setManaged(false);
 		line.getStyleClass().add("current-time-indicator");
 		line.setStartY(0);
 		line.setEndY(0);
