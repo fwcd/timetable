@@ -13,6 +13,8 @@ import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
+import org.controlsfx.control.PopOver;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -48,8 +50,10 @@ public class WeekDayView implements FxView {
 		node.setOnMouseClicked(e -> {
 			NewAppointmentView newAppointmentView = createNewAppointmentView(context, e);
 			double yOffset = -30; // TODO: Dynamic calculation of the y-offset
-			FxUtils.newPopOver(newAppointmentView.getNode())
-				.show(node.getScene().getWindow(), e.getScreenX(), e.getScreenY() + yOffset);
+			PopOver popOver = FxUtils.newPopOver(newAppointmentView.getNode());
+			
+			newAppointmentView.setOnDelete(popOver::hide);
+			popOver.show(node.getScene().getWindow(), e.getScreenX(), e.getScreenY() + yOffset);
 		});
 		
 		// Add layered nodes

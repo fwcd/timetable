@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
-import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.geometry.Insets;
@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 public class NewAppointmentView implements FxView {
 	private final Pane node;
 	private final LocalDateTime start;
+	private Runnable onDelete = () -> {};
 	
 	public NewAppointmentView(TimeTableAppContext context, CalendarsViewModel calendars, LocalDateTime start) {
 		this.start = start;
@@ -39,9 +40,14 @@ public class NewAppointmentView implements FxView {
 			.build();
 		node.setPadding(Insets.EMPTY);
 		calendar.getAppointments().add(appointment);
-		node.getChildren().setAll(new AppointmentDetailsView(calendar, context, appointment).getNode());
+		
+		AppointmentDetailsView detailsView = new AppointmentDetailsView(calendar, context, appointment);
+		detailsView.setOnDelete(onDelete);
+		node.getChildren().setAll(detailsView.getNode());
 	}
 	
 	@Override
 	public Pane getNode() { return node; }
+
+	public void setOnDelete(Runnable onDelete) { this.onDelete = onDelete; }
 }

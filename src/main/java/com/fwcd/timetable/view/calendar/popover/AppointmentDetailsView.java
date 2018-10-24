@@ -5,9 +5,9 @@ import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.model.calendar.Location;
-import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -23,6 +23,7 @@ import tornadofx.control.DateTimePicker;
 
 public class AppointmentDetailsView implements FxView {
 	private final VBox node;
+	private Runnable onDelete = () -> {};
 	
 	public AppointmentDetailsView(CalendarModel calendar, TimeTableAppContext context, AppointmentModel model) {
 		TextField title = new TextField();
@@ -83,7 +84,10 @@ public class AppointmentDetailsView implements FxView {
 		FxUtils.bindBidirectionally(model.ignoresTime(), ignoreTime.selectedProperty());
 		properties.addRow(rowIndex++, localizedPropertyLabel("ignoretime", context), ignoreTime);
 		
-		Button deleteButton = FxUtils.buttonOf(context.localized("deleteappointment"), () -> calendar.getAppointments().remove(model));
+		Button deleteButton = FxUtils.buttonOf(context.localized("deleteappointment"), () -> {
+			calendar.getAppointments().remove(model);
+			onDelete.run();
+		});
 		
 		node = new VBox(
 			title,
@@ -97,6 +101,8 @@ public class AppointmentDetailsView implements FxView {
 	private Label localizedPropertyLabel(String unlocalized, TimeTableAppContext context) {
 		return FxUtils.labelOf(context.localized(unlocalized), ": ");
 	}
+	
+	public void setOnDelete(Runnable onDelete) { this.onDelete = onDelete; }
 	
 	@Override
 	public Node getNode() { return node; }
