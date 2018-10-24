@@ -4,43 +4,55 @@
 	-fx-background: rgb(34, 34, 34);
 }
 
-.tab-label, .button {
-	-fx-text-fill: white;
-}
-
 .tab,
-.button,
 .list-cell:even,
 .text-field,
 .date-picker-popup > .month-year-pane,
 .split-pane-divider,
 .scroll-bar,
 .scroll-pane,
+.corner,
 .menu-bar,
+.tree-cell,
 .context-menu {
 	-fx-background-color: rgb(46, 46, 46);
 }
 
 .list-cell:odd,
+.button,
+.titled-pane > .title,
 .combo-box .list-cell:hover {
 	-fx-background-color: rgb(53, 53, 53);
 }
 
 .tab:selected,
 .button:hover,
-.list-cell:selected {
+.list-cell:selected,
+.tree-cell:selected {
 	-fx-background-color: rgb(97, 97, 97);
 }
 
 .scroll-bar .thumb {
 	-fx-background-color: rgb(128, 128, 128);
 }
+
+.tree-cell .arrow {
+	-fx-background-color: white;
+}
  
 .list-cell,
 .text-field,
 .menu .label,
-.menu-item .label {
+.tab-label,
+.button,
+.tree-cell,
+.menu-item .label,
+.tree-cell .label {
 	-fx-text-fill: white;
+}
+
+.titled-pane > .title > .text {
+	-fx-fill: white;
 }
 
 .list-view,
