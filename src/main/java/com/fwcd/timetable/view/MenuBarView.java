@@ -69,7 +69,7 @@ public class MenuBarView implements FxView {
 			),
 			FxUtils.menuOf(context.localized("thememenu"),
 				context.getThemeManager().getThemeKeys().stream()
-					.map(key -> FxUtils.menuItemOf(context.localize(key), () -> context.setTheme(key)))
+					.map(key -> FxUtils.menuItemOf(context.localized(key), () -> context.setTheme(key)))
 			),
 			FxUtils.menuOf(context.localized("debugmenu"),
 				FxUtils.menuItemOf(context.localized("reloadcss"), this::reloadCss)
