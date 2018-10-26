@@ -1,9 +1,11 @@
 package com.fwcd.timetable.view.calendar.popover;
 
+import java.util.Collection;
+
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.time.LocalDateTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
-import com.fwcd.timetable.model.calendar.CalendarModel;
+import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.Location;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
@@ -25,7 +27,7 @@ public class AppointmentDetailsView implements FxView {
 	private final VBox node;
 	private Runnable onDelete = () -> {};
 	
-	public AppointmentDetailsView(CalendarModel calendar, TimeTableAppContext context, AppointmentModel model) {
+	public AppointmentDetailsView(Collection<? extends CalendarEntryModel> parent, TimeTableAppContext context, AppointmentModel model) {
 		TextField title = new TextField();
 		FxUtils.bindBidirectionally(model.getName(), title.textProperty());
 		title.setFont(Font.font(14));
@@ -85,7 +87,7 @@ public class AppointmentDetailsView implements FxView {
 		properties.addRow(rowIndex++, localizedPropertyLabel("ignoretime", context), ignoreTime);
 		
 		Button deleteButton = FxUtils.buttonOf(context.localized("deleteappointment"), () -> {
-			calendar.getAppointments().remove(model);
+			parent.remove(model);
 			onDelete.run();
 		});
 		

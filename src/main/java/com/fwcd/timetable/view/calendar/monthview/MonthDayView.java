@@ -71,7 +71,7 @@ public class MonthDayView implements FxView, AutoCloseable {
 		Label label = new Label(appWithCal.getEntry().getName().get());
 		label.setOnMouseClicked(e -> {
 			FxUtils.showIndependentPopOver(
-				FxUtils.newPopOver(new AppointmentDetailsView(appWithCal.getCalendar(), context, appWithCal.getEntry())),
+				FxUtils.newPopOver(new AppointmentDetailsView(appWithCal.getCalendar().getAppointments(), context, appWithCal.getEntry())),
 				label
 			);
 		});

@@ -2,6 +2,8 @@ package com.fwcd.timetable.view.calendar.listview;
 
 import java.util.stream.Collectors;
 
+import com.fwcd.timetable.model.calendar.CalendarEntryModel;
+import com.fwcd.timetable.model.utils.Contained;
 import com.fwcd.timetable.view.utils.FxNavigableView;
 import com.fwcd.timetable.view.utils.calendar.CalendarEntryListView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
@@ -24,8 +26,9 @@ public class CalendarListView implements FxNavigableView {
 	private void updateEntries(CalendarsViewModel calendars) {
 		entries.getNode().getItems().setAll(calendars.getSelectedCalendars()
 			.stream()
-			.flatMap(it -> it.getAppointments().stream())
-			.sorted()
+			.flatMap(cal -> cal.getAppointments().stream()
+				.sorted()
+				.map(app -> new Contained<CalendarEntryModel>(app, cal.getAppointments())))
 			.collect(Collectors.toList())
 		);
 	}
