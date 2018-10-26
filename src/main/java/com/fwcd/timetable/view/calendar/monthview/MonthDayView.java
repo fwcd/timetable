@@ -4,12 +4,13 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
-import com.fwcd.timetable.viewmodel.TimeTableAppContext;
+import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
-import com.fwcd.timetable.view.calendar.utils.AppointmentWithCalendar;
+import com.fwcd.timetable.view.calendar.utils.Calendarized;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.geometry.Insets;
@@ -60,17 +61,17 @@ public class MonthDayView implements FxView, AutoCloseable {
 		content.getChildren().setAll(calendars.getSelectedCalendars().stream()
 			.flatMap(cal -> cal.getAppointments().stream()
 				.filter(app -> app.occursOn(date))
-				.map(app -> new AppointmentWithCalendar(app, cal)))
+				.map(app -> new Calendarized<>(app, cal)))
 			.map(this::appointmentLabelOf)
 			.collect(Collectors.toList())
 		);
 	}
 
-	private Label appointmentLabelOf(AppointmentWithCalendar appWithCal) {
-		Label label = new Label(appWithCal.getAppointment().getName().get());
+	private Label appointmentLabelOf(Calendarized<AppointmentModel> appWithCal) {
+		Label label = new Label(appWithCal.getEntry().getName().get());
 		label.setOnMouseClicked(e -> {
 			FxUtils.showIndependentPopOver(
-				FxUtils.newPopOver(new AppointmentDetailsView(appWithCal.getCalendar(), context, appWithCal.getAppointment())),
+				FxUtils.newPopOver(new AppointmentDetailsView(appWithCal.getCalendar(), context, appWithCal.getEntry())),
 				label
 			);
 		});

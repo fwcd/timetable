@@ -1,9 +1,11 @@
 package com.fwcd.timetable.model.calendar.task;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import com.fwcd.fructose.EventListenerList;
 import com.fwcd.fructose.Observable;
+import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import com.fwcd.timetable.model.calendar.CommonEntryType;
@@ -13,6 +15,7 @@ public class TaskModel implements CalendarEntryModel, Serializable, PostDeserial
 	private static final long serialVersionUID = -1219052993628334319L;
 	private final Observable<String> name;
 	private final Observable<String> description = new Observable<>("");
+	private final Observable<Option<LocalDateTime>> dateTime = new Observable<>(Option.empty());
 	
 	private transient EventListenerList<TaskModel> nullableChangeListeners;
 	
@@ -29,6 +32,7 @@ public class TaskModel implements CalendarEntryModel, Serializable, PostDeserial
 	private void setupChangeListeners() {
 		name.listen(it -> getChangeListeners().fire(this));
 		description.listen(it -> getChangeListeners().fire(this));
+		dateTime.listen(it -> getChangeListeners().fire(this));
 	}
 	
 	public EventListenerList<TaskModel> getChangeListeners() {
@@ -42,6 +46,8 @@ public class TaskModel implements CalendarEntryModel, Serializable, PostDeserial
 	public void accept(CalendarEntryVisitor visitor) { visitor.visitTask(this); }
 	
 	public Observable<String> getName() { return name; }
+	
+	public Observable<Option<LocalDateTime>> getDateTime() { return dateTime; }
 	
 	@Override
 	public Observable<String> getDescription() { return description; }
