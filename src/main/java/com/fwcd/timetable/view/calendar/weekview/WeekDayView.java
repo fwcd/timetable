@@ -28,7 +28,7 @@ import javafx.util.Duration;
 
 public class WeekDayView implements FxView {
 	private final StackPane node;
-	private final WeekDayAppointmentsView appointments;
+	private final WeekDayEntriesView appointments;
 	private final WeekDayTimeLayouter layouter;
 	private final CalendarsViewModel calendars;
 	
@@ -44,7 +44,7 @@ public class WeekDayView implements FxView {
 		node.setMinWidth(0);
 		node.getStyleClass().add("week-day");
 		
-		appointments = new WeekDayAppointmentsView(layouter, context, calendars);
+		appointments = new WeekDayEntriesView(layouter, context, calendars);
 		date.listenAndFire(it -> it.ifPresent(appointments::setDate));
 		
 		node.setOnMouseClicked(e -> {

@@ -29,9 +29,9 @@ public class CurrentTimeIndicator implements FxView {
 		StackPane.setAlignment(line, Pos.CENTER_RIGHT);
 		line.setManaged(false);
 		line.getStyleClass().add("current-time-indicator");
+		line.setStartX(0);
 		line.setStartY(0);
 		line.setEndY(0);
-		line.setStartX(0);
 		line.endXProperty().bind(node.widthProperty());
 		childs.add(line);
 	}

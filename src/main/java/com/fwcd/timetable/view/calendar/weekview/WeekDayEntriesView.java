@@ -8,9 +8,10 @@ import com.fwcd.fructose.structs.BiList;
 import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
-import com.fwcd.timetable.viewmodel.TimeTableAppContext;
+import com.fwcd.timetable.model.calendar.task.TaskModel;
 import com.fwcd.timetable.view.calendar.utils.Calendarized;
 import com.fwcd.timetable.view.utils.FxView;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
 import javafx.scene.Node;
@@ -18,7 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
-public class WeekDayAppointmentsView implements FxView {
+public class WeekDayEntriesView implements FxView {
 	private final WeekDayTimeLayouter layouter;
 	private final StackPane node;
 	
@@ -28,7 +29,7 @@ public class WeekDayAppointmentsView implements FxView {
 	private final BiList<LocalTimeInterval, StackPane> overlapBoxes = new ArrayBiList<>();
 	private Option<LocalDate> currentDate = Option.empty();
 	
-	public WeekDayAppointmentsView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarsViewModel calendars) {
+	public WeekDayEntriesView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarsViewModel calendars) {
 		this.layouter = layouter;
 		this.context = context;
 		this.calendars = calendars;
@@ -47,14 +48,27 @@ public class WeekDayAppointmentsView implements FxView {
 
 	private void updateView() {
 		clear();
-		currentDate.ifPresent(date -> calendars.getSelectedCalendars().stream()
-			.flatMap(cal -> cal.getAppointments().stream()
-				.filter(app -> app.occursOn(date))
-				.map(app -> new Calendarized<>(app, cal)))
-			.forEach(it -> add(it, date)));
+		currentDate.ifPresent(date -> {
+			// Add appointments
+			calendars.getSelectedCalendars().stream()
+				.flatMap(cal -> cal.getAppointments().stream()
+					.filter(app -> app.occursOn(date))
+					.map(app -> new Calendarized<>(app, cal)))
+				.forEach(it -> addAppointment(it, date));
+			
+			// Add tasks
+			calendars.getSelectedCalendars().stream()
+				.flatMap(cal -> cal.getTaskCrate().getLists().stream()
+					.flatMap(task -> task.getTasks().stream())
+					.filter(task -> task.getDateTime().get()
+						.filter(it -> it.toLocalDate().equals(date))
+						.isPresent())
+					.map(it -> new Calendarized<>(it, cal)))
+				.forEach(it -> addTask(it, date));
+		});
 	}
 
-	private void add(Calendarized<AppointmentModel> appWithCal, LocalDate viewedDate) {
+	private void addAppointment(Calendarized<AppointmentModel> appWithCal, LocalDate viewedDate) {
 		AppointmentModel appointment = appWithCal.getEntry();
 		CalendarModel calendar = appWithCal.getCalendar();
 		Pane child = new AppointmentView(layouter, context, calendar, appointment).getNode();
@@ -92,6 +106,20 @@ public class WeekDayAppointmentsView implements FxView {
 		anchor.setPickOnBounds(false);
 		AnchorPane.setLeftAnchor(child, indent);
 		overlappingBox.getChildren().add(anchor);
+	}
+	
+	private void addTask(Calendarized<TaskModel> taskWithCal, LocalDate viewedDate) {
+		TaskModel task = taskWithCal.getEntry();
+		Pane child = new TaskView(task).getNode();
+		
+		AnchorPane.setTopAnchor(child, layouter.toPixelY(task.getDateTime().get()
+			.unwrap("Tried to add a task without a datetime to a WeekDayEntriesView")
+			.toLocalTime()));
+		
+		AnchorPane anchor = new AnchorPane(child);
+		anchor.setPickOnBounds(false);
+		
+		node.getChildren().add(child);
 	}
 	
 	private void clear() {
