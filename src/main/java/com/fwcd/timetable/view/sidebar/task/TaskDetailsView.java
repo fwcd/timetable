@@ -9,6 +9,7 @@ import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -26,9 +27,15 @@ public class TaskDetailsView implements FxView {
 		GridPane properties = new GridPane();
 		int rowIndex = 0;
 		
+		Button deleteButton = FxUtils.buttonOf(context.localized("deletetask"), () -> {
+			parent.remove(model);
+			onDelete.run();
+		});
+		
 		node = new VBox(
 			title,
-			properties
+			properties,
+			deleteButton
 		);
 		node.getStyleClass().add("details-view");
 	}
