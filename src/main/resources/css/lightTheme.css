@@ -13,6 +13,11 @@
 	-fx-stroke: blue;
 }
 
+.task-due-datetime-indicator {
+	-fx-fill: salmon;
+	-fx-stroke: salmon;
+}
+
 .drag-active {
 	-fx-background-color: blue;
 }

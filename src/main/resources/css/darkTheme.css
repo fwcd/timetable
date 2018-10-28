@@ -81,6 +81,11 @@
 	-fx-stroke: orange;
 }
 
+.task-due-datetime-indicator {
+	-fx-fill: yellow;
+	-fx-stroke: yellow;
+}
+
 .drag-active {
 	-fx-background-color: orange;
 }

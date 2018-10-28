@@ -43,6 +43,11 @@ public class CalendarModel implements Serializable, PostDeserializable {
 	private void setupChangeListeners() {
 		name.listen(it -> getChangeListeners().fire(this));
 		color.listen(it -> getChangeListeners().fire(this));
+		taskCrate.getChangeListeners().listen(it -> {
+			getChangeListeners().fire(this);
+			// TODO: More fine-grained event handling for task crates
+			getStructuralChangeListeners().fire(this);
+		});
 		appointments.listenAndFire(it -> {
 			getChangeListeners().fire(this);
 			getStructuralChangeListeners().fire(this);
