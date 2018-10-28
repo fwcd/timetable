@@ -23,14 +23,19 @@ public class CalendarEntryListCell extends ListCell<Contained<CalendarEntryModel
 		
 		setContextMenu(new ContextMenu(
 			FxUtils.menuItemOf(context.localized("editmenu"), () -> {
-				getEntry().ifPresent(it -> {
-					CalendarEntryEditProvider editProvider = new CalendarEntryEditProvider(context, it.getContainer());
-					it.getValue().accept(editProvider);
+				getEntry().ifPresent(entry -> {
+					CalendarEntryEditProvider editProvider = new CalendarEntryEditProvider(context, entry.getContainer());
+					entry.getValue().accept(editProvider);
 					editProvider.getView().ifPresent(view -> {
 						PopOver popOver = FxUtils.newPopOver(view);
 						editProvider.setOnDelete(popOver::hide);
 						FxUtils.showIndependentPopOver(popOver, this);
 					});
+				});
+			}),
+			FxUtils.menuItemOf(context.localized("delete"), () -> {
+				getEntry().ifPresent(entry -> {
+					entry.getContainer().remove(entry.getValue());
 				});
 			})
 		));
