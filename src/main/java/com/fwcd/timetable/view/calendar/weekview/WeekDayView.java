@@ -97,10 +97,6 @@ public class WeekDayView implements FxView {
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
 		
-		date.listenAndFire(it -> {
-			anchor.setVisible(it.filter(LocalDate.now()::equals).isPresent());
-		});
-		
 		anchor.setPickOnBounds(false);
 		AnchorPane.setLeftAnchor(indicatorNode, 0D);
 		AnchorPane.setRightAnchor(indicatorNode, 0D);
@@ -110,6 +106,9 @@ public class WeekDayView implements FxView {
 	
 	private void updateIndicatorY(Node indicator) {
 		AnchorPane.setTopAnchor(indicator, layouter.toPixelY(LocalTime.now()) - (indicator.getBoundsInParent().getHeight() / 2));
+		date.listenAndFire(it -> {
+			indicator.setVisible(it.filter(LocalDate.now()::equals).isPresent());
+		});
 	}
 	
 	public void setWeekStart(LocalDate weekStart) {
