@@ -11,7 +11,6 @@ import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -42,7 +41,7 @@ public class AppointmentDetailsView implements FxView {
 		location.setFont(Font.font(12));
 		
 		GridPane properties = new GridPane();
-		int rowIndex = 1;
+		int rowIndex = 0;
 		
 		DateTimePicker start = new DateTimePicker();
 		start.setFormat(context.getSettings().get().getDateTimeFormat());
@@ -97,7 +96,7 @@ public class AppointmentDetailsView implements FxView {
 			properties,
 			deleteButton
 		);
-		node.setPadding(new Insets(10, 10, 10, 10));
+		node.getStyleClass().add("details-view");
 	}
 
 	private Label localizedPropertyLabel(String unlocalized, TimeTableAppContext context) {

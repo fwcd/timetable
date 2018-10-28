@@ -31,3 +31,7 @@
 .title-cell-label {
 	-fx-font-weight: bold;
 }
+
+.details-view {
+	-fx-padding: 10px;
+}

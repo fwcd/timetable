@@ -8,6 +8,7 @@ import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import com.fwcd.timetable.model.calendar.task.TaskModel;
 import com.fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
+import com.fwcd.timetable.view.sidebar.task.TaskDetailsView;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
@@ -31,7 +32,9 @@ public class CalendarEntryEditProvider implements CalendarEntryVisitor {
 	
 	@Override
 	public void visitTask(TaskModel task) {
-		// TODO
+		TaskDetailsView detailsView = new TaskDetailsView(parent, context, task);
+		detailsView.setOnDelete(() -> onDelete.run());
+		view = Option.of(detailsView);
 	}
 	
 	public void setOnDelete(Runnable onDelete) { this.onDelete = onDelete; }
