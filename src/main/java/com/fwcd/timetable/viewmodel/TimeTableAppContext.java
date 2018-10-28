@@ -3,6 +3,8 @@ package com.fwcd.timetable.viewmodel;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
@@ -28,6 +30,7 @@ public class TimeTableAppContext {
 	private final Observable<DateTimeFormatter> yearMonthFormatter = new Observable<>(DateTimeFormatter.ofPattern("MM.yyyy"));
 	
 	private final FileSaveState fileSaveState = new FileSaveState();
+	private final Map<String, ReadOnlyObservable<String>> cachedLocalizations = new HashMap<>();
 	
 	public TimeTableAppContext() {
 		settings.listenAndFire(it -> {
@@ -76,6 +79,11 @@ public class TimeTableAppContext {
 	}
 	
 	public ReadOnlyObservable<String> localized(String unlocalized) {
-		return language.mapStrongly(it -> it.localize(unlocalized));
+		ReadOnlyObservable<String> result = cachedLocalizations.get(unlocalized);
+		if (result == null) {
+			result = language.mapStrongly(it -> it.localize(unlocalized));
+			cachedLocalizations.put(unlocalized, result);
+		}
+		return result;
 	}
 }

@@ -85,5 +85,7 @@
 	"onfridays": "freitags",
 	"onsaturdays": "samstags",
 	"onsundays": "sonntags",
-	"hasduedatetime": "Hat Fälligkeitstermin"
+	"hasduedatetime": "Hat Fälligkeitstermin",
+	"title": "Titel",
+	"location": "Ort"
 }

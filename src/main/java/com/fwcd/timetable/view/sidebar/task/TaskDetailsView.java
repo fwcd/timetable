@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
+import com.fwcd.timetable.model.calendar.Location;
 import com.fwcd.timetable.model.calendar.task.TaskModel;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.FxView;
@@ -28,6 +29,18 @@ public class TaskDetailsView implements FxView {
 	public TaskDetailsView(Collection<? extends CalendarEntryModel> parent, TimeTableAppContext context, TaskModel model) {
 		TextField title = new TextField();
 		FxUtils.bindBidirectionally(model.getName(), title.textProperty());
+		context.localized("title").listenAndFire(title::setPromptText);
+		title.getStyleClass().add("title-label");
+		
+		TextField location = new TextField();
+		FxUtils.bindBidirectionally(
+			model.getLocation(),
+			location.textProperty(),
+			optLocation -> optLocation.map(Location::getLabel).orElse(""),
+			newLocation -> Option.of(newLocation).filter(it -> !it.isEmpty()).map(Location::new)
+		);
+		context.localized("location").listenAndFire(location::setPromptText);
+		location.getStyleClass().add("location-label");
 		
 		BorderPane dateTimeGrid = new BorderPane();
 		
@@ -65,6 +78,7 @@ public class TaskDetailsView implements FxView {
 		
 		node = new VBox(
 			title,
+			location,
 			dateTimeGrid,
 			deleteButton
 		);

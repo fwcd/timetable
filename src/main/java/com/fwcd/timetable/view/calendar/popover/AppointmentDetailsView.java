@@ -19,7 +19,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import tornadofx.control.DateTimePicker;
 
 public class AppointmentDetailsView implements FxView {
@@ -29,7 +28,8 @@ public class AppointmentDetailsView implements FxView {
 	public AppointmentDetailsView(Collection<? extends CalendarEntryModel> parent, TimeTableAppContext context, AppointmentModel model) {
 		TextField title = new TextField();
 		FxUtils.bindBidirectionally(model.getName(), title.textProperty());
-		title.setFont(Font.font(14));
+		context.localized("title").listenAndFire(title::setPromptText);
+		title.getStyleClass().add("title-label");
 		
 		TextField location = new TextField();
 		FxUtils.bindBidirectionally(
@@ -38,7 +38,8 @@ public class AppointmentDetailsView implements FxView {
 			optLocation -> optLocation.map(Location::getLabel).orElse(""),
 			newLocation -> Option.of(newLocation).filter(it -> !it.isEmpty()).map(Location::new)
 		);
-		location.setFont(Font.font(12));
+		context.localized("location").listenAndFire(location::setPromptText);
+		location.getStyleClass().add("location-label");
 		
 		GridPane properties = new GridPane();
 		int rowIndex = 0;

@@ -85,5 +85,7 @@
 	"onfridays": "on Fridays",
 	"onsaturdays": "on Saturdays",
 	"onsundays": "on Sundays",
-	"hasduedatetime": "Has due date and time"
+	"hasduedatetime": "Has due date and time",
+	"title": "Title",
+	"location": "Location"
 }

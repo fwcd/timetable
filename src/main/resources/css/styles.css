@@ -25,7 +25,7 @@
 }
 
 .entry-cell-label {
-	-font-size: 12px;
+	-fx-font-size: 12px;
 }
 
 .title-cell-label {
@@ -34,4 +34,12 @@
 
 .details-view {
 	-fx-padding: 10px;
+}
+
+.title-label {
+	-fx-font-size: 14px;
+}
+
+.location-label {
+	-fx-font-size: 12px;
 }

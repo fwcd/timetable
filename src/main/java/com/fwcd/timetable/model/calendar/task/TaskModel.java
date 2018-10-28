@@ -9,12 +9,14 @@ import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import com.fwcd.timetable.model.calendar.CommonEntryType;
+import com.fwcd.timetable.model.calendar.Location;
 import com.fwcd.timetable.model.json.PostDeserializable;
 
 public class TaskModel implements CalendarEntryModel, Serializable, PostDeserializable {
 	private static final long serialVersionUID = -1219052993628334319L;
 	private final Observable<String> name;
 	private final Observable<String> description = new Observable<>("");
+	private final Observable<Option<Location>> location = new Observable<>(Option.empty());
 	private final Observable<Option<LocalDateTime>> dueDateTime = new Observable<>(Option.empty());
 	
 	private transient EventListenerList<TaskModel> nullableChangeListeners;
@@ -31,6 +33,7 @@ public class TaskModel implements CalendarEntryModel, Serializable, PostDeserial
 	
 	private void setupChangeListeners() {
 		name.listen(it -> getChangeListeners().fire(this));
+		location.listen(it -> getChangeListeners().fire(this));
 		description.listen(it -> getChangeListeners().fire(this));
 		dueDateTime.listen(it -> getChangeListeners().fire(this));
 	}
@@ -48,6 +51,8 @@ public class TaskModel implements CalendarEntryModel, Serializable, PostDeserial
 	public Observable<String> getName() { return name; }
 	
 	public Observable<Option<LocalDateTime>> getDueDateTime() { return dueDateTime; }
+	
+	public Observable<Option<Location>> getLocation() { return location; }
 	
 	@Override
 	public Observable<String> getDescription() { return description; }
