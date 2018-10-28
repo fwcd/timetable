@@ -13,6 +13,8 @@ import com.fwcd.timetable.view.utils.SubscriptionStack;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 
+import org.controlsfx.control.PopOver;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -70,8 +72,12 @@ public class MonthDayView implements FxView, AutoCloseable {
 	private Label appointmentLabelOf(Calendarized<AppointmentModel> appWithCal) {
 		Label label = new Label(appWithCal.getEntry().getName().get());
 		label.setOnMouseClicked(e -> {
+			AppointmentDetailsView detailsView = new AppointmentDetailsView(appWithCal.getCalendar().getAppointments(), context, appWithCal.getEntry());
+			PopOver popOver = FxUtils.newPopOver(detailsView);
+			
+			detailsView.setOnDelete(popOver::hide);
 			FxUtils.showIndependentPopOver(
-				FxUtils.newPopOver(new AppointmentDetailsView(appWithCal.getCalendar().getAppointments(), context, appWithCal.getEntry())),
+				popOver,
 				label
 			);
 		});
