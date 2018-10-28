@@ -84,5 +84,6 @@
 	"onthursdays": "donnerstags",
 	"onfridays": "freitags",
 	"onsaturdays": "samstags",
-	"onsundays": "sonntags"
+	"onsundays": "sonntags",
+	"hasduedatetime": "Hat Fälligkeitstermin"
 }

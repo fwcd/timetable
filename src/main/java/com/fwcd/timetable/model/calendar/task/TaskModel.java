@@ -15,7 +15,7 @@ public class TaskModel implements CalendarEntryModel, Serializable, PostDeserial
 	private static final long serialVersionUID = -1219052993628334319L;
 	private final Observable<String> name;
 	private final Observable<String> description = new Observable<>("");
-	private final Observable<Option<LocalDateTime>> dateTime = new Observable<>(Option.empty());
+	private final Observable<Option<LocalDateTime>> dueDateTime = new Observable<>(Option.empty());
 	
 	private transient EventListenerList<TaskModel> nullableChangeListeners;
 	
@@ -32,7 +32,7 @@ public class TaskModel implements CalendarEntryModel, Serializable, PostDeserial
 	private void setupChangeListeners() {
 		name.listen(it -> getChangeListeners().fire(this));
 		description.listen(it -> getChangeListeners().fire(this));
-		dateTime.listen(it -> getChangeListeners().fire(this));
+		dueDateTime.listen(it -> getChangeListeners().fire(this));
 	}
 	
 	public EventListenerList<TaskModel> getChangeListeners() {
@@ -47,7 +47,7 @@ public class TaskModel implements CalendarEntryModel, Serializable, PostDeserial
 	
 	public Observable<String> getName() { return name; }
 	
-	public Observable<Option<LocalDateTime>> getDateTime() { return dateTime; }
+	public Observable<Option<LocalDateTime>> getDueDateTime() { return dueDateTime; }
 	
 	@Override
 	public Observable<String> getDescription() { return description; }
