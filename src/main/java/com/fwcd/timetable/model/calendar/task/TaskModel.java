@@ -27,6 +27,11 @@ public class TaskModel implements CalendarEntryModel, Serializable, PostDeserial
 
 	private transient EventListenerList<TaskModel> nullableChangeListeners;
 	
+	public TaskModel() {
+		name = new Observable<>("");
+		setupChangeListeners();
+	}
+	
 	public TaskModel(String name) {
 		this.name = new Observable<>(name);
 		setupChangeListeners();
