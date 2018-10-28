@@ -13,7 +13,7 @@
 	-fx-stroke: blue;
 }
 
-.task-due-datetime-indicator {
+.task-mark-view {
 	-fx-fill: salmon;
 	-fx-stroke: salmon;
 }

@@ -81,7 +81,7 @@
 	-fx-stroke: orange;
 }
 
-.task-due-datetime-indicator {
+.task-mark-view {
 	-fx-fill: yellow;
 	-fx-stroke: yellow;
 }

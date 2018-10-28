@@ -110,7 +110,7 @@ public class WeekDayEntriesView implements FxView {
 	
 	private void addTask(Calendarized<TaskModel> taskWithCal, LocalDate viewedDate) {
 		TaskModel task = taskWithCal.getEntry();
-		Pane child = new TaskDueDateTimeView(task).getNode();
+		Pane child = new TaskMarkView(task).getNode();
 		
 		AnchorPane.setTopAnchor(child, layouter.toPixelY(task.getDueDateTime().get()
 			.unwrap("Tried to add a task without a datetime to a WeekDayEntriesView")
