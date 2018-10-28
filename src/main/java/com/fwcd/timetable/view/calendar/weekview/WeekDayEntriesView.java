@@ -1,6 +1,8 @@
 package com.fwcd.timetable.view.calendar.weekview;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.structs.ArrayBiList;
@@ -9,6 +11,7 @@ import com.fwcd.fructose.time.LocalTimeInterval;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.model.calendar.task.TaskModel;
+import com.fwcd.timetable.model.utils.CloseUtils;
 import com.fwcd.timetable.view.calendar.utils.Calendarized;
 import com.fwcd.timetable.view.utils.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
@@ -26,6 +29,7 @@ public class WeekDayEntriesView implements FxView {
 	private final TimeTableAppContext context;
 	private final CalendarsViewModel calendars;
 	
+	private final List<AutoCloseable> childResources = new ArrayList<>();
 	private final BiList<LocalTimeInterval, StackPane> overlapBoxes = new ArrayBiList<>();
 	private Option<LocalDate> currentDate = Option.empty();
 	
@@ -69,11 +73,14 @@ public class WeekDayEntriesView implements FxView {
 	}
 
 	private void addAppointment(Calendarized<AppointmentModel> appWithCal, LocalDate viewedDate) {
-		AppointmentModel appointment = appWithCal.getEntry();
+		AppointmentModel appointmentModel = appWithCal.getEntry();
 		CalendarModel calendar = appWithCal.getCalendar();
-		Pane child = new AppointmentView(layouter, context, calendar, appointment).getNode();
+		AppointmentView appointmentView = new AppointmentView(layouter, context, calendar, appointmentModel);
+		Pane child = appointmentView.getNode();
 		
-		LocalTimeInterval eventInterval = appointment.getTimeIntervalOn(viewedDate);
+		childResources.add(appointmentView);
+		
+		LocalTimeInterval eventInterval = appointmentModel.getTimeIntervalOn(viewedDate);
 		AnchorPane.setTopAnchor(child, layouter.toPixelY(eventInterval.getStart()));
 		child.maxWidthProperty().bind(node.widthProperty());
 		child.setPrefHeight(layouter.toPixelHeight(eventInterval.getDuration()));
@@ -109,10 +116,13 @@ public class WeekDayEntriesView implements FxView {
 	}
 	
 	private void addTask(Calendarized<TaskModel> taskWithCal, LocalDate viewedDate) {
-		TaskModel task = taskWithCal.getEntry();
-		Pane child = new TaskMarkView(task).getNode();
+		TaskModel taskModel = taskWithCal.getEntry();
+		TaskMarkView taskView = new TaskMarkView(taskModel);
+		Pane child = taskView.getNode();
 		
-		AnchorPane.setTopAnchor(child, layouter.toPixelY(task.getDueDateTime().get()
+		childResources.add(taskView);
+		
+		AnchorPane.setTopAnchor(child, layouter.toPixelY(taskModel.getDueDateTime().get()
 			.unwrap("Tried to add a task without a datetime to a WeekDayEntriesView")
 			.toLocalTime()));
 		AnchorPane.setLeftAnchor(child, 0D);
@@ -127,6 +137,7 @@ public class WeekDayEntriesView implements FxView {
 	private void clear() {
 		node.getChildren().clear();
 		overlapBoxes.clear();
+		CloseUtils.clean(childResources);
 	}
 	
 	@Override

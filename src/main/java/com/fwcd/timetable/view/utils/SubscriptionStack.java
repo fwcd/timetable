@@ -35,6 +35,15 @@ public class SubscriptionStack {
 		}
 	}
 	
+	/** Moves all subscriptions in the provided collection to this queue. */
+	public void takeAll(SubscriptionStack other) {
+		Iterator<Subscription> iterator = other.subscriptions.iterator();
+		while (iterator.hasNext()) {
+			subscriptions.push(iterator.next());
+			iterator.remove();
+		}
+	}
+	
 	public <T> void subscribeAll(Iterable<? extends Listenable<T>> listenables, Consumer<? super T> listener) {
 		for (Listenable<T> listenable : listenables) {
 			subscriptions.push(listenable.subscribe(listener));

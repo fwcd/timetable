@@ -3,21 +3,19 @@ package com.fwcd.timetable.view.utils.calendar;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.HashSet;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
-import com.fwcd.fructose.function.Subscription;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import com.fwcd.timetable.model.calendar.Location;
+import com.fwcd.timetable.view.utils.SubscriptionStack;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 	private final TimeTableAppContext context;
 	private final Observable<String> info = new Observable<>("");
-	private final Collection<Subscription> subscriptions = new HashSet<>();
+	private final SubscriptionStack subscriptions = new SubscriptionStack();
 	
 	public CalendarEntryInfoProvider(TimeTableAppContext context) {
 		this.context = context;
@@ -27,11 +25,11 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 	public void visitAppointment(AppointmentModel appointment) {
 		Runnable updater = () -> info.set(getAppointmentInfo(appointment));
 		
-		subscriptions.add(appointment.getDateTimeInterval().subscribe(v -> updater.run()));
-		subscriptions.add(appointment.getLocation().subscribe(v -> updater.run()));
-		subscriptions.add(appointment.ignoresDate().subscribe(v -> updater.run()));
-		subscriptions.add(appointment.ignoresTime().subscribe(v -> updater.run()));
-		subscriptions.add(appointment.getRecurrence().getParsed().subscribe(v -> updater.run()));
+		subscriptions.push(appointment.getDateTimeInterval().subscribe(v -> updater.run()));
+		subscriptions.push(appointment.getLocation().subscribe(v -> updater.run()));
+		subscriptions.push(appointment.ignoresDate().subscribe(v -> updater.run()));
+		subscriptions.push(appointment.ignoresTime().subscribe(v -> updater.run()));
+		subscriptions.push(appointment.getRecurrence().getParsed().subscribe(v -> updater.run()));
 		
 		updater.run();
 	}
@@ -89,5 +87,5 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 	
 	public ReadOnlyObservable<String> getInfo() { return info; }
 	
-	public Collection<Subscription> getSubscriptions() { return subscriptions; }
+	public SubscriptionStack getSubscriptions() { return subscriptions; }
 }

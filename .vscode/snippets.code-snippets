@@ -31,5 +31,21 @@
 			"return $1;"
 		],
 		"description": "Implements the getter body for a lazily initialized field"
+	},
+	"Subscription Stack": {
+		"scope": "java",
+		"prefix": "substack",
+		"body": "SubscriptionStack subscriptions = new SubscriptionStack();",
+		"description": "Creates a new Subscription stack"
+	},
+	"Subscribe and push": {
+		"scope": "java",
+		"prefix": "subpush",
+		"body": "${1:subscriptions}.push($2.subscribe(it -> $3));$0"
+	},
+	"Subscribe, fire and push": {
+		"scope": "java",
+		"prefix": "subpushfire",
+		"body": "${1:subscriptions}.push($2.subscribeAndFire(it -> $3));$0"
 	}
 }
