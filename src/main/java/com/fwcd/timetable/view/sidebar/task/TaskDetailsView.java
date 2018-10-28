@@ -14,9 +14,11 @@ import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -44,28 +46,46 @@ public class TaskDetailsView implements FxView {
 		
 		BorderPane dateTimeGrid = new BorderPane();
 		
-		CheckBox hasDueDateTime = new CheckBox();
+		CheckBox hasDateTime = new CheckBox();
 		FxUtils.bindBidirectionally(
-			model.getDueDateTime(),
-			hasDueDateTime.selectedProperty(),
+			model.getDateTime(),
+			hasDateTime.selectedProperty(),
 			optDT -> optDT.isPresent(),
 			selected -> selected
-				? model.getDueDateTime().get().or(() -> Option.of(LocalDateTime.now()))
+				? model.getDateTime().get().or(() -> Option.of(LocalDateTime.now()))
 				: Option.empty()
 		);
-		dateTimeGrid.setTop(new HBox(localizedPropertyLabel("hasduedatetime", context), hasDueDateTime));
+		dateTimeGrid.setTop(new HBox(localizedPropertyLabel("hasdatetime", context), hasDateTime));
 		
-		DateTimePicker dueDateTime = new DateTimePicker();
+		GridPane properties = new GridPane();
+		int rowIndex = 0;
+		
+		DateTimePicker dateTimePicker = new DateTimePicker();
 		FxUtils.bindBidirectionally(
-			model.getDueDateTime(),
-			dueDateTime.dateTimeValueProperty(),
+			model.getDateTime(),
+			dateTimePicker.dateTimeValueProperty(),
 			optDT -> optDT.orElseNull(),
 			newDT -> Option.ofNullable(newDT)
 		);
+		properties.addRow(rowIndex++, localizedPropertyLabel("datetime", context), dateTimePicker);
 		
-		model.getDueDateTime().listenAndFire(dateTime -> {
+		TextField recurrence = new TextField();
+		FxUtils.bindBidirectionally(model.getRecurrence().getRaw(), recurrence.textProperty());
+		properties.addRow(rowIndex++, localizedPropertyLabel("recurrence", context), recurrence);
+		
+		DatePicker recurrenceEnd = new DatePicker();
+		FxUtils.setDateFormat(recurrenceEnd, context.getSettings().get().getDateFormat());
+		FxUtils.bindBidirectionally(
+			model.getRecurrenceEnd(),
+			recurrenceEnd.valueProperty(),
+			optEnd -> optEnd.orElseNull(),
+			newEnd -> Option.ofNullable(newEnd)
+		);
+		properties.addRow(rowIndex++, localizedPropertyLabel("recurrenceend", context), recurrenceEnd);
+		
+		model.getDateTime().listenAndFire(dateTime -> {
 			if (dateTime.isPresent()) {
-				dateTimeGrid.setCenter(dueDateTime);
+				dateTimeGrid.setCenter(properties);
 			} else {
 				dateTimeGrid.setCenter(null);
 			}

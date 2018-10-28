@@ -41,10 +41,16 @@ public class ParsedRecurrence implements Serializable {
 	private final Observable<String> raw = new Observable<>("");
 	private final Observable<Option<Recurrence>> parsed = new Observable<>(Option.empty());
 	
+	public ParsedRecurrence() {}
+	
 	public ParsedRecurrence(ReadOnlyObservable<LocalDateTimeInterval> dateTimeInterval, ReadOnlyObservable<Option<LocalDate>> recurrenceEnd, Set<LocalDate> excludes) {
-		ObservableUtils.triListen(dateTimeInterval, raw, recurrenceEnd, (dates, str, recEnd) -> {
-			parsed.set(parse(str, dates.getStart().toLocalDate(), recEnd, excludes));
+		ObservableUtils.triListen(dateTimeInterval, raw, recurrenceEnd, (dates, str, end) -> {
+			update(Option.of(dates.getStart().toLocalDate()), end, excludes);
 		});
+	}
+	
+	public void update(Option<LocalDate> start, Option<LocalDate> end, Set<LocalDate> excludes) {
+		parsed.set(start.flatMap(it -> parse(raw.get(), it, end, excludes)));
 	}
 	
 	private Option<Recurrence> parse(String str, LocalDate start, Option<LocalDate> end, Set<LocalDate> excludes) {
