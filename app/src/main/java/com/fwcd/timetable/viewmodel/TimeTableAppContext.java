@@ -10,6 +10,7 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
 import com.fwcd.timetable.model.language.Language;
 import com.fwcd.timetable.model.language.LanguageManager;
+import com.fwcd.timetable.plugin.PluginManager;
 import com.fwcd.timetable.viewmodel.settings.TimeTableAppSettings;
 import com.fwcd.timetable.viewmodel.theme.Theme;
 import com.fwcd.timetable.viewmodel.theme.ThemeManager;
@@ -20,6 +21,7 @@ public class TimeTableAppContext {
 	private final LanguageManager languageManager = new LanguageManager();
 	private final ThemeManager themeManager = new ThemeManager();
 	private final PersistentStorage persistentStorage = new PersistentStorage(Paths.get(System.getProperty("user.home"), ".timetable"));
+	private final PluginManager pluginManager = new PluginManager();
 	
 	private final Observable<TimeTableAppSettings> settings = new Observable<>(new TimeTableAppSettings.Builder().build());
 	private final Observable<Language> language = new Observable<>(new Language("", Collections.emptyMap()));
@@ -55,6 +57,8 @@ public class TimeTableAppContext {
 	public LanguageManager getLanguageManager() { return languageManager; }
 	
 	public ThemeManager getThemeManager() { return themeManager; }
+	
+	public PluginManager getPluginManager() { return pluginManager; }
 	
 	public void setLanguage(String key) { settings.set(settings.get().with().language(key).build()); }
 

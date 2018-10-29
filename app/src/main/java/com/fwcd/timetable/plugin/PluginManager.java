@@ -7,4 +7,10 @@ public class PluginManager {
 	private final ObservableList<TimeTableAppPlugin> loadedPlugins = new ObservableList<>();
 	
 	public ObservableList<TimeTableAppPlugin> getLoadedPlugins() { return loadedPlugins; }
+	
+	public void add(JarPluginBundle bundle) {
+		for (TimeTableAppPlugin plugin : bundle) {
+			loadedPlugins.add(plugin);
+		}
+	}
 }
