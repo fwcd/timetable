@@ -14,8 +14,9 @@
 }
 
 .task-mark-view {
-	-fx-fill: salmon;
-	-fx-stroke: salmon;
+	-fx-fill: rgb(80, 0, 80);
+	-fx-stroke: rgb(80, 0, 80);
+	-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 0);
 }
 
 .drag-active {

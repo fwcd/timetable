@@ -43,7 +43,3 @@
 .location-label {
 	-fx-font-size: 12px;
 }
-
-.task-mark-view {
-	-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 0, 0);
-}
