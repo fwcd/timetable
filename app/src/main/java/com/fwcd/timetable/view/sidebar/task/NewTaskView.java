@@ -1,0 +1,61 @@
+package com.fwcd.timetable.view.sidebar.task;
+
+import com.fwcd.fructose.ListenerList;
+import com.fwcd.fructose.Observable;
+import com.fwcd.timetable.model.calendar.task.TaskModel;
+import com.fwcd.timetable.viewmodel.TimeTableAppContext;
+import com.fwcd.timetable.view.utils.FxUtils;
+import com.fwcd.timetable.api.view.FxView;
+
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+
+public class NewTaskView implements FxView {
+	private final Pane node;
+	private final TextField nameTextField;
+	private final ListenerList addedTaskListeners = new ListenerList();
+	
+	private final TaskCrateViewModel crate;
+	private final Observable<String> editedTaskName;
+	
+	public NewTaskView(TimeTableAppContext context, TaskCrateViewModel crate) {
+		this.crate = crate;
+		
+		editedTaskName = new Observable<>(newTaskName());
+		nameTextField = FxUtils.textFieldOf(editedTaskName);
+		node = new VBox(
+			new HBox(FxUtils.labelOf(context.localized("name"), ": "), nameTextField),
+			FxUtils.buttonOf(context.localized("addtaskbutton"), this::addTaskToList)
+		);
+		
+		nameTextField.setOnAction(e -> addTaskToList());
+		node.setPadding(new Insets(6, 6, 6, 6));
+	}
+	
+	public void focus() {
+		nameTextField.requestFocus();
+	}
+	
+	private void addTaskToList() {
+		crate.getSelectedList().get().ifPresent(list -> {
+			if (!editedTaskName.get().isEmpty()) {
+				list.getTasks().add(new TaskModel(editedTaskName.get()));
+				editedTaskName.set(newTaskName());
+				addedTaskListeners.fire();
+			}
+		});
+	}
+
+	private String newTaskName() {
+		return "";
+	}
+	
+	public ListenerList getAddedTaskListeners() { return addedTaskListeners; }
+	
+	@Override
+	public Node getNode() { return node; }
+}

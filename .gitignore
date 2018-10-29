@@ -5,7 +5,7 @@ build
 target
 .DS_Store
 
-.settings/*
+**/.settings/*
 !.settings/org.eclipse.jdt.core.prefs
 
 .vscode/*

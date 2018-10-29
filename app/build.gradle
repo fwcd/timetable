@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+mainClassName = 'com.fwcd.timetable.TimeTableMain'
+
+dependencies {
+    implementation 'com.github.fwcd:Fructose:237f4528a96b25cbd1c5fa62afaa630047442f1e'
+    implementation 'no.tornado:tornadofx-controls:1.0.4'
+    implementation 'com.google.code.gson:gson:2.6.2'
+    implementation 'org.controlsfx:controlsfx:8.40.14'
+    implementation project(':api')
+    testImplementation 'junit:junit:4.12'
+}
