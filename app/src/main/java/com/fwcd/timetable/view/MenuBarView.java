@@ -7,11 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fwcd.fructose.Option;
+import com.fwcd.timetable.api.view.FxView;
 import com.fwcd.timetable.model.calendar.CalendarCrateModel;
+import com.fwcd.timetable.view.plugin.PluginManagerView;
 import com.fwcd.timetable.view.print.CalendarPrinter;
 import com.fwcd.timetable.view.settings.SettingsView;
 import com.fwcd.timetable.view.utils.FxUtils;
-import com.fwcd.timetable.api.view.FxView;
 import com.fwcd.timetable.view.utils.RetentionFileChooser;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.TimeTableAppViewModel;
@@ -35,6 +36,9 @@ public class MenuBarView implements FxView {
 	private final FileSaveManager fileSaveManager;
 	private final CalendarPrinter printer;
 	
+	private final SettingsView settingsView;
+	private final PluginManagerView pluginManagerView;
+	
 	public MenuBarView(TimeTableAppContext context, TimeTableAppViewModel viewModel) {
 		this.context = context;
 		this.viewModel = viewModel;
@@ -52,7 +56,8 @@ public class MenuBarView implements FxView {
 			context.getFileSaveState(),
 			StandardCharsets.UTF_8
 		);
-		
+		settingsView = new SettingsView(context);
+		pluginManagerView = new PluginManagerView(context);
 		node = new MenuBar(
 			FxUtils.menuOf(context.localized("filemenu"),
 				FxUtils.menuItemOf(context.localized("open"), this::open, new KeyCodeCombination(KeyCode.O, FxUtils.CTRL_OR_CMD_DOWN)),
@@ -70,6 +75,9 @@ public class MenuBarView implements FxView {
 			FxUtils.menuOf(context.localized("thememenu"),
 				context.getThemeManager().getThemeKeys().stream()
 					.map(key -> FxUtils.menuItemOf(context.localized(key), () -> context.setTheme(key)))
+			),
+			FxUtils.menuOf(context.localized("plugins"),
+				FxUtils.menuItemOf(context.localized("pluginmanager"), this::showPluginManager)
 			),
 			FxUtils.menuOf(context.localized("debugmenu"),
 				FxUtils.menuItemOf(context.localized("reloadcss"), this::reloadCss)
@@ -129,7 +137,15 @@ public class MenuBarView implements FxView {
 		Alert dialog = new Alert(AlertType.INFORMATION);
 		dialog.setTitle(context.localize("settings"));
 		dialog.setHeaderText(context.localize("settings"));
-		dialog.getDialogPane().setContent(new SettingsView(context).getNode());
+		dialog.getDialogPane().setContent(settingsView.getNode());
+		dialog.show();
+	}
+	
+	private void showPluginManager() {
+		Alert dialog = new Alert(AlertType.INFORMATION);
+		dialog.setTitle(context.localize("pluginmanager"));
+		dialog.setHeaderText(context.localize("pluginmanager"));
+		dialog.getDialogPane().setContent(pluginManagerView.getNode());
 		dialog.show();
 	}
 	

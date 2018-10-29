@@ -88,5 +88,8 @@
 	"hasdatetime": "Hat Datum und Zeit",
 	"title": "Titel",
 	"location": "Ort",
-	"datetime": "Datum und Zeit"
+	"datetime": "Datum und Zeit",
+	"plugins": "Plugins",
+	"addplugins": "Plugins hinzufügen",
+	"pluginmanager": "Pluginverwalter"
 }

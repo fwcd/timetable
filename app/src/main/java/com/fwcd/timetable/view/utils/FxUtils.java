@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import com.fwcd.fructose.ListenableValue;
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
 import com.fwcd.fructose.draw.DrawColor;
@@ -142,7 +143,7 @@ public final class FxUtils {
 		return textField;
 	}
 	
-	public static <T> void bindBidirectionally(Observable<T> fructoseObservable, Property<T> fxProperty) {
+	public static <T> void bindBidirectionally(ListenableValue<T> fructoseObservable, Property<T> fxProperty) {
 		Flag updating = new Flag();
 		fructoseObservable.listenAndFire(it -> {
 			if (!updating.value) {
@@ -160,7 +161,7 @@ public final class FxUtils {
 		});
 	}
 	
-	public static <T, R> void bindBidirectionally(Observable<T> fructoseObservable, Property<R> fxProperty, Function<T, R> mapper, Function<R, T> inverseMapper) {
+	public static <T, R> void bindBidirectionally(ListenableValue<T> fructoseObservable, Property<R> fxProperty, Function<T, R> mapper, Function<R, T> inverseMapper) {
 		Flag updating = new Flag();
 		fructoseObservable.listenAndFire(it -> {
 			if (!updating.value) {
