@@ -23,7 +23,7 @@ public class NamedFxView implements FxView {
 	
 	public String getName() { return name; }
 	
-	public boolean isLocalized() { return isLocalized; }
+	public boolean isNameLocalized() { return isLocalized; }
 	
 	@Override
 	public Node getNode() { return delegate.getNode(); }
