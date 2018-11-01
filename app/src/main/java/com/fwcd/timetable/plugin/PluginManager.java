@@ -10,7 +10,11 @@ public class PluginManager {
 	
 	public void add(JarPluginBundle bundle) {
 		for (TimeTableAppPlugin plugin : bundle) {
-			loadedPlugins.add(plugin);
+			add(plugin);
 		}
+	}
+	
+	public void add(TimeTableAppPlugin plugin) {
+		loadedPlugins.add(plugin);
 	}
 }

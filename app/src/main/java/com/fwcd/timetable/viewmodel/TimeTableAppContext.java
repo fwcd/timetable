@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
+import com.fwcd.timetable.git.GitPlugin;
 import com.fwcd.timetable.model.language.Language;
 import com.fwcd.timetable.model.language.LanguageManager;
 import com.fwcd.timetable.plugin.PluginManager;
@@ -45,9 +46,15 @@ public class TimeTableAppContext {
 			yearMonthFormatter.set(DateTimeFormatter.ofPattern(it.getYearMonthFormat()));
 		});
 		
+		loadDefaultPlugins();
+		
 		persistentStorage.add("settings", settings, TimeTableAppSettings.class);
 		persistentStorage.loadFromDisk();
 		persistentStorage.addAutoSaveHooks();
+	}
+	
+	private void loadDefaultPlugins() {
+		pluginManager.add(new GitPlugin());
 	}
 	
 	public void resetSettings() { settings.set(new TimeTableAppSettings.Builder().build()); }
