@@ -8,10 +8,10 @@ import java.util.Map;
 
 import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.ReadOnlyObservable;
-import com.fwcd.timetable.git.GitPlugin;
 import com.fwcd.timetable.model.language.Language;
 import com.fwcd.timetable.model.language.LanguageManager;
 import com.fwcd.timetable.plugin.PluginManager;
+import com.fwcd.timetable.plugin.git.GitPlugin;
 import com.fwcd.timetable.viewmodel.settings.TimeTableAppSettings;
 import com.fwcd.timetable.viewmodel.theme.Theme;
 import com.fwcd.timetable.viewmodel.theme.ThemeManager;
