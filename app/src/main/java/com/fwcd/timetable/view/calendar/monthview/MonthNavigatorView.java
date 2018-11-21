@@ -1,7 +1,7 @@
 package com.fwcd.timetable.view.calendar.monthview;
 
 import com.fwcd.timetable.view.utils.FxUtils;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.geometry.Insets;

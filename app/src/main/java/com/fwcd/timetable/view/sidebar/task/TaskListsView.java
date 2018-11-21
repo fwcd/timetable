@@ -3,7 +3,7 @@ package com.fwcd.timetable.view.sidebar.task;
 import java.util.List;
 
 import com.fwcd.timetable.model.calendar.task.TaskListModel;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.scene.Node;

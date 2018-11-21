@@ -1,4 +1,4 @@
-package com.fwcd.timetable.api.view;
+package com.fwcd.timetable.view;
 
 import javafx.scene.Node;
 

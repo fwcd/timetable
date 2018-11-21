@@ -5,7 +5,7 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.timetable.model.calendar.task.TaskModel;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;

@@ -3,8 +3,8 @@ package com.fwcd.timetable.view.utils.calendar;
 import com.fwcd.fructose.Option;
 import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.CalendarSerializationUtils;
-import com.fwcd.timetable.api.view.FxView;
-import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.view.FxView;
+import com.fwcd.timetable.model.utils.SubscriptionStack;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.google.gson.Gson;
 

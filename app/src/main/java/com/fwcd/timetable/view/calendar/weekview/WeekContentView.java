@@ -11,7 +11,7 @@ import java.util.List;
 import com.fwcd.fructose.Observable;
 import com.fwcd.timetable.model.calendar.CalendarConstants;
 import com.fwcd.timetable.view.utils.FxHeaderedView;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 

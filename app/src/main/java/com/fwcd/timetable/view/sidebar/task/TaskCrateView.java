@@ -4,7 +4,7 @@ import com.fwcd.timetable.model.calendar.task.TaskCrateModel;
 import com.fwcd.timetable.model.calendar.task.TaskListModel;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.view.utils.FxUtils;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.view.utils.HideableView;
 
 import javafx.geometry.Insets;

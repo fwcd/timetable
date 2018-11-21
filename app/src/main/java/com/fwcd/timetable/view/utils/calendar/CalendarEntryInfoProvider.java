@@ -9,7 +9,7 @@ import com.fwcd.fructose.ReadOnlyObservable;
 import com.fwcd.timetable.model.calendar.AppointmentModel;
 import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import com.fwcd.timetable.model.calendar.Location;
-import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.model.utils.SubscriptionStack;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 public class CalendarEntryInfoProvider implements CalendarEntryVisitor {

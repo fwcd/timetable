@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.structs.ObservableList;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.model.query.Parameter;
 import com.fwcd.timetable.model.query.ParameterKey;
 

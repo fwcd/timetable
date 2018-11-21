@@ -5,7 +5,7 @@ import java.net.URLClassLoader;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import com.fwcd.timetable.api.plugin.TimeTableAppPlugin;
+import com.fwcd.timetable.plugin.TimeTableAppPlugin;
 
 public class JarPluginBundle implements Iterable<TimeTableAppPlugin> {
 	private final ServiceLoader<TimeTableAppPlugin> serviceLoader;

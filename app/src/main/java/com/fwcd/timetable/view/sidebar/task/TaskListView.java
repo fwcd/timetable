@@ -7,7 +7,7 @@ import com.fwcd.timetable.model.calendar.CalendarEntryModel;
 import com.fwcd.timetable.model.calendar.task.TaskListModel;
 import com.fwcd.timetable.model.calendar.task.TaskModel;
 import com.fwcd.timetable.model.utils.Contained;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.view.utils.calendar.CalendarEntryListView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.fwcd.fructose.EventListenerList;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.json.PostDeserializable;
-import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.model.utils.SubscriptionStack;
 
 public class TaskCrateModel implements Serializable, PostDeserializable {
 	private static final long serialVersionUID = -1485835006395536825L;

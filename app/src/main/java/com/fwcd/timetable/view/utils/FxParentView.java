@@ -1,6 +1,6 @@
 package com.fwcd.timetable.view.utils;
 
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 
 import javafx.scene.Parent;
 

@@ -9,7 +9,7 @@ import com.fwcd.timetable.view.calendar.listview.CalendarListView;
 import com.fwcd.timetable.view.calendar.monthview.MonthView;
 import com.fwcd.timetable.view.calendar.tableview.CalendarTableView;
 import com.fwcd.timetable.view.calendar.weekview.WeekView;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.view.utils.NavigableTabPane;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 import com.google.gson.Gson;

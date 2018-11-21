@@ -5,9 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.fwcd.timetable.api.plugin.TimeTableAppPlugin;
-import com.fwcd.timetable.api.view.FxView;
-import com.fwcd.timetable.api.view.NamedFxView;
+import com.fwcd.timetable.plugin.TimeTableAppPlugin;
+import com.fwcd.timetable.view.FxView;
+import com.fwcd.timetable.view.NamedFxView;
 import com.fwcd.timetable.view.sidebar.calendar.CalendarsSideView;
 import com.fwcd.timetable.view.sidebar.task.TasksView;
 import com.fwcd.timetable.view.utils.FxUtils;

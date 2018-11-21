@@ -13,7 +13,7 @@ import com.fwcd.fructose.ReadOnlyObservable;
 import com.fwcd.fructose.draw.DrawColor;
 import com.fwcd.fructose.io.DelegatePrintStream;
 import com.fwcd.fructose.structs.ReadOnlyObservableList;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 
 import org.controlsfx.control.PopOver;
 

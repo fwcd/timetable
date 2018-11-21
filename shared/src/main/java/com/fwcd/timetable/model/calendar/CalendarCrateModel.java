@@ -8,7 +8,7 @@ import java.util.List;
 import com.fwcd.fructose.EventListenerList;
 import com.fwcd.fructose.ListenerList;
 import com.fwcd.fructose.structs.ObservableList;
-import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.model.utils.SubscriptionStack;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

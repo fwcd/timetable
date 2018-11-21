@@ -1,9 +1,9 @@
-package com.fwcd.timetable.api.plugin;
+package com.fwcd.timetable.plugin;
 
 import java.util.Collections;
 import java.util.List;
 
-import com.fwcd.timetable.api.view.NamedFxView;
+import com.fwcd.timetable.view.NamedFxView;
 
 public interface TimeTableAppPlugin {
 	String getName();

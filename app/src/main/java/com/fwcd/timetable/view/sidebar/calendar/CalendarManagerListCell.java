@@ -5,7 +5,7 @@ import com.fwcd.fructose.ReadOnlyObservable;
 import com.fwcd.fructose.draw.DrawColor;
 import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.view.utils.FxUtils;
-import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.model.utils.SubscriptionStack;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
 

@@ -1,7 +1,7 @@
 package com.fwcd.timetable.view.utils;
 
 import com.fwcd.fructose.Observable;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;

@@ -12,7 +12,7 @@ import com.fwcd.fructose.draw.DrawColor;
 import com.fwcd.fructose.structs.ObservableList;
 import com.fwcd.timetable.model.calendar.task.TaskCrateModel;
 import com.fwcd.timetable.model.json.PostDeserializable;
-import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.model.utils.SubscriptionStack;
 
 public class CalendarModel implements Serializable, PostDeserializable {
 	private static final long serialVersionUID = 831554590083407654L;

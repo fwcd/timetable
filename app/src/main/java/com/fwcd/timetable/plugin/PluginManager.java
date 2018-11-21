@@ -1,7 +1,7 @@
 package com.fwcd.timetable.plugin;
 
 import com.fwcd.fructose.structs.ObservableList;
-import com.fwcd.timetable.api.plugin.TimeTableAppPlugin;
+import com.fwcd.timetable.plugin.TimeTableAppPlugin;
 
 public class PluginManager {
 	private final ObservableList<TimeTableAppPlugin> loadedPlugins = new ObservableList<>();

@@ -5,8 +5,8 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
-import com.fwcd.timetable.api.plugin.TimeTableAppPlugin;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.plugin.TimeTableAppPlugin;
+import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.model.utils.IOUtils;
 import com.fwcd.timetable.plugin.JarPluginBundle;
 import com.fwcd.timetable.plugin.PluginManager;

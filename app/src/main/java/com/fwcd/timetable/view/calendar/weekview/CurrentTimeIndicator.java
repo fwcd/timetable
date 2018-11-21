@@ -1,6 +1,6 @@
 package com.fwcd.timetable.view.calendar.weekview;
 
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;

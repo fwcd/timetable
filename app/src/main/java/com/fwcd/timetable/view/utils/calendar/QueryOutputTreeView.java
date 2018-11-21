@@ -1,7 +1,7 @@
 package com.fwcd.timetable.view.utils.calendar;
 
 import com.fwcd.timetable.model.query.QueryOutputNode;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.scene.Node;

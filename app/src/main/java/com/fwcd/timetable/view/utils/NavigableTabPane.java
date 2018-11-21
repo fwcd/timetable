@@ -6,7 +6,7 @@ import java.util.function.BiFunction;
 
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.ReadOnlyObservable;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 
 import javafx.scene.Node;
 import javafx.scene.control.Tab;

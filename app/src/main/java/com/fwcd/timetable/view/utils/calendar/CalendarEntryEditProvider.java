@@ -9,7 +9,7 @@ import com.fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import com.fwcd.timetable.model.calendar.task.TaskModel;
 import com.fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import com.fwcd.timetable.view.sidebar.task.TaskDetailsView;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 public class CalendarEntryEditProvider implements CalendarEntryVisitor {

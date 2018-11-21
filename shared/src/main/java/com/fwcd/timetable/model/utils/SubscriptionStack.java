@@ -1,4 +1,4 @@
-package com.fwcd.timetable.view.utils;
+package com.fwcd.timetable.model.utils;
 
 import java.util.Iterator;
 import java.util.function.Consumer;

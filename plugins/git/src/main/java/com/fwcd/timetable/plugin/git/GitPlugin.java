@@ -3,8 +3,8 @@ package com.fwcd.timetable.plugin.git;
 import java.util.Collections;
 import java.util.List;
 
-import com.fwcd.timetable.api.plugin.TimeTableAppPlugin;
-import com.fwcd.timetable.api.view.NamedFxView;
+import com.fwcd.timetable.plugin.TimeTableAppPlugin;
+import com.fwcd.timetable.view.NamedFxView;
 import com.fwcd.timetable.view.git.GitView;
 
 public class GitPlugin implements TimeTableAppPlugin {

@@ -3,7 +3,7 @@ package com.fwcd.timetable.view.calendar.weekview;
 import java.time.LocalTime;
 
 import com.fwcd.timetable.model.calendar.CalendarConstants;
-import com.fwcd.timetable.api.view.FxView;
+import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.geometry.Insets;

@@ -9,8 +9,8 @@ import com.fwcd.timetable.model.calendar.CalendarModel;
 import com.fwcd.timetable.model.calendar.Location;
 import com.fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import com.fwcd.timetable.view.utils.FxUtils;
-import com.fwcd.timetable.api.view.FxView;
-import com.fwcd.timetable.view.utils.SubscriptionStack;
+import com.fwcd.timetable.view.FxView;
+import com.fwcd.timetable.model.utils.SubscriptionStack;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import org.controlsfx.control.PopOver;
