@@ -11,6 +11,7 @@ import com.fwcd.timetable.model.utils.IOUtils;
 import com.fwcd.timetable.plugin.JarPluginBundle;
 import com.fwcd.timetable.plugin.PluginManager;
 import com.fwcd.timetable.view.utils.FxUtils;
+import com.fwcd.timetable.viewmodel.TimeTableAppApi;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 
 import javafx.scene.Node;
@@ -25,8 +26,11 @@ public class PluginManagerView implements FxView {
 	private final BorderPane node;
 	private final FileChooser fileChooser = new FileChooser();
 	private final PluginManager model;
+	private final TimeTableAppApi api;
 	
-	public PluginManagerView(TimeTableAppContext context) {
+	public PluginManagerView(TimeTableAppContext context, TimeTableAppApi api) {
+		this.api = api;
+		
 		model = context.getPluginManager();
 		node = new BorderPane();
 		
@@ -57,7 +61,7 @@ public class PluginManagerView implements FxView {
 			model.add(new JarPluginBundle(files.stream()
 				.map(File::toURI)
 				.map(IOUtils.wrap(URI::toURL))
-				.toArray(URL[]::new)));
+				.toArray(URL[]::new)), api);
 		}
 	}
 	

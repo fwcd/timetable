@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fwcd.fructose.Option;
-import com.fwcd.timetable.view.FxView;
 import com.fwcd.timetable.model.calendar.CalendarCrateModel;
 import com.fwcd.timetable.view.plugin.PluginManagerView;
 import com.fwcd.timetable.view.print.CalendarPrinter;
 import com.fwcd.timetable.view.settings.SettingsView;
 import com.fwcd.timetable.view.utils.FxUtils;
 import com.fwcd.timetable.view.utils.RetentionFileChooser;
+import com.fwcd.timetable.viewmodel.TimeTableAppApi;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.TimeTableAppViewModel;
 import com.fwcd.timetable.viewmodel.utils.FileSaveManager;
@@ -39,7 +39,7 @@ public class MenuBarView implements FxView {
 	private final SettingsView settingsView;
 	private final PluginManagerView pluginManagerView;
 	
-	public MenuBarView(TimeTableAppContext context, TimeTableAppViewModel viewModel) {
+	public MenuBarView(TimeTableAppContext context, TimeTableAppViewModel viewModel, TimeTableAppApi api) {
 		this.context = context;
 		this.viewModel = viewModel;
 		
@@ -57,7 +57,7 @@ public class MenuBarView implements FxView {
 			StandardCharsets.UTF_8
 		);
 		settingsView = new SettingsView(context);
-		pluginManagerView = new PluginManagerView(context);
+		pluginManagerView = new PluginManagerView(context, api);
 		node = new MenuBar(
 			FxUtils.menuOf(context.localized("filemenu"),
 				FxUtils.menuItemOf(context.localized("open"), this::open, new KeyCodeCombination(KeyCode.O, FxUtils.CTRL_OR_CMD_DOWN)),

@@ -3,6 +3,7 @@ package com.fwcd.timetable.view;
 import com.fwcd.timetable.view.calendar.CalendarsView;
 import com.fwcd.timetable.view.sidebar.SideBarView;
 import com.fwcd.timetable.view.utils.FxParentView;
+import com.fwcd.timetable.viewmodel.TimeTableAppApi;
 import com.fwcd.timetable.viewmodel.TimeTableAppContext;
 import com.fwcd.timetable.viewmodel.TimeTableAppViewModel;
 
@@ -14,7 +15,7 @@ import javafx.scene.layout.BorderPane;
 public class TimeTableAppView implements FxParentView {
 	private final BorderPane node;
 	
-	public TimeTableAppView(TimeTableAppContext context, TimeTableAppViewModel viewModel) {
+	public TimeTableAppView(TimeTableAppContext context, TimeTableAppViewModel viewModel, TimeTableAppApi api) {
 		node = new BorderPane();
 		
 		CalendarsView calendar = new CalendarsView(context, viewModel.getCalendars());
@@ -27,7 +28,7 @@ public class TimeTableAppView implements FxParentView {
 		split.setOrientation(Orientation.HORIZONTAL);
 		split.setDividerPositions(0.7);
 		
-		node.setTop(new MenuBarView(context, viewModel).getNode());
+		node.setTop(new MenuBarView(context, viewModel, api).getNode());
 		node.setCenter(split);
 	}
 	

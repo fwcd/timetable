@@ -11,13 +11,15 @@ import com.fwcd.fructose.ReadOnlyObservable;
 import com.fwcd.timetable.model.language.Language;
 import com.fwcd.timetable.model.language.LanguageManager;
 import com.fwcd.timetable.plugin.PluginManager;
-import com.fwcd.timetable.plugin.git.GitPlugin;
 import com.fwcd.timetable.viewmodel.settings.TimeTableAppSettings;
 import com.fwcd.timetable.viewmodel.theme.Theme;
 import com.fwcd.timetable.viewmodel.theme.ThemeManager;
 import com.fwcd.timetable.viewmodel.utils.FileSaveState;
 import com.fwcd.timetable.viewmodel.utils.PersistentStorage;
 
+/**
+ * An aggregate of application-specific managers and state.
+ */
 public class TimeTableAppContext {
 	private final LanguageManager languageManager = new LanguageManager();
 	private final ThemeManager themeManager = new ThemeManager();
@@ -46,15 +48,9 @@ public class TimeTableAppContext {
 			yearMonthFormatter.set(DateTimeFormatter.ofPattern(it.getYearMonthFormat()));
 		});
 		
-		loadDefaultPlugins();
-		
 		persistentStorage.add("settings", settings, TimeTableAppSettings.class);
 		persistentStorage.loadFromDisk();
 		persistentStorage.addAutoSaveHooks();
-	}
-	
-	private void loadDefaultPlugins() {
-		pluginManager.add(new GitPlugin());
 	}
 	
 	public void resetSettings() { settings.set(new TimeTableAppSettings.Builder().build()); }

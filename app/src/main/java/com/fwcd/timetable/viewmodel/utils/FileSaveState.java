@@ -6,6 +6,10 @@ import com.fwcd.fructose.Observable;
 import com.fwcd.fructose.Option;
 import com.fwcd.fructose.ReadOnlyObservable;
 
+/**
+ * Holds a path to the currently loaded file together
+ * with its name and save state.
+ */
 public class FileSaveState {
 	private final Observable<Boolean> hasUnsavedData = new Observable<>(false);
 	private final Observable<Option<Path>> currentPath = new Observable<>(Option.empty());

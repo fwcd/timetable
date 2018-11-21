@@ -4,9 +4,11 @@ plugins {
 
 repositories {
 	jcenter()
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+    implementation 'com.github.fwcd:Fructose:237f4528a96b25cbd1c5fa62afaa630047442f1e'
 	implementation 'org.eclipse.jgit:org.eclipse.jgit:5.1.3.201810200350-r'
 	implementation project(':shared')
 }
