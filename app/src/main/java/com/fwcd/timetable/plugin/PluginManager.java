@@ -15,7 +15,7 @@ public class PluginManager {
 	}
 	
 	public void add(TimeTableAppPlugin plugin, TimeTableAppApi api) {
-		plugin.initialize(api);
+		new Thread(() -> plugin.initialize(api), "Plugin initializer").start();
 		loadedPlugins.add(plugin);
 	}
 }
