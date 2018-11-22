@@ -14,12 +14,12 @@ import com.fwcd.timetable.viewmodel.TimeTableAppApi;
 public class GitPlugin implements TimeTableAppPlugin {
 	private static final String NAME = "Git";
 	private static final String DESCRIPTION = "Git integration for TimeTable";
-	private final List<NamedFxView> sidebarViews = Collections.singletonList(NamedFxView.of("Git", new GitView()));
-	private final Observable<Option<GitRepositoryModel>> repository = new Observable<>(Option.empty());
+	private final Observable<Option<GitRepositoryModel>> model = new Observable<>(Option.empty());
+	private final List<NamedFxView> sidebarViews = Collections.singletonList(NamedFxView.of("Git", new GitView(model)));
 	
 	@Override
 	public void initialize(TimeTableAppApi api) {
-		api.getCurrentPath().listenAndFire(path -> repository.set(path.map(GitRepositoryModel::new)));
+		api.getCurrentPath().listenAndFire(path -> model.set(path.flatMap(GitRepositoryModel::ofFileInRepo)));
 	}
 	
 	@Override
