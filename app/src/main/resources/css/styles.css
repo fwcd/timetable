@@ -43,3 +43,7 @@
 .location-label {
 	-fx-font-size: 12px;
 }
+
+.padded-view {
+	-fx-padding: 10px;
+}

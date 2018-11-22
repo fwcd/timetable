@@ -11,11 +11,16 @@ import com.fwcd.timetable.view.NamedFxView;
 import com.fwcd.timetable.view.git.GitView;
 import com.fwcd.timetable.viewmodel.TimeTableAppApi;
 
+/**
+ * A plugin that allows the user to manage the
+ * Git repository of the currently open file.
+ */
 public class GitPlugin implements TimeTableAppPlugin {
 	private static final String NAME = "Git";
 	private static final String DESCRIPTION = "Git integration for TimeTable";
 	private final Observable<Option<GitRepositoryModel>> model = new Observable<>(Option.empty());
-	private final List<NamedFxView> sidebarViews = Collections.singletonList(NamedFxView.of("Git", new GitView(model)));
+	private final GitView view = new GitView(model);
+	private final List<NamedFxView> sidebarViews = Collections.singletonList(NamedFxView.of("Git", view));
 	
 	@Override
 	public void initialize(TimeTableAppApi api) {
@@ -30,4 +35,10 @@ public class GitPlugin implements TimeTableAppPlugin {
 	
 	@Override
 	public List<? extends NamedFxView> getSidebarViews() { return sidebarViews; }
+	
+	@Override
+	public void close() {
+		view.close();
+		model.get().ifPresent(GitRepositoryModel::close);
+	}
 }
