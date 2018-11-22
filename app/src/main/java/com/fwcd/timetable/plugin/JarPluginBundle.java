@@ -7,6 +7,10 @@ import java.util.ServiceLoader;
 
 import com.fwcd.timetable.plugin.TimeTableAppPlugin;
 
+/**
+ * A JAR-packaged plugin bundle that can hold multiple
+ * plugins inside the META-INF/services directory.
+ */
 public class JarPluginBundle implements Iterable<TimeTableAppPlugin> {
 	private final ServiceLoader<TimeTableAppPlugin> serviceLoader;
 	
