@@ -8,16 +8,29 @@ import com.fwcd.timetable.view.FxView;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 /**
  * The Git plugin view class.
  */
 public class GitView implements FxView {
 	private final Pane node;
+	private final Label name;
 	
 	public GitView(Observable<Option<GitRepositoryModel>> model) {
-		node = new Pane();
-		model.listenAndFire(repo -> repo.ifPresent(it -> node.getChildren().setAll(new Label(it.getRepositoryFolder().toString())))); // FIXME: Proof-of-concept
+		name = new Label("");
+		node = new VBox(
+			name
+		);
+		
+		model.listenAndFire(optionalRepo -> {
+			if (optionalRepo.isPresent()) {
+				GitRepositoryModel repo = optionalRepo.unwrap();
+				name.setText(repo.getRepositoryFolder().getFileName().toString());
+			} else {
+				name.setText("No Git repository found!");
+			}
+		}); // FIXME: Proof-of-concept
 	}
 	
 	@Override
