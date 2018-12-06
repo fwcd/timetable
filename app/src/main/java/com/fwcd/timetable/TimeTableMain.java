@@ -3,6 +3,7 @@ package com.fwcd.timetable;
 import com.fwcd.timetable.model.utils.ObservableUtils;
 import com.fwcd.timetable.plugin.PluginManager;
 import com.fwcd.timetable.plugin.git.GitPlugin;
+import com.fwcd.timetable.plugin.timer.TimerPlugin;
 import com.fwcd.timetable.view.TimeTableAppView;
 import com.fwcd.timetable.view.utils.FxParentView;
 import com.fwcd.timetable.viewmodel.TimeTableApiBackend;
@@ -54,6 +55,7 @@ public class TimeTableMain extends Application {
 	private void loadDefaultPlugins() {
 		PluginManager pluginManager = context.getPluginManager();
 		pluginManager.add(new GitPlugin(), api);
+		pluginManager.add(new TimerPlugin(), api);
 	}
 	
 	private void wireApi() {

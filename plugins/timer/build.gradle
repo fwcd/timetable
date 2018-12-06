@@ -1,0 +1,13 @@
+plugins {
+	id 'java-library'
+}
+
+repositories {
+	jcenter()
+	maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.fwcd:Fructose:237f4528a96b25cbd1c5fa62afaa630047442f1e'
+	implementation project(':shared')
+}
