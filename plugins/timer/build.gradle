@@ -8,6 +8,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.fwcd:Fructose:237f4528a96b25cbd1c5fa62afaa630047442f1e'
+    implementation 'com.github.fwcd:Fructose:b12e36618dc3d386cde73b25efe45723f88eb859'
 	implementation project(':shared')
 }

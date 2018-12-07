@@ -10,10 +10,10 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-mainClassName = 'com.fwcd.timetable.TimeTableMain'
+mainClassName = 'fwcd.timetable.TimeTableMain'
 
 dependencies {
-    implementation 'com.github.fwcd:Fructose:237f4528a96b25cbd1c5fa62afaa630047442f1e'
+    implementation 'com.github.fwcd:Fructose:b12e36618dc3d386cde73b25efe45723f88eb859'
     implementation 'no.tornado:tornadofx-controls:1.0.4'
     implementation 'com.google.code.gson:gson:2.6.2'
     implementation 'org.controlsfx:controlsfx:8.40.14'
