@@ -90,6 +90,6 @@
 	"location": "Location",
 	"datetime": "Date and Time",
 	"plugins": "Plugins",
-	"addplugins": "Plugins hinzufügen",
+	"addplugins": "Add Plugins",
 	"pluginmanager": "Plugin Manager"
 }
