@@ -30,6 +30,7 @@ public class TimeTableAppContext {
 	
 	private final FileSaveState fileSaveState = new FileSaveState();
 	private final Localizer localizer = new LocalizerBackend(language);
+	private final TemporalFormattersBackend formatters = new TemporalFormattersBackend(settings);
 	
 	public TimeTableAppContext() {
 		settings.listenAndFire(it -> {
@@ -60,13 +61,13 @@ public class TimeTableAppContext {
 	
 	public ReadOnlyObservable<Theme> getTheme() { return theme; }
 	
-	public ReadOnlyObservable<DateTimeFormatter> getDateFormatter() { return dateFormatter; }
+	public ReadOnlyObservable<DateTimeFormatter> getDateFormatter() { return formatters.getObservableDateFormatter(); }
 	
-	public ReadOnlyObservable<DateTimeFormatter> getTimeFormatter() { return timeFormatter; }
+	public ReadOnlyObservable<DateTimeFormatter> getTimeFormatter() { return formatters.getObservableTimeFormatter(); }
 	
-	public ReadOnlyObservable<DateTimeFormatter> getDateTimeFormatter() { return dateTimeFormatter; }
+	public ReadOnlyObservable<DateTimeFormatter> getDateTimeFormatter() { return formatters.getObservableDateTimeFormatter(); }
 	
-	public ReadOnlyObservable<DateTimeFormatter> getYearMonthFormatter() { return yearMonthFormatter; }
+	public ReadOnlyObservable<DateTimeFormatter> getYearMonthFormatter() { return formatters.getObservableYearMonthFormatter(); }
 	
 	public FileSaveState getFileSaveState() { return fileSaveState; }
 	
@@ -75,4 +76,6 @@ public class TimeTableAppContext {
 	public ReadOnlyObservable<String> localized(String unlocalized) { return localizer.localized(unlocalized); }
 	
 	public Localizer getLocalizer() { return localizer; }
+	
+	public TemporalFormatters getFormatters() { return formatters; }
 }

@@ -43,6 +43,14 @@ public class TemporalFormattersBackend implements TemporalFormatters {
 	@Override
 	public DateTimeFormatter getDateTimeFormatter() { return dateTimeFormatter.get(); }
 	
+	ReadOnlyObservable<DateTimeFormatter> getObservableDateFormatter() { return dateFormatter; }
+	
+	ReadOnlyObservable<DateTimeFormatter> getObservableTimeFormatter() { return timeFormatter; }
+	
+	ReadOnlyObservable<DateTimeFormatter> getObservableDateTimeFormatter() { return dateTimeFormatter; }
+	
+	ReadOnlyObservable<DateTimeFormatter> getObservableYearMonthFormatter() { return yearMonthFormatter; }
+	
 	@Override
 	public String getRawDateFormat() { return rawDateFormat.get(); }
 	
