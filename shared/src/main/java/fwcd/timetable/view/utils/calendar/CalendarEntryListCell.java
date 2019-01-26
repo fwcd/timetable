@@ -1,13 +1,13 @@
 package fwcd.timetable.view.utils.calendar;
 
+import org.controlsfx.control.PopOver;
+
 import fwcd.fructose.Option;
 import fwcd.timetable.model.calendar.CalendarEntryModel;
 import fwcd.timetable.model.utils.Contained;
 import fwcd.timetable.view.utils.FxUtils;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-
-import org.controlsfx.control.PopOver;
-
+import fwcd.timetable.viewmodel.Localizer;
+import fwcd.timetable.viewmodel.TemporalFormatters;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
@@ -15,16 +15,16 @@ import javafx.scene.control.ListCell;
 public class CalendarEntryListCell extends ListCell<Contained<CalendarEntryModel>> {
 	private final CalendarEntryCell cell;
 	
-	public CalendarEntryListCell(TimeTableAppContext context) {
-		cell = new CalendarEntryCell(context);
+	public CalendarEntryListCell(Localizer localizer, TemporalFormatters formatters) {
+		cell = new CalendarEntryCell(localizer, formatters);
 		
 		setGraphic(cell.getNode());
 		setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 		
 		setContextMenu(new ContextMenu(
-			FxUtils.menuItemOf(context.localized("editmenu"), () -> {
+			FxUtils.menuItemOf(localizer.localized("editmenu"), () -> {
 				getEntry().ifPresent(entry -> {
-					CalendarEntryEditProvider editProvider = new CalendarEntryEditProvider(context, entry.getContainer());
+					CalendarEntryEditProvider editProvider = new CalendarEntryEditProvider(localizer, formatters, entry.getContainer());
 					entry.getValue().accept(editProvider);
 					editProvider.getView().ifPresent(view -> {
 						PopOver popOver = FxUtils.newPopOver(view);
@@ -33,7 +33,7 @@ public class CalendarEntryListCell extends ListCell<Contained<CalendarEntryModel
 					});
 				});
 			}),
-			FxUtils.menuItemOf(context.localized("delete"), () -> {
+			FxUtils.menuItemOf(localizer.localized("delete"), () -> {
 				getEntry().ifPresent(entry -> {
 					entry.getContainer().remove(entry.getValue());
 				});
