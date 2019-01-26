@@ -277,8 +277,12 @@ public final class FxUtils {
 	}
 	
 	public static void setDateFormat(DatePicker picker, String format) {
+		setDateFormat(picker, DateTimeFormatter.ofPattern(format));
+	}
+	
+	public static void setDateFormat(DatePicker picker, DateTimeFormatter format) {
 		picker.setConverter(new StringConverter<LocalDate>() {
-			private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+			private final DateTimeFormatter formatter = format;
 			
 			@Override
 			public String toString(LocalDate object) {

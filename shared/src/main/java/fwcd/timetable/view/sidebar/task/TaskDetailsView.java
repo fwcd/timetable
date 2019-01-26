@@ -7,10 +7,10 @@ import fwcd.fructose.Option;
 import fwcd.timetable.model.calendar.CalendarEntryModel;
 import fwcd.timetable.model.calendar.Location;
 import fwcd.timetable.model.calendar.task.TaskModel;
-import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.FxView;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-
+import fwcd.timetable.view.utils.FxUtils;
+import fwcd.timetable.viewmodel.Localizer;
+import fwcd.timetable.viewmodel.TemporalFormatters;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -28,10 +28,10 @@ public class TaskDetailsView implements FxView {
 	private final Pane node;
 	private Runnable onDelete = () -> {};
 	
-	public TaskDetailsView(Collection<? extends CalendarEntryModel> parent, TimeTableAppContext context, TaskModel model) {
+	public TaskDetailsView(Collection<? extends CalendarEntryModel> parent, Localizer localizer, TemporalFormatters formatters, TaskModel model) {
 		TextField title = new TextField();
 		FxUtils.bindBidirectionally(model.getName(), title.textProperty());
-		context.localized("title").listenAndFire(title::setPromptText);
+		localizer.localized("title").listenAndFire(title::setPromptText);
 		title.getStyleClass().add("title-label");
 		
 		TextField location = new TextField();
@@ -41,7 +41,7 @@ public class TaskDetailsView implements FxView {
 			optLocation -> optLocation.map(Location::getLabel).orElse(""),
 			newLocation -> Option.of(newLocation).filter(it -> !it.isEmpty()).map(Location::new)
 		);
-		context.localized("location").listenAndFire(location::setPromptText);
+		localizer.localized("location").listenAndFire(location::setPromptText);
 		location.getStyleClass().add("location-label");
 		
 		BorderPane dateTimeGrid = new BorderPane();
@@ -55,7 +55,7 @@ public class TaskDetailsView implements FxView {
 				? model.getDateTime().get().or(() -> Option.of(LocalDateTime.now()))
 				: Option.empty()
 		);
-		dateTimeGrid.setTop(new HBox(localizedPropertyLabel("hasdatetime", context), hasDateTime));
+		dateTimeGrid.setTop(new HBox(localizedPropertyLabel("hasdatetime", localizer), hasDateTime));
 		
 		GridPane properties = new GridPane();
 		int rowIndex = 0;
@@ -67,21 +67,21 @@ public class TaskDetailsView implements FxView {
 			optDT -> optDT.orElseNull(),
 			newDT -> Option.ofNullable(newDT)
 		);
-		properties.addRow(rowIndex++, localizedPropertyLabel("datetime", context), dateTimePicker);
+		properties.addRow(rowIndex++, localizedPropertyLabel("datetime", localizer), dateTimePicker);
 		
 		TextField recurrence = new TextField();
 		FxUtils.bindBidirectionally(model.getRecurrence().getRaw(), recurrence.textProperty());
-		properties.addRow(rowIndex++, localizedPropertyLabel("recurrence", context), recurrence);
+		properties.addRow(rowIndex++, localizedPropertyLabel("recurrence", localizer), recurrence);
 		
 		DatePicker recurrenceEnd = new DatePicker();
-		FxUtils.setDateFormat(recurrenceEnd, context.getSettings().get().getDateFormat());
+		FxUtils.setDateFormat(recurrenceEnd, formatters.getDateFormatter());
 		FxUtils.bindBidirectionally(
 			model.getRecurrenceEnd(),
 			recurrenceEnd.valueProperty(),
 			optEnd -> optEnd.orElseNull(),
 			newEnd -> Option.ofNullable(newEnd)
 		);
-		properties.addRow(rowIndex++, localizedPropertyLabel("recurrenceend", context), recurrenceEnd);
+		properties.addRow(rowIndex++, localizedPropertyLabel("recurrenceend", localizer), recurrenceEnd);
 		
 		model.getDateTime().listenAndFire(dateTime -> {
 			if (dateTime.isPresent()) {
@@ -91,7 +91,7 @@ public class TaskDetailsView implements FxView {
 			}
 		});
 		
-		Button deleteButton = FxUtils.buttonOf(context.localized("deletetask"), () -> {
+		Button deleteButton = FxUtils.buttonOf(localizer.localized("deletetask"), () -> {
 			parent.remove(model);
 			onDelete.run();
 		});
@@ -105,8 +105,8 @@ public class TaskDetailsView implements FxView {
 		node.getStyleClass().add("details-view");
 	}
 
-	private Label localizedPropertyLabel(String unlocalized, TimeTableAppContext context) {
-		return FxUtils.labelOf(context.localized(unlocalized), ": ");
+	private Label localizedPropertyLabel(String unlocalized, Localizer localizer) {
+		return FxUtils.labelOf(localizer.localized(unlocalized), ": ");
 	}
 
 	public void setOnDelete(Runnable onDelete) { this.onDelete = onDelete; }
