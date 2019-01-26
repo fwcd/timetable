@@ -8,4 +8,8 @@ public interface TemporalFormatters {
 	DateTimeFormatter getTimeFormatter();
 	
 	DateTimeFormatter getDateTimeFormatter();
+	
+	String getRawDateTimeFormat();
+	
+	String getRawDateFormat();
 }
