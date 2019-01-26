@@ -67,7 +67,7 @@ public class WeekDayView implements FxView {
 		LocalDate newDate = date.get().unwrap("Can not create appointment without a date");
 		LocalTime newTime = layouter.toTime(e.getY());
 		LocalDateTime dateTime = LocalDateTime.of(newDate, newTime);
-		return new NewAppointmentView(context, calendars, dateTime);
+		return new NewAppointmentView(context.getLocalizer(), calendars.getModel(), context.getFormatters(), dateTime);
 	}
 	
 	private void addHourMarks() {

@@ -16,7 +16,7 @@ public class CalendarListView implements FxNavigableView {
 	private final CalendarEntryListView entries;
 	
 	public CalendarListView(TimeTableAppContext context, CalendarsViewModel calendars) {
-		entries = new CalendarEntryListView(context);
+		entries = new CalendarEntryListView(context.getLocalizer(), context.getFormatters());
 		node = entries.getNode();
 		
 		calendars.getChangeListeners().add(it -> updateEntries(calendars));

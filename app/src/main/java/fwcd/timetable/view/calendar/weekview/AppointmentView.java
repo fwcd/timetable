@@ -66,7 +66,7 @@ public class AppointmentView implements FxView, AutoCloseable {
 		subscriptions.push(model.getDateTimeInterval().subscribeAndFire(it -> timeLabel.setText(formatTimeInterval(it, context.getTimeFormatter().get()))));
 		node.getChildren().add(timeLabel);
 		
-		AppointmentDetailsView detailsView = new AppointmentDetailsView(calendar.getAppointments(), context, model);
+		AppointmentDetailsView detailsView = new AppointmentDetailsView(calendar.getAppointments(), context.getLocalizer(), context.getFormatters(), model);
 		PopOver popOver = FxUtils.newPopOver(detailsView);
 		detailsView.setOnDelete(popOver::hide);
 		node.setOnMouseClicked(e -> {

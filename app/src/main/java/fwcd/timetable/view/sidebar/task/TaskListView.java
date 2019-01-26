@@ -20,7 +20,7 @@ public class TaskListView implements FxView {
 	
 	public TaskListView(TimeTableAppContext context, TaskListModel model) {
 		this.model = model;
-		node = new CalendarEntryListView(context).getNode();
+		node = new CalendarEntryListView(context.getLocalizer(), context.getFormatters()).getNode();
 		model.getTasks().listenAndFire(this::setVisibleTasks);
 	}
 	
