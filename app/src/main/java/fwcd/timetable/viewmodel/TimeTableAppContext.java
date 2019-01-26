@@ -24,6 +24,7 @@ public class TimeTableAppContext {
 	private final PersistentStorage persistentStorage = new PersistentStorage(Paths.get(System.getProperty("user.home"), ".timetable"));
 	private final PluginManager pluginManager = new PluginManager();
 	
+	private final Observable<PluginJarList> pluginJars = new Observable<>(new PluginJarList());
 	private final Observable<TimeTableAppSettings> settings = new Observable<>(new TimeTableAppSettings.Builder().build());
 	private final Observable<Language> language = new Observable<>(new Language("", Collections.emptyMap()));
 	private final Observable<Theme> theme = new Observable<>(new Theme("", ""));
@@ -39,6 +40,7 @@ public class TimeTableAppContext {
 		});
 		
 		persistentStorage.add("settings", settings, TimeTableAppSettings.class);
+		persistentStorage.add("pluginJars", pluginJars, PluginJarList.class);
 		persistentStorage.loadFromDisk();
 		persistentStorage.addAutoSaveHooks();
 	}
