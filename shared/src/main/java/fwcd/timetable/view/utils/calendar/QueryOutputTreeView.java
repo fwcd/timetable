@@ -4,7 +4,6 @@ import fwcd.timetable.model.query.QueryOutputNode;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.viewmodel.Localizer;
 import fwcd.timetable.viewmodel.TemporalFormatters;
-import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
@@ -30,5 +29,5 @@ public class QueryOutputTreeView implements FxView {
 	}
 	
 	@Override
-	public Node getNode() { return node; }
+	public TreeView<QueryOutputNode> getNode() { return node; }
 }

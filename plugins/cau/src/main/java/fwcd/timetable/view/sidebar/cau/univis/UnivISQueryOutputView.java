@@ -8,11 +8,11 @@ import fwcd.timetable.model.calendar.CalendarModel;
 import fwcd.timetable.model.query.Query;
 import fwcd.timetable.model.query.QueryOutputNode;
 import fwcd.timetable.model.query.QueryResult;
+import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.utils.FxUtils;
-import fwcd.timetable.view.utils.FxView;
 import fwcd.timetable.view.utils.calendar.QueryOutputTreeView;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-
+import fwcd.timetable.viewmodel.Localizer;
+import fwcd.timetable.viewmodel.TemporalFormatters;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
@@ -30,18 +30,18 @@ public class UnivISQueryOutputView implements FxView {
 	private final CalendarCrateModel calendars;
 	private Option<CalendarModel> currentCalendar = Option.empty();
 	
-	public UnivISQueryOutputView(TimeTableAppContext context, CalendarCrateModel calendars) {
+	public UnivISQueryOutputView(Localizer localizer, TemporalFormatters formatters, CalendarCrateModel calendars) {
 		this.calendars = calendars;
 		
 		node = new BorderPane();
 		progressBar = new ProgressBar();
 		webView = new WebView();
-		treeView = new QueryOutputTreeView(context);
+		treeView = new QueryOutputTreeView(localizer, formatters);
 		
 		progressBar.setProgress(0D);
 		progressBar.setMaxWidth(Double.MAX_VALUE);
 		
-		node.setBottom(new HBox(FxUtils.buttonOf(context.localized("addtocalendars"), this::addToCalendars)));
+		node.setBottom(new HBox(FxUtils.buttonOf(localizer.localized("addtocalendars"), this::addToCalendars)));
 	}
 
 	public void perform(Query query) {
