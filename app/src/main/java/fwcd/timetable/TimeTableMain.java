@@ -62,6 +62,7 @@ public class TimeTableMain extends Application {
 		api.setCurrentPath(context.getFileSaveState().getCurrentPath());
 		api.setCalendarCrate(viewModel.getCalendars().getModel());
 		api.setLocalizer(context.getLocalizer());
+		api.setFormatters(context.getFormatters());
 	}
 	
 	public static void main(String[] args) {

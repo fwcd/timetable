@@ -10,12 +10,15 @@ public class TimeTableApiBackend implements TimeTableAppApi {
 	private Option<ReadOnlyObservable<Option<Path>>> path = Option.empty();
 	private Option<CalendarCrateModel> calendarCrate = Option.empty();
 	private Option<Localizer> localizer = Option.empty();
+	private Option<TemporalFormatters> formatters = Option.empty();
 	
 	public void setCurrentPath(ReadOnlyObservable<Option<Path>> path) { this.path = Option.of(path); }
 	
 	public void setCalendarCrate(CalendarCrateModel calendarCrate) { this.calendarCrate = Option.of(calendarCrate); }
 	
 	public void setLocalizer(Localizer localizer) { this.localizer = Option.of(localizer); }
+	
+	public void setFormatters(TemporalFormatters formatters) { this.formatters = Option.of(formatters); }
 	
 	@Override
 	public ReadOnlyObservable<Option<Path>> getCurrentPath() { return path.unwrap("Path has not been initializer in TimeTableApiBackend"); }
@@ -25,4 +28,7 @@ public class TimeTableApiBackend implements TimeTableAppApi {
 	
 	@Override
 	public Localizer getLocalizer() { return localizer.unwrap("Localizer has not been initializer in TimeTableApiBackend"); }
+	
+	@Override
+	public TemporalFormatters getFormatters() { return formatters.unwrap("Temporal formatters have not been initializer in TimeTableApiBackend"); }
 }
