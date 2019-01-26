@@ -27,4 +27,10 @@ public interface TimeTableAppApi {
 	 * strings into localized ones.
 	 */
 	Localizer getLocalizer();
+	
+	/**
+	 * Provides formatters for temporal objects such
+	 * as LocalDate, LocalTime or LocalDateTime.
+	 */
+	TemporalFormatters getFormatters();
 }
