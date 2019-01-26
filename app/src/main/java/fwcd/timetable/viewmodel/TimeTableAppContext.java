@@ -27,10 +27,6 @@ public class TimeTableAppContext {
 	private final Observable<TimeTableAppSettings> settings = new Observable<>(new TimeTableAppSettings.Builder().build());
 	private final Observable<Language> language = new Observable<>(new Language("", Collections.emptyMap()));
 	private final Observable<Theme> theme = new Observable<>(new Theme("", ""));
-	private final Observable<DateTimeFormatter> dateFormatter = new Observable<>(DateTimeFormatter.ISO_DATE);
-	private final Observable<DateTimeFormatter> timeFormatter = new Observable<>(DateTimeFormatter.ISO_TIME);
-	private final Observable<DateTimeFormatter> dateTimeFormatter = new Observable<>(DateTimeFormatter.ISO_DATE_TIME);
-	private final Observable<DateTimeFormatter> yearMonthFormatter = new Observable<>(DateTimeFormatter.ofPattern("MM.yyyy"));
 	
 	private final FileSaveState fileSaveState = new FileSaveState();
 	private final Localizer localizer = new LocalizerBackend(language);
@@ -39,11 +35,6 @@ public class TimeTableAppContext {
 		settings.listenAndFire(it -> {
 			languageManager.getLanguage(it.getLanguage()).ifPresent(language::set);
 			themeManager.getTheme(it.getTheme()).ifPresent(theme::set);
-			
-			dateFormatter.set(DateTimeFormatter.ofPattern(it.getDateFormat()));
-			timeFormatter.set(DateTimeFormatter.ofPattern(it.getTimeFormat()));
-			dateTimeFormatter.set(DateTimeFormatter.ofPattern(it.getDateTimeFormat()));
-			yearMonthFormatter.set(DateTimeFormatter.ofPattern(it.getYearMonthFormat()));
 		});
 		
 		persistentStorage.add("settings", settings, TimeTableAppSettings.class);
