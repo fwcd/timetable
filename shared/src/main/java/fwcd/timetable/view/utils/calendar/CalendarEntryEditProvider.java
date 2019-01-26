@@ -10,29 +10,32 @@ import fwcd.timetable.model.calendar.task.TaskModel;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import fwcd.timetable.view.sidebar.task.TaskDetailsView;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
+import fwcd.timetable.viewmodel.Localizer;
+import fwcd.timetable.viewmodel.TemporalFormatters;
 
 public class CalendarEntryEditProvider implements CalendarEntryVisitor {
-	private final TimeTableAppContext context;
+	private final Localizer localizer;
+	private final TemporalFormatters formatters;
 	private final Collection<? extends CalendarEntryModel> parent;
 	private Runnable onDelete = () -> {};
 	private Option<FxView> view = Option.empty();
 	
-	public CalendarEntryEditProvider(TimeTableAppContext context, Collection<? extends CalendarEntryModel> parent) {
-		this.context = context;
+	public CalendarEntryEditProvider(Localizer localizer, TemporalFormatters formatters, Collection<? extends CalendarEntryModel> parent) {
+		this.localizer = localizer;
+		this.formatters = formatters;
 		this.parent = parent;
 	}
 	
 	@Override
 	public void visitAppointment(AppointmentModel appointment) {
-		AppointmentDetailsView detailsView = new AppointmentDetailsView(parent, context, appointment);
+		AppointmentDetailsView detailsView = new AppointmentDetailsView(parent, localizer, formatters, appointment);
 		detailsView.setOnDelete(() -> onDelete.run());
 		view = Option.of(detailsView);
 	}
 	
 	@Override
 	public void visitTask(TaskModel task) {
-		TaskDetailsView detailsView = new TaskDetailsView(parent, context, task);
+		TaskDetailsView detailsView = new TaskDetailsView(parent, localizer, formatters, task);
 		detailsView.setOnDelete(() -> onDelete.run());
 		view = Option.of(detailsView);
 	}
