@@ -11,7 +11,7 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.TitledPane;
 
 public class CauView implements FxView {
-	private final Accordion node;
+	private Accordion node;
 	
 	public void initialize(TimeTableAppApi api) {
 		CampusView campusView = new CampusView();
@@ -32,5 +32,5 @@ public class CauView implements FxView {
 	}
 	
 	@Override
-	public Node getNode() { return node; }
+	public Node getNode() { return Objects.requireNonNull(node, "CauView.node has not been initialized"); }
 }
