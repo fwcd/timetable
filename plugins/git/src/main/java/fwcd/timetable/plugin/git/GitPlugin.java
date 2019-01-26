@@ -20,7 +20,7 @@ public class GitPlugin implements TimeTableAppPlugin {
 	private static final String DESCRIPTION = "Git integration for TimeTable";
 	private final Observable<Option<GitRepositoryModel>> model = new Observable<>(Option.empty());
 	private final GitView view = new GitView(model);
-	private final List<NamedFxView> sidebarViews = Collections.singletonList(NamedFxView.of("Git", view));
+	private final List<NamedFxView> sidebarViews = Collections.singletonList(NamedFxView.ofUnlocalized("Git", view));
 	
 	@Override
 	public void initialize(TimeTableAppApi api) {

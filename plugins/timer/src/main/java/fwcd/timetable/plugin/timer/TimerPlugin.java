@@ -15,7 +15,7 @@ public class TimerPlugin implements TimeTableAppPlugin {
 	private static final String NAME = "Timer";
 	private static final String DESCRIPTION = "A simple timer UI";
 	private final TimerView view = new TimerView();
-	private final List<NamedFxView> sidebarViews = Collections.singletonList(NamedFxView.of("Timer", view));
+	private final List<NamedFxView> sidebarViews = Collections.singletonList(NamedFxView.ofUnlocalized("Timer", view));
 	
 	@Override
 	public void initialize(TimeTableAppApi api) {

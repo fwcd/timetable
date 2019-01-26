@@ -21,4 +21,10 @@ public interface TimeTableAppApi {
 	 * Provides the calendar crate.
 	 */
 	CalendarCrateModel getCalendarCrate();
+	
+	/**
+	 * Provides a facility that converts unlocalized
+	 * strings into localized ones.
+	 */
+	Localizer getLocalizer();
 }

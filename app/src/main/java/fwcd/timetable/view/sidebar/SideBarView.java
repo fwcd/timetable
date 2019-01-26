@@ -37,9 +37,9 @@ public class SideBarView implements FxView {
 					if (pluginTabs.containsKey(key)) {
 						removedTabs.remove(key);
 					} else if (view.isNameLocalized()) {
-						addPluginTab(key, FxUtils.tabOf(view.getName(), view.getNode()));
-					} else {
 						addPluginTab(key, FxUtils.tabOf(context.localize(view.getName()), view.getNode()));
+					} else {
+						addPluginTab(key, FxUtils.tabOf(view.getName(), view.getNode()));
 					}
 				}
 			}
