@@ -2,12 +2,10 @@ package fwcd.timetable.view.sidebar.cau;
 
 import java.util.Objects;
 
+import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.sidebar.cau.campus.CampusView;
 import fwcd.timetable.view.sidebar.cau.univis.UnivISView;
-import fwcd.timetable.view.utils.FxView;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
-
+import fwcd.timetable.viewmodel.TimeTableAppApi;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.TitledPane;
@@ -15,9 +13,9 @@ import javafx.scene.control.TitledPane;
 public class CauView implements FxView {
 	private final Accordion node;
 	
-	public CauView(TimeTableAppContext context, CalendarsViewModel calendars) {
+	public void initialize(TimeTableAppApi api) {
 		CampusView campusView = new CampusView();
-		TitledPane univIS = new TitledPane("UnivIS", new UnivISView(context, calendars).getNode());
+		TitledPane univIS = new TitledPane("UnivIS", new UnivISView(api).getNode());
 		TitledPane campus = new TitledPane("Campus", campusView.getNode());
 		
 		node = new Accordion(

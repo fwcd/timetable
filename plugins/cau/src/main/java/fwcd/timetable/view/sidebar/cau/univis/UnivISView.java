@@ -1,9 +1,7 @@
 package fwcd.timetable.view.sidebar.cau.univis;
 
-import fwcd.timetable.view.utils.FxView;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
-
+import fwcd.timetable.view.FxView;
+import fwcd.timetable.viewmodel.TimeTableAppApi;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
@@ -13,10 +11,10 @@ public class UnivISView implements FxView {
 	private final UnivISNewQueryView input;
 	private final UnivISQueryOutputView output;
 	
-	public UnivISView(TimeTableAppContext context, CalendarsViewModel calendars) {
+	public UnivISView(TimeTableAppApi api) {
 		node = new SplitPane();
-		input = new UnivISNewQueryView(context);
-		output = new UnivISQueryOutputView(context, calendars.getModel());
+		input = new UnivISNewQueryView(api);
+		output = new UnivISQueryOutputView(api);
 		
 		input.getQueryListeners().add(output::perform);
 		

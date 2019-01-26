@@ -8,11 +8,10 @@ import fwcd.timetable.model.query.Query;
 import fwcd.timetable.model.query.cau.UnivISDepartmentNode;
 import fwcd.timetable.model.query.cau.UnivISParameterKeyProvider;
 import fwcd.timetable.model.query.cau.UnivISQuery;
+import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.utils.FxUtils;
-import fwcd.timetable.view.utils.FxView;
 import fwcd.timetable.view.utils.ParametersBuilderView;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-
+import fwcd.timetable.viewmodel.TimeTableAppApi;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
@@ -27,7 +26,7 @@ public class UnivISNewQueryView implements FxView {
 	
 	private final EventListenerList<Query> queryListeners = new EventListenerList<>();
 	
-	public UnivISNewQueryView(TimeTableAppContext context) {
+	public UnivISNewQueryView(TimeTableAppApi api) {
 		departmentChooser = new UnivISDepartmentChooserView();
 		parametersBuilder = new ParametersBuilderView(new UnivISParameterKeyProvider().getKeys());
 		node = new VBox(

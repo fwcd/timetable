@@ -61,6 +61,7 @@ public class TimeTableMain extends Application {
 	private void wireApi() {
 		api.setCurrentPath(context.getFileSaveState().getCurrentPath());
 		api.setCalendarCrate(viewModel.getCalendars().getModel());
+		api.setLocalizer(context.getLocalizer());
 	}
 	
 	public static void main(String[] args) {

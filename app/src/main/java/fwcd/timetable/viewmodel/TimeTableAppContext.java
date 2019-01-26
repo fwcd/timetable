@@ -82,4 +82,6 @@ public class TimeTableAppContext {
 	public String localize(String unlocalized) { return localizer.localize(unlocalized); }
 	
 	public ReadOnlyObservable<String> localized(String unlocalized) { return localizer.localized(unlocalized); }
+	
+	public Localizer getLocalizer() { return localizer; }
 }
