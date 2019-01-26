@@ -5,9 +5,8 @@ import java.io.IOException;
 import fwcd.fructose.Option;
 import fwcd.timetable.model.query.cau.UnivISDepartmentNode;
 import fwcd.timetable.model.query.cau.UnivISDepartmentProvider;
+import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.utils.FxUtils;
-import fwcd.timetable.view.utils.FxView;
-
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;

@@ -1,7 +1,6 @@
 package fwcd.timetable.view.sidebar.cau.campus;
 
-import fwcd.timetable.view.utils.FxView;
-
+import fwcd.timetable.view.FxView;
 import javafx.scene.Node;
 import javafx.scene.web.WebView;
 
