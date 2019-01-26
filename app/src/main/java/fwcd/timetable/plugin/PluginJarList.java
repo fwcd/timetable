@@ -1,4 +1,4 @@
-package fwcd.timetable.viewmodel;
+package fwcd.timetable.plugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;

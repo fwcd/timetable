@@ -54,6 +54,7 @@ public class TimeTableMain extends Application {
 	
 	private void loadDefaultPlugins() {
 		PluginManager pluginManager = context.getPluginManager();
+		pluginManager.setupPluginJarListeners(api);
 		pluginManager.add(new GitPlugin(), api);
 		pluginManager.add(new TimerPlugin(), api);
 	}

@@ -1,13 +1,55 @@
 package fwcd.timetable.model.utils;
 
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
+import fwcd.fructose.ListenableValue;
 import fwcd.fructose.ReadOnlyObservable;
 
 public final class ObservableUtils {
 	public static final ReadOnlyObservable<String> EMPTY_STRING = new ReadOnlyObservable<>("");
 	
 	private ObservableUtils() {}
+	
+	private static class Flag {
+		boolean value = false;
+	}
+	
+	public static <T> void bindBidirectionally(ListenableValue<T> a, ListenableValue<T> b) {
+		Flag updating = new Flag();
+		a.listenAndFire(it -> {
+			if (!updating.value) {
+				updating.value = true;
+				b.set(it);
+				updating.value = false;
+			}
+		});
+		b.listen(it -> {
+			if (!updating.value) {
+				updating.value = true;
+				a.set(it);
+				updating.value = false;
+			}
+		});
+	}
+	
+	public static <T, R> void bindBidirectionally(ListenableValue<T> a, ListenableValue<R> b, Function<T, R> mapper, Function<R, T> inverseMapper) {
+		Flag updating = new Flag();
+		a.listenAndFire(it -> {
+			if (!updating.value) {
+				updating.value = true;
+				b.set(mapper.apply(it));
+				updating.value = false;
+			}
+		});
+		b.listen(it -> {
+			if (!updating.value) {
+				updating.value = true;
+				a.set(inverseMapper.apply(it));
+				updating.value = false;
+			}
+		});
+	}
 	
 	/** Listens to two observables "at once" */
 	public static <A, B> void dualListen(ReadOnlyObservable<? extends A> a, ReadOnlyObservable<? extends B> b, BiConsumer<? super A, ? super B> listener) {
