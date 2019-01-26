@@ -1,13 +1,14 @@
 package fwcd.timetable.view.utils.calendar;
 
+import com.google.gson.Gson;
+
 import fwcd.fructose.Option;
 import fwcd.timetable.model.calendar.CalendarEntryModel;
 import fwcd.timetable.model.calendar.CalendarSerializationUtils;
-import fwcd.timetable.view.FxView;
 import fwcd.timetable.model.utils.SubscriptionStack;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-import com.google.gson.Gson;
-
+import fwcd.timetable.view.FxView;
+import fwcd.timetable.viewmodel.Localizer;
+import fwcd.timetable.viewmodel.TemporalFormatters;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
@@ -17,7 +18,8 @@ import javafx.scene.layout.VBox;
 
 public class CalendarEntryCell implements FxView {
 	private static final Gson GSON = CalendarSerializationUtils.newGson();
-	private final TimeTableAppContext context;
+	private final Localizer localizer;
+	private final TemporalFormatters formatters;
 	
 	private final Label titleLabel = new Label();
 	private final Label subtitleLabel = new Label();
@@ -28,8 +30,9 @@ public class CalendarEntryCell implements FxView {
 	private boolean showTitle = true;
 	private boolean showSubtitle = true;
 	
-	public CalendarEntryCell(TimeTableAppContext context) {
-		this.context = context;
+	public CalendarEntryCell(Localizer localizer, TemporalFormatters formatters) {
+		this.localizer = localizer;
+		this.formatters = formatters;
 		
 		titleLabel.getStyleClass().addAll("entry-cell-label", "title-cell-label");
 		subtitleLabel.getStyleClass().addAll("entry-cell-label", "subtitle-cell-label");
@@ -62,7 +65,7 @@ public class CalendarEntryCell implements FxView {
 		if (item == null) {
 			node.getChildren().clear();
 		} else {
-			CalendarEntryInfoProvider infoProvider = new CalendarEntryInfoProvider(context);
+			CalendarEntryInfoProvider infoProvider = new CalendarEntryInfoProvider(localizer, formatters);
 			item.accept(infoProvider);
 			
 			itemSubscriptions.push(item.getName().subscribeAndFire(name -> titleLabel.setText(titlePrefixOf(item) + name)));
