@@ -29,4 +29,4 @@ To compile runtime plugins, the `jar` task is used:
 
 `./gradlew plugins:cau:jar`
 
-This will automatically generate the necessary `ServiceLoader` interfaces using Gradle.
+This will automatically generate the necessary `ServiceLoader` interfaces using Gradle. The plugin can then be added through the application using the plugin manager.
