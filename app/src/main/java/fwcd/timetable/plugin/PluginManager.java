@@ -68,9 +68,11 @@ public class PluginManager {
 	
 	public void add(JarPluginBundle bundle, TimeTableAppApi api) {
 		updatingPluginJars = true;
-		pluginJars.set(pluginJars.get()
+		PluginJarList previousJars = pluginJars.get();
+		pluginJars.set(previousJars
 			.with(Arrays.stream(bundle.getURLs())
 			.map(it -> Paths.get(IOUtils.toURI(it)).toAbsolutePath().toString())
+			.filter(it -> !previousJars.contains(it))
 			.toArray(String[]::new)));
 		updatingPluginJars = false;
 		

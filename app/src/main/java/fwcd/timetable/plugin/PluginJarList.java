@@ -38,6 +38,8 @@ public class PluginJarList implements Iterable<String> {
 		return new PluginJarList(jarPaths.stream().filter(it -> !removedPaths.contains(it)).collect(Collectors.toList()));
 	}
 	
+	public boolean contains(String path) { return jarPaths.contains(path); }
+	
 	public List<String> asList() { return jarPaths; }
 	
 	public Stream<String> stream() { return jarPaths.stream(); }
