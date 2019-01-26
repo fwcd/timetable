@@ -28,4 +28,9 @@ public class LocalizerBackend implements Localizer {
 		}
 		return result;
 	}
+	
+	@Override
+	public Language getLanguage() {
+		return language.get();
+	}
 }

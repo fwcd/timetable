@@ -10,15 +10,18 @@ import fwcd.timetable.model.calendar.AppointmentModel;
 import fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import fwcd.timetable.model.calendar.Location;
 import fwcd.timetable.model.utils.SubscriptionStack;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
+import fwcd.timetable.viewmodel.Localizer;
+import fwcd.timetable.viewmodel.TemporalFormatters;
 
 public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
-	private final TimeTableAppContext context;
+	private final Localizer localizer;
+	private final TemporalFormatters formatters;
 	private final Observable<String> info = new Observable<>("");
 	private final SubscriptionStack subscriptions = new SubscriptionStack();
 	
-	public CalendarEntryInfoProvider(TimeTableAppContext context) {
-		this.context = context;
+	public CalendarEntryInfoProvider(Localizer localizer, TemporalFormatters formatters) {
+		this.localizer = localizer;
+		this.formatters = formatters;
 	}
 	
 	@Override
@@ -39,12 +42,12 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 		boolean ignoreDate = appointment.ignoresDate().get();
 		boolean ignoreTime = appointment.ignoresTime().get();
 		
-		DateTimeFormatter dateFormatter = context.getDateFormatter().get();
-		DateTimeFormatter timeFormatter = context.getTimeFormatter().get();
-		DateTimeFormatter dateTimeFormatter = context.getDateTimeFormatter().get();
+		DateTimeFormatter dateFormatter = formatters.getDateFormatter();
+		DateTimeFormatter timeFormatter = formatters.getTimeFormatter();
+		DateTimeFormatter dateTimeFormatter = formatters.getDateTimeFormatter();
 		
 		appointment.getRecurrence().getParsed().get()
-			.map(it -> it.describeWith(context.getLanguage().get(), dateFormatter))
+			.map(it -> it.describeWith(localizer.getLanguage(), dateFormatter))
 			.ifPresent(recurrence -> str.append(recurrence).append(" - "));
 		
 		if (!ignoreDate && !ignoreTime) {

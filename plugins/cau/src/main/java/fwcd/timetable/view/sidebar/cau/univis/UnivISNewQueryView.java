@@ -11,7 +11,7 @@ import fwcd.timetable.model.query.cau.UnivISQuery;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.utils.ParametersBuilderView;
-import fwcd.timetable.viewmodel.TimeTableAppApi;
+import fwcd.timetable.viewmodel.Localizer;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
@@ -26,15 +26,15 @@ public class UnivISNewQueryView implements FxView {
 	
 	private final EventListenerList<Query> queryListeners = new EventListenerList<>();
 	
-	public UnivISNewQueryView(TimeTableAppApi api) {
+	public UnivISNewQueryView(Localizer localizer) {
 		departmentChooser = new UnivISDepartmentChooserView();
 		parametersBuilder = new ParametersBuilderView(new UnivISParameterKeyProvider().getKeys());
 		node = new VBox(
 			departmentChooser.getNode(),
 			parametersBuilder.getNode(),
 			new HBox(
-				FxUtils.buttonOf(context.localized("search"), this::performNewQuery),
-				FxUtils.buttonOf(context.localized("reset"), parametersBuilder::reset)
+				FxUtils.buttonOf(localizer.localized("search"), this::performNewQuery),
+				FxUtils.buttonOf(localizer.localized("reset"), parametersBuilder::reset)
 			)
 		);
 		node.setPadding(new Insets(4, 4, 4, 4));

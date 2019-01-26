@@ -13,7 +13,7 @@ public class UnivISView implements FxView {
 	
 	public UnivISView(TimeTableAppApi api) {
 		node = new SplitPane();
-		input = new UnivISNewQueryView(api);
+		input = new UnivISNewQueryView(api.getLocalizer());
 		output = new UnivISQueryOutputView(api);
 		
 		input.getQueryListeners().add(output::perform);
