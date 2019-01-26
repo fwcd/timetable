@@ -3,8 +3,8 @@ package fwcd.timetable.view.utils.calendar;
 import fwcd.fructose.Option;
 import fwcd.timetable.model.calendar.AppointmentModel;
 import fwcd.timetable.model.query.QueryOutputNode;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-
+import fwcd.timetable.viewmodel.Localizer;
+import fwcd.timetable.viewmodel.TemporalFormatters;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TreeCell;
 import javafx.scene.text.Font;
@@ -14,8 +14,8 @@ public class QueryOutputTreeCell extends TreeCell<QueryOutputNode> {
 	private final CalendarEntryCell cell;
 	private boolean isBold = false;
 	
-	public QueryOutputTreeCell(TimeTableAppContext context) {
-		cell = new CalendarEntryCell(context);
+	public QueryOutputTreeCell(Localizer localizer, TemporalFormatters formatters) {
+		cell = new CalendarEntryCell(localizer, formatters);
 	}
 	
 	@Override
