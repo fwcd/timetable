@@ -2,8 +2,8 @@ package fwcd.timetable.view.utils.calendar;
 
 import fwcd.timetable.model.query.QueryOutputNode;
 import fwcd.timetable.view.FxView;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-
+import fwcd.timetable.viewmodel.Localizer;
+import fwcd.timetable.viewmodel.TemporalFormatters;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -11,10 +11,10 @@ import javafx.scene.control.TreeView;
 public class QueryOutputTreeView implements FxView {
 	private final TreeView<QueryOutputNode> node;
 	
-	public QueryOutputTreeView(TimeTableAppContext context) {
+	public QueryOutputTreeView(Localizer localizer, TemporalFormatters formatters) {
 		node = new TreeView<>();
 		node.setShowRoot(false);
-		node.setCellFactory(tree -> new QueryOutputTreeCell(context));
+		node.setCellFactory(tree -> new QueryOutputTreeCell(localizer, formatters));
 	}
 	
 	public void setRoot(QueryOutputNode root) {
