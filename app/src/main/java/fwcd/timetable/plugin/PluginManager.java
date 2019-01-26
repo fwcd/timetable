@@ -1,5 +1,6 @@
 package fwcd.timetable.plugin;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,19 +29,23 @@ public class PluginManager {
 	private final ObservableList<TimeTableAppPlugin> loadedPlugins = new ObservableList<>();
 	private final Observable<PluginJarList> pluginJars = new Observable<>(new PluginJarList());
 	private boolean updatingPluginJars = false;
-	
+
 	public void setupPluginJarListeners(TimeTableAppApi api) {
 		pluginJars.listenAndFire(jars -> {
 			if (!updatingPluginJars) {
 				Set<String> removed = new HashSet<>();
 				Stream.Builder<URL> urls = Stream.builder();
 				boolean foundURLs = false;
-				
+
 				for (String jar : jars) {
 					Path path = Paths.get(jar);
 					if (Files.exists(path)) {
-						foundURLs = true;
-						
+						try {
+							urls.accept(path.toUri().toURL());
+							foundURLs = true;
+						} catch (MalformedURLException e) {
+							LOG.error("Found malformed URL while loading stored plugin jars", e);
+						}
 					} else {
 						LOG.warn("Plugin " + jar + " could not be found, will be removed");
 						removed.add(jar);
