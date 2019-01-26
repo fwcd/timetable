@@ -30,7 +30,9 @@ public class PluginManager {
 	}
 	
 	private void add(TimeTableAppPlugin plugin, TimeTableAppApi api, Executor executor) {
-		executor.execute(() -> plugin.initialize(api));
-		loadedPlugins.add(plugin);
+		executor.execute(() -> {
+			plugin.initialize(api);
+			loadedPlugins.add(plugin);
+		});
 	}
 }

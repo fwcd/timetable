@@ -3,11 +3,9 @@ package fwcd.timetable.plugin;
 import java.util.Collections;
 import java.util.List;
 
-import fwcd.fructose.Observable;
-import fwcd.fructose.Option;
-import fwcd.timetable.plugin.TimeTableAppPlugin;
 import fwcd.timetable.view.NamedFxView;
 import fwcd.timetable.view.sidebar.cau.CauView;
+import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.viewmodel.TimeTableAppApi;
 
 /**
@@ -22,7 +20,7 @@ public class CauPlugin implements TimeTableAppPlugin {
 	
 	@Override
 	public void initialize(TimeTableAppApi api) {
-		
+		FxUtils.runAndWait(() -> view.initialize(api));
 	}
 	
 	@Override

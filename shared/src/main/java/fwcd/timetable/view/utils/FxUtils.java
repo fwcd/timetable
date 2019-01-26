@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -17,6 +19,7 @@ import fwcd.timetable.view.FxView;
 
 import org.controlsfx.control.PopOver;
 
+import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.geometry.Bounds;
@@ -317,5 +320,34 @@ public final class FxUtils {
 			item = item.getChildren().get(0);
 		}
 		item.setExpanded(true);
+	}
+	
+	/**
+	 * Runs a task on the JavaFX application thread
+	 * and blocks until it has been executed.
+	 */
+	public static void runAndWait(Runnable task) {
+		Objects.requireNonNull(task, "Can not perform a null task!");
+		
+		if (Platform.isFxApplicationThread()) {
+			task.run();
+		} else {
+			// Source: https://news.kynosarges.org/2014/05/01/simulating-platform-runandwait/
+			CountDownLatch latch = new CountDownLatch(1);
+			
+			Platform.runLater(() -> {
+				try {
+					task.run();
+				} finally {
+					latch.countDown();
+				}
+			});
+			
+			try {
+				latch.await();
+			} catch (InterruptedException e) {
+				// Do nothing if interrupted
+			}
+		}
 	}
 }
