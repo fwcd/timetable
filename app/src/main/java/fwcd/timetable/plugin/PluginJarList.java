@@ -3,14 +3,16 @@ package fwcd.timetable.plugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * An immutable list of plugin JAR paths.
  */
-public class PluginJarList {
+public class PluginJarList implements Iterable<String> {
 	private List<String> jarPaths = new ArrayList<>();
 	
 	public PluginJarList(List<String> jarPaths) {
@@ -32,11 +34,14 @@ public class PluginJarList {
 		return new PluginJarList(newPaths.build().collect(Collectors.toList()));
 	}
 	
-	public PluginJarList without(String removedPath) {
-		return new PluginJarList(jarPaths.stream().filter(it -> !it.equals(removedPath)).collect(Collectors.toList()));
+	public PluginJarList without(Set<String> removedPaths) {
+		return new PluginJarList(jarPaths.stream().filter(it -> !removedPaths.contains(it)).collect(Collectors.toList()));
 	}
 	
-	public List<String> getJarPaths() { return jarPaths; }
+	public List<String> asList() { return jarPaths; }
 	
-	public Stream<String> streamJarPaths() { return jarPaths.stream(); }
+	public Stream<String> stream() { return jarPaths.stream(); }
+
+	@Override
+	public Iterator<String> iterator() { return jarPaths.iterator(); }
 }
