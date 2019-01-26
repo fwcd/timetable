@@ -3,12 +3,12 @@ package fwcd.timetable.view.calendar.popover;
 import java.time.LocalDateTime;
 
 import fwcd.timetable.model.calendar.AppointmentModel;
+import fwcd.timetable.model.calendar.CalendarCrateModel;
 import fwcd.timetable.model.calendar.CalendarModel;
-import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.FxView;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
-
+import fwcd.timetable.view.utils.FxUtils;
+import fwcd.timetable.viewmodel.Localizer;
+import fwcd.timetable.viewmodel.TemporalFormatters;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -19,21 +19,21 @@ public class NewAppointmentView implements FxView {
 	private final LocalDateTime start;
 	private Runnable onDelete = () -> {};
 	
-	public NewAppointmentView(TimeTableAppContext context, CalendarsViewModel calendars, LocalDateTime start) {
+	public NewAppointmentView(Localizer localizer, CalendarCrateModel calendars, TemporalFormatters formatters, LocalDateTime start) {
 		this.start = start;
 		
 		node = new VBox(
-			calendars.getModel().getCalendars().stream()
+			calendars.getCalendars().stream()
 				.map(cal -> FxUtils.buttonOf(
-					context.localized("newappointment").mapStrongly(it -> it + " in " + cal.toString()),
-					() -> createAppointment(context, cal))
+					localizer.localized("newappointment").mapStrongly(it -> it + " in " + cal.toString()),
+					() -> createAppointment(localizer, formatters, cal))
 				)
 				.toArray(Button[]::new)
 		);
 		node.setPadding(new Insets(10));
 	}
 	
-	private void createAppointment(TimeTableAppContext context, CalendarModel calendar) {
+	private void createAppointment(Localizer localizer, TemporalFormatters formatters, CalendarModel calendar) {
 		AppointmentModel appointment = new AppointmentModel.Builder("")
 			.start(start)
 			.end(start.plusHours(1))
@@ -41,7 +41,7 @@ public class NewAppointmentView implements FxView {
 		node.setPadding(Insets.EMPTY);
 		calendar.getAppointments().add(appointment);
 		
-		AppointmentDetailsView detailsView = new AppointmentDetailsView(calendar.getAppointments(), context, appointment);
+		AppointmentDetailsView detailsView = new AppointmentDetailsView(calendar.getAppointments(), localizer, formatters, appointment);
 		detailsView.setOnDelete(onDelete);
 		node.getChildren().setAll(detailsView.getNode());
 	}
