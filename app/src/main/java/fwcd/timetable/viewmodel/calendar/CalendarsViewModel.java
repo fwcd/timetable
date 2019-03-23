@@ -18,13 +18,13 @@ public class CalendarsViewModel {
 		this.model = model;
 		
 		model.getCalendars().listen(selectedCalendars::retainAll);
-		model.getOnLoadFromJsonListeners().add(() -> {
+		model.getOnLoadListeners().add(() -> {
 			selectedCalendars.clear();
 			selectedCalendars.addAll(model.getCalendars());
 		});
 		
 		setupChangeListeners();
-		addAndSelect(new CalendarModel("Calendar"));
+		model.createNewCalendars();
 	}
 	
 	private void setupChangeListeners() {

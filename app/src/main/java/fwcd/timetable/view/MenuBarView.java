@@ -60,6 +60,7 @@ public class MenuBarView implements FxView {
 		pluginManagerView = new PluginManagerView(context, api);
 		node = new MenuBar(
 			FxUtils.menuOf(context.localized("filemenu"),
+				FxUtils.menuItemOf(context.localized("new"), this::createNew, new KeyCodeCombination(KeyCode.N, FxUtils.CTRL_OR_CMD_DOWN)),
 				FxUtils.menuItemOf(context.localized("open"), this::open, new KeyCodeCombination(KeyCode.O, FxUtils.CTRL_OR_CMD_DOWN)),
 				FxUtils.menuItemOf(context.localized("save"), this::save, new KeyCodeCombination(KeyCode.S, FxUtils.CTRL_OR_CMD_DOWN)),
 				FxUtils.menuItemOf(context.localized("saveas"), this::saveAs, new KeyCodeCombination(KeyCode.S, FxUtils.CTRL_OR_CMD_DOWN, KeyCombination.SHIFT_DOWN)),
@@ -103,6 +104,10 @@ public class MenuBarView implements FxView {
 		
 		stylesheets.clear();
 		stylesheets.addAll(cssPaths);
+	}
+	
+	private void createNew() {
+		viewModel.getCalendars().getModel().createNewCalendars();
 	}
 	
 	private void open() {

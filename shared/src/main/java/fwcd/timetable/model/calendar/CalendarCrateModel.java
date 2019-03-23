@@ -21,7 +21,7 @@ public class CalendarCrateModel implements Serializable {
 	
 	private transient EventListenerList<CalendarCrateModel> nullableChangeListeners;
 	private transient EventListenerList<CalendarCrateModel> nullableStructuralChangeListeners;
-	private transient ListenerList nullableOnLoadFromJsonListeners;
+	private transient ListenerList nullableOnLoadListeners;
 	private transient SubscriptionStack nullableCalendarSubscriptions;
 	
 	public CalendarCrateModel() {
@@ -46,7 +46,13 @@ public class CalendarCrateModel implements Serializable {
 	
 	public void loadFromJsonIn(Reader reader) {
 		calendars.set(GSON.fromJson(reader, CALENDARS_TYPE));
-		getOnLoadFromJsonListeners().fire();
+		getOnLoadListeners().fire();
+	}
+	
+	public void createNewCalendars() {
+		calendars.clear();
+		calendars.add(new CalendarModel("Calendar"));
+		getOnLoadListeners().fire();
 	}
 	
 	public EventListenerList<CalendarCrateModel> getChangeListeners() {
@@ -70,10 +76,10 @@ public class CalendarCrateModel implements Serializable {
 		return nullableCalendarSubscriptions;
 	}
 	
-	public ListenerList getOnLoadFromJsonListeners() {
-		if (nullableOnLoadFromJsonListeners == null) {
-			nullableOnLoadFromJsonListeners = new ListenerList();
+	public ListenerList getOnLoadListeners() {
+		if (nullableOnLoadListeners == null) {
+			nullableOnLoadListeners = new ListenerList();
 		}
-		return nullableOnLoadFromJsonListeners;
+		return nullableOnLoadListeners;
 	}
 }

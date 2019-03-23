@@ -91,5 +91,6 @@
 	"datetime": "Date and Time",
 	"plugins": "Plugins",
 	"addplugins": "Add Plugins",
-	"pluginmanager": "Plugin Manager"
+	"pluginmanager": "Plugin Manager",
+	"new": "New"
 }
