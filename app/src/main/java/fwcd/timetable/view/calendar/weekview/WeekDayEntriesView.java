@@ -87,11 +87,11 @@ public class WeekDayEntriesView implements FxView {
 		int overlapBoxCount = overlapBoxes.size();
 		
 		for (int i = 0; i < overlapBoxCount; i++) {
-			LocalTimeInterval interval = overlapBoxes.getA(i);
-			StackPane box = overlapBoxes.getB(i);
+			LocalTimeInterval interval = overlapBoxes.getLeft(i);
+			StackPane box = overlapBoxes.getRight(i);
 			
 			if (interval.overlaps(eventInterval)) {
-				overlapBoxes.setA(i, interval.merge(eventInterval));
+				overlapBoxes.setLeft(i, interval.merge(eventInterval));
 				overlappingBox = box;
 				break;
 			}

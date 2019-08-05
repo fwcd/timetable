@@ -8,7 +8,7 @@ A lightweight calendar application.
 * JavaFX
 
 ## Running
-* `./gradlew app:run`
+* `./gradlew :app:run`
 
 ## Module Architecture
 The application consists of multiple modules, some of which are bundled at compile-time.
@@ -27,6 +27,6 @@ The application consists of multiple modules, some of which are bundled at compi
 
 To compile runtime plugins, the `jar` task is used:
 
-`./gradlew plugins:cau:jar`
+`./gradlew :plugins:cau:jar`
 
 This will automatically generate the necessary `ServiceLoader` interfaces using Gradle. The plugin can then be added through the application using the plugin manager.

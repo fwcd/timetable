@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import fwcd.fructose.Option;
-import fwcd.fructose.StreamUtils;
+import fwcd.fructose.util.StreamUtils;
 import fwcd.fructose.exception.Rethrow;
 import fwcd.fructose.structs.ObservableList;
 

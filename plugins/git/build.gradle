@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.fwcd:Fructose:b12e36618dc3d386cde73b25efe45723f88eb859'
+    implementation 'com.github.fwcd:Fructose:1.0.0'
 	implementation 'org.eclipse.jgit:org.eclipse.jgit:5.1.3.201810200350-r'
 	implementation project(':shared')
 }
