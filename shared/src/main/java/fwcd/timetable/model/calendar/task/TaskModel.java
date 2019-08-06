@@ -13,11 +13,11 @@ import fwcd.timetable.model.calendar.recurrence.Recurrence;
 
 public class TaskModel implements CalendarEntryModel, Serializable {
 	private static final long serialVersionUID = -1219052993628334319L;
-	private final String name;
-	private final String description;
-	private final Option<Location> location;
-	private final Option<LocalDateTime> dateTime;
-	private final Option<Recurrence> recurrence;
+	private String name;
+	private String description;
+	private Option<Location> location;
+	private Option<LocalDateTime> dateTime;
+	private Option<Recurrence> recurrence;
 	
 	public TaskModel() {
 		this("", "", Option.empty(), Option.empty(), Option.empty());

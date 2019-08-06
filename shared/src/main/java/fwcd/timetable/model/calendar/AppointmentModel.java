@@ -7,30 +7,24 @@ import java.time.LocalTime;
 import java.util.Collections;
 import java.util.Set;
 
-import fwcd.fructose.EventListenerList;
-import fwcd.fructose.Observable;
 import fwcd.fructose.Option;
 import fwcd.fructose.time.LocalDateTimeInterval;
 import fwcd.fructose.time.LocalTimeInterval;
+import fwcd.timetable.model.calendar.recurrence.Recurrence;
 import fwcd.timetable.model.calendar.recurrence.RecurrenceParser;
-import fwcd.timetable.model.json.PostDeserializable;
 
-public class AppointmentModel implements Serializable, CalendarEntryModel, Comparable<AppointmentModel>, PostDeserializable {
+public class AppointmentModel implements Serializable, CalendarEntryModel, Comparable<AppointmentModel> {
 	private static final long serialVersionUID = 6135909125862494477L;
-	private final Observable<String> name;
-	private final Observable<Option<Location>> location;
-	private final Observable<LocalDateTimeInterval> dateTimeInterval;
-	private final Observable<String> description;
-	private final Observable<Boolean> ignoreDate;
-	private final Observable<Boolean> ignoreTime;
-	private final RecurrenceParser recurrence;
-	private final Observable<Option<LocalDate>> recurrenceEnd;
-	
-	private transient EventListenerList<AppointmentModel> nullableChangeListeners;
-	private transient EventListenerList<AppointmentModel> nullableStructuralChangeListeners;
+	private String name;
+	private Option<Location> location;
+	private LocalDateTimeInterval dateTimeInterval;
+	private String description;
+	private boolean ignoreDate;
+	private boolean ignoreTime;
+	private Option<Recurrence> recurrence;
 	
 	public AppointmentModel() {
-		this("", Option.empty(), LocalDateTime.now(), LocalDateTime.now(), "", false, false, "", Collections.emptySet(), Option.empty());
+		this("", Option.empty(), LocalDateTime.now(), LocalDateTime.now(), "", false, false, Option.empty());
 	}
 	
 	private AppointmentModel(
@@ -41,47 +35,15 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		String description,
 		boolean ignoreDate,
 		boolean ignoreTime,
-		String rawRecurrence,
-		Set<LocalDate> excludes,
-		Option<LocalDate> recurrenceEnd
+		Option<Recurrence> recurrence
 	) {
-		this.name = new Observable<>(name);
-		this.location = new Observable<>(location);
-		dateTimeInterval = new Observable<>(new LocalDateTimeInterval(startInclusive, endExclusive));
-		this.description = new Observable<>(description);
-		this.ignoreDate = new Observable<>(ignoreDate);
-		this.ignoreTime = new Observable<>(ignoreTime);
-		this.recurrenceEnd = new Observable<>(recurrenceEnd);
-		recurrence = new RecurrenceParser(dateTimeInterval, this.recurrenceEnd, excludes);
-		recurrence.getRaw().set(rawRecurrence);
-		
-		setupChangeListeners();
-		setupStructuralChangeListeners();
-	}
-	
-	private void setupChangeListeners() {
-		name.listen(it -> getChangeListeners().fire(this));
-		location.listen(it -> getChangeListeners().fire(this));
-		dateTimeInterval.listen(it -> getChangeListeners().fire(this));
-		description.listen(it -> getChangeListeners().fire(this));
-		ignoreDate.listen(it -> getChangeListeners().fire(this));
-		ignoreTime.listen(it -> getChangeListeners().fire(this));
-		recurrence.getParsed().listen(it -> getChangeListeners().fire(this));
-		recurrenceEnd.listen(it -> getChangeListeners().fire(this));
-	}
-	
-	private void setupStructuralChangeListeners() {
-		dateTimeInterval.listen(it -> getStructuralChangeListeners().fire(this));
-		ignoreDate.listen(it -> getStructuralChangeListeners().fire(this));
-		ignoreTime.listen(it -> getStructuralChangeListeners().fire(this));
-		recurrence.getParsed().listen(it -> getStructuralChangeListeners().fire(this));
-		recurrenceEnd.listen(it -> getStructuralChangeListeners().fire(this));
-	}
-	
-	@Override
-	public void postDeserialize() {
-		setupChangeListeners();
-		setupStructuralChangeListeners();
+		this.name = name;
+		this.location = location;
+		dateTimeInterval = new LocalDateTimeInterval(startInclusive, endExclusive);
+		this.description = description;
+		this.ignoreDate = ignoreDate;
+		this.ignoreTime = ignoreTime;
+		this.recurrence = recurrence;
 	}
 	
 	@Override
@@ -91,17 +53,17 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	public String getType() { return CommonEntryType.APPOINTMENT; }
 	
 	@Override
-	public Observable<String> getName() { return name; }
+	public String getName() { return name; }
 	
-	public Observable<Option<Location>> getLocation() { return location; }
+	public Option<Location> getLocation() { return location; }
 	
-	public Observable<LocalDateTimeInterval> getDateTimeInterval() { return dateTimeInterval; }
+	public LocalDateTimeInterval getDateTimeInterval() { return dateTimeInterval; }
 	
 	/** The inclusive start date */
-	public LocalDateTime getStart() { return dateTimeInterval.get().getStart(); }
+	public LocalDateTime getStart() { return dateTimeInterval.getStart(); }
 	
 	/** The exclusive end date time*/
-	public LocalDateTime getEnd() { return dateTimeInterval.get().getEnd(); }
+	public LocalDateTime getEnd() { return dateTimeInterval.getEnd(); }
 	
 	/** The inclusive start date */
 	public LocalDate getStartDate() { return getStart().toLocalDate(); }
@@ -115,52 +77,34 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	/** The exclusive end time */
 	public LocalTime getEndTime() { return getEnd().toLocalTime(); }
 	
-	public RecurrenceParser getRecurrence() { return recurrence; }
-	
-	public Observable<Option<LocalDate>> getRecurrenceEnd() { return recurrenceEnd; }
-	
-	/** A change listener list that fires whenever any property of this appointment is mutated */
-	public EventListenerList<AppointmentModel> getChangeListeners() {
-		if (nullableChangeListeners == null) {
-			nullableChangeListeners = new EventListenerList<>();
-		}
-		return nullableChangeListeners;
-	}
-	
-	/** A change listener list that fires whenever the "structure" (date, time, recurrence, etc) of this appointment is mutated */
-	public EventListenerList<AppointmentModel> getStructuralChangeListeners() {
-		if (nullableStructuralChangeListeners == null) {
-			nullableStructuralChangeListeners = new EventListenerList<>();
-		}
-		return nullableStructuralChangeListeners;
-	}
+	public Option<Recurrence> getRecurrence() { return recurrence; }
 	
 	@Override
-	public Observable<String> getDescription() { return description; }
+	public String getDescription() { return description; }
 	
-	public boolean occursOn(LocalDate date) { return ignoreDate.get() ? false : repeatsOn(date).orElseGet(() -> dateTimeInterval.get().toLocalDateInterval().contains(date)); }
+	public boolean occursOn(LocalDate date) { return ignoreDate ? false : repeatsOn(date).orElseGet(() -> dateTimeInterval.toLocalDateInterval().contains(date)); }
 
-	private Option<Boolean> repeatsOn(LocalDate date) { return recurrence.getParsed().get().map(it -> it.matches(date)); }
+	private Option<Boolean> repeatsOn(LocalDate date) { return recurrence.map(it -> it.matches(date)); }
 	
 	@Override
 	public int compareTo(AppointmentModel o) { return getStart().compareTo(o.getStart()); }
 	
 	public boolean overlaps(AppointmentModel other) { return (getStart().compareTo(other.getEnd()) <= 0) && (getEnd().compareTo(other.getStart()) <= 0); }
 	
-	public boolean beginsOn(LocalDate date) { return ignoreDate.get() ? false : date.equals(getStartDate()); }
+	public boolean beginsOn(LocalDate date) { return ignoreDate ? false : date.equals(getStartDate()); }
 	
-	public boolean endsOn(LocalDate date) { return ignoreDate.get() ? false : date.equals(getLastDate()); }
+	public boolean endsOn(LocalDate date) { return ignoreDate ? false : date.equals(getLastDate()); }
 	
-	public Observable<Boolean> ignoresDate() { return ignoreDate; }
+	public boolean ignoresDate() { return ignoreDate; }
 	
-	public Observable<Boolean> ignoresTime() { return ignoreTime; }
+	public boolean ignoresTime() { return ignoreTime; }
 	
 	public LocalTimeInterval getTimeIntervalOn(LocalDate date) {
 		if (occursOn(date)) {
 			boolean repeats = repeatsOn(date).orElse(false);
 			boolean begins = beginsOn(date);
 			boolean ends = endsOn(date);
-			boolean allDay = ignoreTime.get();
+			boolean allDay = ignoreTime;
 			
 			if (!allDay) {
 				if ((begins && ends) || repeats) {
@@ -190,6 +134,8 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		private boolean ignoreTime = false;
 		private String rawRecurrence = "";
 		private Option<LocalDate> recurrenceEnd = Option.empty();
+		
+		private RecurrenceParser recurrenceParser = new RecurrenceParser();
 		
 		public Builder(String name) {
 			this.name = name;
@@ -261,7 +207,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		}
 		
 		public AppointmentModel build() {
-			return new AppointmentModel(name, location, start, end, description, ignoreDate, ignoreTime, rawRecurrence, excludes, recurrenceEnd);
+			return new AppointmentModel(name, location, start, end, description, ignoreDate, ignoreTime, recurrenceParser.parse(rawRecurrence, start.toLocalDate(), recurrenceEnd, excludes));
 		}
 	}
 }
