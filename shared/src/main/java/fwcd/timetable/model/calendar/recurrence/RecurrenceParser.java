@@ -10,14 +10,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import fwcd.fructose.Observable;
 import fwcd.fructose.Option;
-import fwcd.fructose.ReadOnlyObservable;
-import fwcd.fructose.time.LocalDateTimeInterval;
-import fwcd.timetable.model.utils.ObservableUtils;
 
 /**
- * A recurrence that is parsed using the following scheme
+ * A recurrence parser using the following scheme
  * (represented using a grammar similar to EBNF):
  * 
  * <pre>
@@ -32,28 +28,15 @@ import fwcd.timetable.model.utils.ObservableUtils;
  * weeksubmode = 'w', number (week of the month), ' ', number (day of the week)
  * </pre>
  */
-public class ParsedRecurrence implements Serializable {
+public class RecurrenceParser implements Serializable {
 	private static final long serialVersionUID = -1134267101451984444L;
 	private static final Pattern RECURRENCE_PATTERN = Pattern.compile("^(d|w|m)(\\d+)(?: (.+))?$");
 	private static final Pattern MONTH_SUB_MODE_PATTERN = Pattern.compile("^d(\\d+)$");
 	private static final Pattern WEEK_SUB_MODE_PATTERN = Pattern.compile("^w(\\d+) (\\d+)$");
 	
-	private final Observable<String> raw = new Observable<>("");
-	private final Observable<Option<Recurrence>> parsed = new Observable<>(Option.empty());
+	public RecurrenceParser() {}
 	
-	public ParsedRecurrence() {}
-	
-	public ParsedRecurrence(ReadOnlyObservable<LocalDateTimeInterval> dateTimeInterval, ReadOnlyObservable<Option<LocalDate>> recurrenceEnd, Set<LocalDate> excludes) {
-		ObservableUtils.triListen(dateTimeInterval, raw, recurrenceEnd, (dates, str, end) -> {
-			update(Option.of(dates.getStart().toLocalDate()), end, excludes);
-		});
-	}
-	
-	public void update(Option<LocalDate> start, Option<LocalDate> end, Set<LocalDate> excludes) {
-		parsed.set(start.flatMap(it -> parse(raw.get(), it, end, excludes)));
-	}
-	
-	private Option<Recurrence> parse(String str, LocalDate start, Option<LocalDate> end, Set<LocalDate> excludes) {
+	public Option<Recurrence> parse(String str, LocalDate start, Option<LocalDate> end, Set<LocalDate> excludes) {
 		Matcher matcher = RECURRENCE_PATTERN.matcher(str);
 		Option<Recurrence> result = Option.empty();
 		
@@ -112,8 +95,4 @@ public class ParsedRecurrence implements Serializable {
 		
 		return Option.empty();
 	}
-	
-	public Observable<String> getRaw() { return raw; }
-	
-	public ReadOnlyObservable<Option<Recurrence>> getParsed() { return parsed; }
 }

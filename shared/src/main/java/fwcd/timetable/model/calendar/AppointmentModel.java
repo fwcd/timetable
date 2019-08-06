@@ -12,7 +12,7 @@ import fwcd.fructose.Observable;
 import fwcd.fructose.Option;
 import fwcd.fructose.time.LocalDateTimeInterval;
 import fwcd.fructose.time.LocalTimeInterval;
-import fwcd.timetable.model.calendar.recurrence.ParsedRecurrence;
+import fwcd.timetable.model.calendar.recurrence.RecurrenceParser;
 import fwcd.timetable.model.json.PostDeserializable;
 
 public class AppointmentModel implements Serializable, CalendarEntryModel, Comparable<AppointmentModel>, PostDeserializable {
@@ -23,7 +23,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	private final Observable<String> description;
 	private final Observable<Boolean> ignoreDate;
 	private final Observable<Boolean> ignoreTime;
-	private final ParsedRecurrence recurrence;
+	private final RecurrenceParser recurrence;
 	private final Observable<Option<LocalDate>> recurrenceEnd;
 	
 	private transient EventListenerList<AppointmentModel> nullableChangeListeners;
@@ -52,7 +52,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		this.ignoreDate = new Observable<>(ignoreDate);
 		this.ignoreTime = new Observable<>(ignoreTime);
 		this.recurrenceEnd = new Observable<>(recurrenceEnd);
-		recurrence = new ParsedRecurrence(dateTimeInterval, this.recurrenceEnd, excludes);
+		recurrence = new RecurrenceParser(dateTimeInterval, this.recurrenceEnd, excludes);
 		recurrence.getRaw().set(rawRecurrence);
 		
 		setupChangeListeners();
@@ -115,7 +115,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	/** The exclusive end time */
 	public LocalTime getEndTime() { return getEnd().toLocalTime(); }
 	
-	public ParsedRecurrence getRecurrence() { return recurrence; }
+	public RecurrenceParser getRecurrence() { return recurrence; }
 	
 	public Observable<Option<LocalDate>> getRecurrenceEnd() { return recurrenceEnd; }
 	

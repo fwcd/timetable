@@ -3,86 +3,59 @@ package fwcd.timetable.model.calendar.task;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 
-import fwcd.fructose.EventListenerList;
-import fwcd.fructose.Observable;
 import fwcd.fructose.Option;
 import fwcd.timetable.model.calendar.CalendarEntryModel;
 import fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import fwcd.timetable.model.calendar.CommonEntryType;
 import fwcd.timetable.model.calendar.Location;
-import fwcd.timetable.model.calendar.recurrence.ParsedRecurrence;
-import fwcd.timetable.model.json.PostDeserializable;
-import fwcd.timetable.model.utils.ObservableUtils;
+import fwcd.timetable.model.calendar.recurrence.Recurrence;
 
-public class TaskModel implements CalendarEntryModel, Serializable, PostDeserializable {
+public class TaskModel implements CalendarEntryModel, Serializable {
 	private static final long serialVersionUID = -1219052993628334319L;
-	private final Observable<String> name;
-	private final Observable<String> description = new Observable<>("");
-	private final Observable<Option<Location>> location = new Observable<>(Option.empty());
-	private final Observable<Option<LocalDateTime>> dateTime = new Observable<>(Option.empty());
-	private final ParsedRecurrence recurrence = new ParsedRecurrence();
-	private final Observable<Option<LocalDate>> recurrenceEnd = new Observable<>(Option.empty());
-
-	private transient EventListenerList<TaskModel> nullableChangeListeners;
+	private final String name;
+	private final String description;
+	private final Option<Location> location;
+	private final Option<LocalDateTime> dateTime;
+	private final Option<Recurrence> recurrence;
 	
 	public TaskModel() {
-		name = new Observable<>("");
-		setupChangeListeners();
+		this("", "", Option.empty(), Option.empty(), Option.empty());
 	}
 	
-	public TaskModel(String name) {
-		this.name = new Observable<>(name);
-		setupChangeListeners();
-	}
-	
-	@Override
-	public void postDeserialize() {
-		setupChangeListeners();
-	}
-	
-	private void setupChangeListeners() {
-		name.listen(it -> getChangeListeners().fire(this));
-		location.listen(it -> getChangeListeners().fire(this));
-		description.listen(it -> getChangeListeners().fire(this));
-		dateTime.listen(it -> getChangeListeners().fire(this));
-		recurrenceEnd.listen(it -> getChangeListeners().fire(this));
-		recurrence.getParsed().listen(it -> getChangeListeners().fire(this));
-		
-		ObservableUtils.triListen(dateTime, recurrenceEnd, recurrence.getRaw(), (dt, end, raw) -> {
-			recurrence.update(dt.map(LocalDateTime::toLocalDate), end, Collections.emptySet());
-		});
-	}
-	
-	public EventListenerList<TaskModel> getChangeListeners() {
-		if (nullableChangeListeners == null) {
-			nullableChangeListeners = new EventListenerList<>();
-		}
-		return nullableChangeListeners;
+	public TaskModel(
+		String name,
+		String description,
+		Option<Location> location,
+		Option<LocalDateTime> dateTime,
+		Option<Recurrence> recurrence
+	) {
+		this.name = name;
+		this.description = description;
+		this.location = location;
+		this.dateTime = dateTime;
+		this.recurrence = recurrence;
 	}
 
 	@Override
 	public void accept(CalendarEntryVisitor visitor) { visitor.visitTask(this); }
 	
-	public Observable<String> getName() { return name; }
+	public String getName() { return name; }
 	
-	public Observable<Option<LocalDateTime>> getDateTime() { return dateTime; }
+	public Option<LocalDateTime> getDateTime() { return dateTime; }
 	
-	public Observable<Option<Location>> getLocation() { return location; }
+	public Option<Location> getLocation() { return location; }
 	
-	public ParsedRecurrence getRecurrence() { return recurrence; }
-	
-	public Observable<Option<LocalDate>> getRecurrenceEnd() { return recurrenceEnd; }
+	public Option<Recurrence> getRecurrence() { return recurrence; }
 	
 	public boolean occursOn(LocalDate date) {
-		return dateTime.get().map(it -> it.toLocalDate().equals(date) || repeatsOn(date).orElse(false)).orElse(false);
+		return dateTime.map(it -> it.toLocalDate().equals(date) || repeatsOn(date).orElse(false)).orElse(false);
 	}
 	
-	private Option<Boolean> repeatsOn(LocalDate date) { return recurrence.getParsed().get().map(it -> it.matches(date)); }
+	private Option<Boolean> repeatsOn(LocalDate date) { return recurrence.map(it -> it.matches(date)); }
 
 	@Override
-	public Observable<String> getDescription() { return description; }
+	public String getDescription() { return description; }
 
 	@Override
 	public String getType() { return CommonEntryType.TASK; }
