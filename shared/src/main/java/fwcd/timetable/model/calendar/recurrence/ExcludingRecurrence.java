@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
+import fwcd.fructose.Option;
 import fwcd.timetable.model.language.Language;
 
 public class ExcludingRecurrence implements Recurrence {
@@ -26,5 +27,15 @@ public class ExcludingRecurrence implements Recurrence {
 		return base.describeWith(language, dateFormatter)
 			+ " " + language.localize("exceptfor")
 			+ excluded.stream().map(dateFormatter::format).reduce((a, b) -> a + ", " + b).map(it -> " " + it).orElse("");
+	}
+	
+	@Override
+	public Set<? extends LocalDate> getExcludes() {
+		return excluded;
+	}
+	
+	@Override
+	public Option<LocalDate> getEnd() {
+		return base.getEnd();
 	}
 }

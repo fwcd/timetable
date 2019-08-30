@@ -11,7 +11,7 @@ import fwcd.fructose.structs.Stack;
 import fwcd.timetable.model.calendar.CalendarConstants;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
@@ -21,12 +21,12 @@ public class MonthContentView implements FxView {
 	private final TimeTableAppContext context;
 	private final GridPane node;
 	
-	private final CalendarsViewModel calendars;
+	private final CalendarCrateViewModel calendars;
 	private final Stack<MonthDayView> days = new ArrayStack<>();
 	
 	private final Observable<YearMonth> month;
 	
-	public MonthContentView(TimeTableAppContext context, CalendarsViewModel calendars) {
+	public MonthContentView(TimeTableAppContext context, CalendarCrateViewModel calendars) {
 		this.calendars = calendars;
 		this.context = context;
 		

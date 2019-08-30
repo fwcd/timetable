@@ -15,7 +15,7 @@ import fwcd.timetable.model.utils.CloseUtils;
 import fwcd.timetable.view.calendar.utils.Calendarized;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
@@ -27,13 +27,13 @@ public class WeekDayEntriesView implements FxView {
 	private final StackPane node;
 	
 	private final TimeTableAppContext context;
-	private final CalendarsViewModel calendars;
+	private final CalendarCrateViewModel calendars;
 	
 	private final List<AutoCloseable> childResources = new ArrayList<>();
 	private final BiList<LocalTimeInterval, StackPane> overlapBoxes = new ArrayBiList<>();
 	private Option<LocalDate> currentDate = Option.empty();
 	
-	public WeekDayEntriesView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarsViewModel calendars) {
+	public WeekDayEntriesView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarCrateViewModel calendars) {
 		this.layouter = layouter;
 		this.context = context;
 		this.calendars = calendars;

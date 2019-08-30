@@ -4,7 +4,7 @@ import fwcd.timetable.model.calendar.CalendarModel;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
 import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.FxView;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -15,10 +15,10 @@ import javafx.scene.layout.HBox;
 public class CalendarManagerView implements FxView {
 	private final BorderPane node;
 	
-	private final CalendarsViewModel viewModel;
+	private final CalendarCrateViewModel viewModel;
 	private final ListView<CalendarModel> calendarList;
 	
-	public CalendarManagerView(TimeTableAppContext context, CalendarsViewModel viewModel) {
+	public CalendarManagerView(TimeTableAppContext context, CalendarCrateViewModel viewModel) {
 		this.viewModel = viewModel;
 		
 		calendarList = new ListView<>();

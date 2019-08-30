@@ -33,4 +33,9 @@ public class YearlyRecurrence implements Recurrence {
 				: language.localize("eachxyears", yearsBetweenRepeats))
 			+ end.map(it -> " " + language.localize("untilx", dateFormatter.format(it))).orElse("");
 	}
+	
+	@Override
+	public Option<LocalDate> getEnd() {
+		return end;
+	}
 }

@@ -1,20 +1,22 @@
 package fwcd.timetable.view.calendar.weekview;
 
 import java.time.format.DateTimeFormatter;
+import java.util.function.Consumer;
+
+import org.controlsfx.control.PopOver;
 
 import fwcd.fructose.Option;
 import fwcd.fructose.time.LocalDateTimeInterval;
 import fwcd.timetable.model.calendar.AppointmentModel;
 import fwcd.timetable.model.calendar.CalendarModel;
 import fwcd.timetable.model.calendar.Location;
+import fwcd.timetable.model.utils.SubscriptionStack;
+import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import fwcd.timetable.view.utils.FxUtils;
-import fwcd.timetable.view.FxView;
-import fwcd.timetable.model.utils.SubscriptionStack;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-
-import org.controlsfx.control.PopOver;
-
+import fwcd.timetable.viewmodel.calendar.AppointmentViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarViewModel;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -28,51 +30,65 @@ import javafx.scene.text.FontWeight;
 
 public class AppointmentView implements FxView, AutoCloseable {
 	private final Pane node;
-	private final SubscriptionStack subscriptions = new SubscriptionStack();
+	private final Label nameLabel;
+	private final Label locationLabel;
+	private final Label timeLabel;
 	
-	public AppointmentView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarModel calendar, AppointmentModel model) {
+	private final Consumer<AppointmentViewModel> viewModelListener;
+	private final Consumer<CalendarViewModel> calendarListener;
+	
+	public AppointmentView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarViewModel calendar, AppointmentViewModel viewModel) {
 		Color fgColor = Color.BLACK;
 		
 		node = new VBox();
 		node.setMinWidth(0);
-		subscriptions.push(calendar.getColor().subscribeAndFire(it -> {
-			node.setBackground(new Background(new BackgroundFill(brightColor(FxUtils.toFxColor(it)), new CornerRadii(3), Insets.EMPTY)));
-		}));
 		node.getStyleClass().add("appointment");
 		
-		Label nameLabel = new Label();
+		nameLabel = new Label();
 		nameLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
 		nameLabel.setTextFill(fgColor);
 		nameLabel.setWrapText(true);
-		subscriptions.push(model.getName().subscribeAndFire(nameLabel::setText));
 		node.getChildren().add(nameLabel);
 		
-		Label locationLabel = new Label();
+		locationLabel = new Label();
 		locationLabel.setFont(Font.font(11));
 		locationLabel.setTextFill(fgColor);
 		locationLabel.managedProperty().bind(locationLabel.visibleProperty()); // Do not occupy space if the label is not visible
-		subscriptions.push(model.getLocation().subscribeAndFire(it -> {
-			Option<String> location = it
-				.map(Location::getLabel)
-				.filter(s -> !s.isEmpty());
-			location.ifPresent(locationLabel::setText);
-			locationLabel.setVisible(location.isPresent());
-		}));
 		node.getChildren().add(locationLabel);
 		
-		Label timeLabel = new Label();
+		timeLabel = new Label();
 		timeLabel.setFont(Font.font(11));
 		timeLabel.setTextFill(fgColor);
-		subscriptions.push(model.getDateTimeInterval().subscribeAndFire(it -> timeLabel.setText(formatTimeInterval(it, context.getTimeFormatter().get()))));
 		node.getChildren().add(timeLabel);
 		
-		AppointmentDetailsView detailsView = new AppointmentDetailsView(calendar.getAppointments(), context.getLocalizer(), context.getFormatters(), model);
+		AppointmentDetailsView detailsView = new AppointmentDetailsView(calendar.getAppointments(), context.getLocalizer(), context.getFormatters(), viewModel);
 		PopOver popOver = FxUtils.newPopOver(detailsView);
 		detailsView.setOnDelete(popOver::hide);
 		node.setOnMouseClicked(e -> {
 			FxUtils.showIndependentPopOver(popOver, node);
 			e.consume();
 		});
+		
+		// Setup change listeners
+		
+		viewModelListener = vm -> {
+			AppointmentModel model = vm.getModel();
+			nameLabel.setText(model.getName());
+			timeLabel.setText(formatTimeInterval(model.getDateTimeInterval(), context.getTimeFormatter().get()));
+
+			Option<String> location = model.getLocation().map(Location::getLabel).filter(s -> !s.isEmpty());
+			location.ifPresent(locationLabel::setText);
+			locationLabel.setVisible(location.isPresent());
+		};
+		viewModelListener.accept(viewModel);
+		viewModel.getChangeListeners().addWeakListener(viewModelListener);
+
+		calendarListener = calVM -> {
+			CalendarModel calModel = calVM.getModel();
+			node.setBackground(new Background(new BackgroundFill(brightColor(FxUtils.toFxColor(calModel.getColor())), new CornerRadii(3), Insets.EMPTY)));
+		};
+		calendarListener.accept(calendar);
+		calendar.getChangeListeners().addWeakListener(calendarListener);
 	}
 	
 	private String formatTimeInterval(LocalDateTimeInterval interval, DateTimeFormatter formatter) {
@@ -94,9 +110,9 @@ public class AppointmentView implements FxView, AutoCloseable {
 
 	@Override
 	public Pane getNode() { return node; }
-
+	
 	@Override
 	public void close() {
-		subscriptions.unsubscribeAll();
+		// Weak listeners will be automatically dropped
 	}
 }

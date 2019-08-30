@@ -4,7 +4,7 @@ import java.util.Set;
 
 import fwcd.timetable.view.calendar.weekview.WeekView;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
@@ -19,7 +19,7 @@ public class CalendarPrinter {
 		this.context = context;
 	}
 	
-	public void showPrintDialog(Window window, CalendarsViewModel calendars) {
+	public void showPrintDialog(Window window, CalendarCrateViewModel calendars) {
 		// TODO: Ability to choose a different printer
 		PrinterJob job = createJob();
 		

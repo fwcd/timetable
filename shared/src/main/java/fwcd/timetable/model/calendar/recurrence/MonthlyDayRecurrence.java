@@ -43,4 +43,9 @@ public class MonthlyDayRecurrence implements Recurrence {
 			+ " " + language.localize("everyxth", dayOfMonth)
 			+ end.map(it -> " " + language.localize("untilx", dateFormatter.format(it))).orElse("");
 	}
+	
+	@Override
+	public Option<LocalDate> getEnd() {
+		return end;
+	}
 }

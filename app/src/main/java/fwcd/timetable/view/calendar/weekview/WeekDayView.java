@@ -11,7 +11,7 @@ import fwcd.timetable.view.calendar.popover.NewAppointmentView;
 import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import org.controlsfx.control.PopOver;
 
@@ -30,12 +30,12 @@ public class WeekDayView implements FxView {
 	private final StackPane node;
 	private final WeekDayEntriesView appointments;
 	private final WeekDayTimeLayouter layouter;
-	private final CalendarsViewModel calendars;
+	private final CalendarCrateViewModel calendars;
 	
 	private final int dayOffset;
 	private final Observable<Option<LocalDate>> date = new Observable<>(Option.empty());
 	
-	public WeekDayView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarsViewModel calendars, int dayOffset) {
+	public WeekDayView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarCrateViewModel calendars, int dayOffset) {
 		this.dayOffset = dayOffset;
 		this.layouter = layouter;
 		this.calendars = calendars;

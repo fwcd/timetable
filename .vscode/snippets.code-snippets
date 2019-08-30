@@ -21,6 +21,38 @@
 		],
 		"description": "Create a new JavaFX view class"
 	},
+	"ViewModel": {
+		"scope": "java",
+		"prefix": "viewmodel",
+		"body": [
+			"import fwcd.fructose.EventListenerList;",
+			"import fwcd.fructose.Option;",
+			"import fwcd.timetable.viewmodel.Responder;",
+			"",
+			"public class $1ViewModel implements Responder {",
+			"\tprivate final $1Model model;",
+			"\t",
+			"\tprivate final EventListenerList<$1ViewModel> changeListeners = new EventListenerList<>();",
+			"\tprivate Option<Responder> nextResponder = Option.empty();",
+			"\t",
+			"\tpublic $1ViewModel($1Model model) {",
+			"\t\tthis.model = model;",
+			"\t}",
+			"\t",
+			"\t@Override",
+			"\tpublic void setNextResponder(Option<Responder> responder) {",
+			"\t\tnextResponder = responder;",
+			"\t}",
+			"\t",
+			"\t@Override",
+			"\tpublic void fire() {",
+			"\t\tchangeListeners.fire(this);",
+			"\t}",
+			"\t",
+			"\t$0",
+			"}"
+		]
+	},
 	"Lazy Initialization": {
 		"scope": "java",
 		"prefix": "lazyinit",

@@ -7,7 +7,7 @@ import fwcd.timetable.model.utils.Contained;
 import fwcd.timetable.view.utils.FxNavigableView;
 import fwcd.timetable.view.utils.calendar.CalendarEntryListView;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import javafx.scene.Node;
 
@@ -15,7 +15,7 @@ public class CalendarListView implements FxNavigableView {
 	private final Node node;
 	private final CalendarEntryListView entries;
 	
-	public CalendarListView(TimeTableAppContext context, CalendarsViewModel calendars) {
+	public CalendarListView(TimeTableAppContext context, CalendarCrateViewModel calendars) {
 		entries = new CalendarEntryListView(context.getLocalizer(), context.getFormatters());
 		node = entries.getNode();
 		
@@ -23,7 +23,7 @@ public class CalendarListView implements FxNavigableView {
 		updateEntries(calendars);
 	}
 	
-	private void updateEntries(CalendarsViewModel calendars) {
+	private void updateEntries(CalendarCrateViewModel calendars) {
 		entries.getNode().getItems().setAll(calendars.getSelectedCalendars()
 			.stream()
 			.flatMap(cal -> cal.getAppointments().stream()

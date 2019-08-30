@@ -25,7 +25,7 @@ public class AppointmentDetailsView implements FxView {
 	private final VBox node;
 	private Runnable onDelete = () -> {};
 	
-	public AppointmentDetailsView(Collection<? extends CalendarEntryModel> parent, Localizer localizer, TemporalFormatters formatters, AppointmentModel model) {
+	public AppointmentDetailsView(Collection<? extends CalendarEntryModel> parent, Localizer localizer, TemporalFormatters formatters, AppointmentViewModel viewModel) {
 		TextField title = new TextField();
 		FxUtils.bindBidirectionally(model.getName(), title.textProperty());
 		localizer.localized("title").listenAndFire(title::setPromptText);

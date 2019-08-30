@@ -34,4 +34,9 @@ public class DailyRecurrence implements Recurrence {
 				: language.localize("eachxdays", daysBetweenRepeats))
 			+ end.map(it -> " " + language.localize("untilx", dateFormatter.format(it))).orElse("");
 	}
+	
+	@Override
+	public Option<LocalDate> getEnd() {
+		return end;
+	}
 }

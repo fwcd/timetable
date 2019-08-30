@@ -4,7 +4,7 @@ import fwcd.timetable.model.calendar.CalendarModel;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
 import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.FxView;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,7 +16,7 @@ import javafx.scene.layout.HBox;
 public class TasksView implements FxView {
 	private final BorderPane node;
 	
-	public TasksView(TimeTableAppContext context, CalendarsViewModel viewModel) {
+	public TasksView(TimeTableAppContext context, CalendarCrateViewModel viewModel) {
 		node = new BorderPane();
 		
 		ComboBox<CalendarModel> comboBox = FxUtils.comboBoxOfObservable(viewModel.getModel().getCalendars());

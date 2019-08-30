@@ -11,7 +11,7 @@ import fwcd.timetable.view.calendar.tableview.CalendarTableView;
 import fwcd.timetable.view.calendar.weekview.WeekView;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.utils.NavigableTabPane;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
@@ -26,7 +26,7 @@ public class CalendarsView implements FxView {
 	private final CalendarListView listView;
 	private final CalendarTableView tableView;
 	
-	public CalendarsView(TimeTableAppContext context, CalendarsViewModel viewModel) {
+	public CalendarsView(TimeTableAppContext context, CalendarCrateViewModel viewModel) {
 		weekView = new WeekView(context, viewModel);
 		monthView = new MonthView(context, viewModel);
 		listView = new CalendarListView(context, viewModel);

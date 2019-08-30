@@ -7,7 +7,7 @@ import fwcd.timetable.model.calendar.CalendarModel;
 import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.model.utils.SubscriptionStack;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
@@ -25,7 +25,7 @@ import javafx.scene.text.TextAlignment;
 
 public class CalendarManagerListCell extends ListCell<CalendarModel> {
 	private static final int ICON_RADIUS = 5;
-	private final CalendarsViewModel viewModel;
+	private final CalendarCrateViewModel viewModel;
 	
 	private final StackPane checkBoxNode;
 	private final StackPane iconNode;
@@ -36,7 +36,7 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 	
 	private final SubscriptionStack itemSubscriptions = new SubscriptionStack();
 	
-	public CalendarManagerListCell(TimeTableAppContext context, CalendarsViewModel viewModel) {
+	public CalendarManagerListCell(TimeTableAppContext context, CalendarCrateViewModel viewModel) {
 		this.viewModel = viewModel;
 		
 		label = new Label();

@@ -13,7 +13,7 @@ import fwcd.timetable.model.calendar.CalendarConstants;
 import fwcd.timetable.view.utils.FxHeaderedView;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -32,9 +32,9 @@ public class WeekContentView implements FxView, FxHeaderedView {
 	private final Observable<LocalDate> weekStart;
 	
 	private final WeekDayTimeLayouter timeLayouter;
-	private final CalendarsViewModel calendars;
+	private final CalendarCrateViewModel calendars;
 	
-	public WeekContentView(WeekDayTimeLayouter timeLayouter, TimeTableAppContext context, CalendarsViewModel calendars) {
+	public WeekContentView(WeekDayTimeLayouter timeLayouter, TimeTableAppContext context, CalendarCrateViewModel calendars) {
 		this.timeLayouter = timeLayouter;
 		this.calendars = calendars;
 		

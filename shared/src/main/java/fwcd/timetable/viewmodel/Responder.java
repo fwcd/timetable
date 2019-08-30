@@ -11,7 +11,19 @@ import fwcd.fructose.Option;
  */
 public interface Responder {
 	/**
-	 * Fetches the next responder in the chain.
+	 * Registers the provided responder as the
+	 * next responder. Note that the implementor
+	 * may still decide to "swallow" an occurring
+	 * event.
+	 * 
+	 * @param responder - The responder to be registered
 	 */
-	Option<Responder> getNextResponder();
+	void setNextResponder(Option<Responder> responder);
+	
+	/**
+	 * Notifies the responder that some event
+	 * occurred. May or may not follow in a
+	 * call to the next responder in the chain.
+	 */
+	void fire();
 }

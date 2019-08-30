@@ -1,10 +1,10 @@
 package fwcd.timetable.viewmodel;
 
 import fwcd.timetable.model.calendar.CalendarCrateModel;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 public class TimeTableAppViewModel {
-	private final CalendarsViewModel calendars = new CalendarsViewModel(new CalendarCrateModel());
+	private final CalendarCrateViewModel calendars = new CalendarCrateViewModel(new CalendarCrateModel());
 	
-	public CalendarsViewModel getCalendars() { return calendars; }
+	public CalendarCrateViewModel getCalendars() { return calendars; }
 }

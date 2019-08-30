@@ -59,4 +59,9 @@ public class WeeklyRecurrence implements Recurrence {
 		}
 		return language.localize(key);
 	}
+	
+	@Override
+	public Option<LocalDate> getEnd() {
+		return end;
+	}
 }

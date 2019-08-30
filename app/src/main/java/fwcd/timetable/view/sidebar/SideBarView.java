@@ -12,7 +12,7 @@ import fwcd.timetable.view.sidebar.calendar.CalendarsSideView;
 import fwcd.timetable.view.sidebar.task.TasksView;
 import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
@@ -22,7 +22,7 @@ public class SideBarView implements FxView {
 	private final TabPane node;
 	private final Map<String, Tab> pluginTabs = new HashMap<>();
 	
-	public SideBarView(TimeTableAppContext context, CalendarsViewModel viewModel) {
+	public SideBarView(TimeTableAppContext context, CalendarCrateViewModel viewModel) {
 		node = new TabPane(
 			FxUtils.tabOf(context.localized("calendars"), new CalendarsSideView(context, viewModel)),
 			FxUtils.tabOf(context.localized("tasks"), new TasksView(context, viewModel))

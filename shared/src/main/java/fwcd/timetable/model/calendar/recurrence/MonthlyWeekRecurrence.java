@@ -49,4 +49,9 @@ public class MonthlyWeekRecurrence implements Recurrence {
 			+ " " + language.localize(dayOfWeek.name().toLowerCase())
 			+ end.map(it -> " " + language.localize("untilx", dateFormatter.format(it))).orElse("");
 	}
+	
+	@Override
+	public Option<LocalDate> getEnd() {
+		return end;
+	}
 }

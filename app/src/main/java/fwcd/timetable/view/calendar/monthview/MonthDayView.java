@@ -11,7 +11,7 @@ import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.model.utils.SubscriptionStack;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import org.controlsfx.control.PopOver;
 
@@ -30,12 +30,12 @@ public class MonthDayView implements FxView, AutoCloseable {
 	private final VBox content;
 	
 	private final LocalDate date;
-	private final CalendarsViewModel calendars;
+	private final CalendarCrateViewModel calendars;
 	
 	private final TimeTableAppContext context;
 	private final SubscriptionStack subscriptions = new SubscriptionStack();
 	
-	public MonthDayView(TimeTableAppContext context, CalendarsViewModel calendars, LocalDate date) {
+	public MonthDayView(TimeTableAppContext context, CalendarCrateViewModel calendars, LocalDate date) {
 		this.calendars = calendars;
 		this.date = date;
 		this.context = context;
@@ -70,7 +70,7 @@ public class MonthDayView implements FxView, AutoCloseable {
 	}
 
 	private Label appointmentLabelOf(Calendarized<AppointmentModel> appWithCal) {
-		Label label = new Label(appWithCal.getEntry().getName().get());
+		Label label = new Label(appWithCal.getEntry().getName());
 		label.setOnMouseClicked(e -> {
 			AppointmentDetailsView detailsView = new AppointmentDetailsView(appWithCal.getCalendar().getAppointments(), context.getLocalizer(), context.getFormatters(), appWithCal.getEntry());
 			PopOver popOver = FxUtils.newPopOver(detailsView);

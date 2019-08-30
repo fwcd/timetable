@@ -8,7 +8,7 @@ import fwcd.fructose.Option;
 import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.CalendarsViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -21,7 +21,7 @@ public class WeekDayHeaderView implements FxView {
 	private final int dayOffset;
 	private final Observable<Option<LocalDate>> date = new Observable<>(Option.empty());
 	
-	public WeekDayHeaderView(TimeTableAppContext context, CalendarsViewModel calendars, int dayOffset) {
+	public WeekDayHeaderView(TimeTableAppContext context, CalendarCrateViewModel calendars, int dayOffset) {
 		this.dayOffset = dayOffset;
 		DayOfWeek weekDay = DayOfWeek.of(dayOffset + 1);
 		

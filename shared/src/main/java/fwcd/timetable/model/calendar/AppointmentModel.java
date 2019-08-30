@@ -21,10 +21,11 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	private String description;
 	private boolean ignoreDate;
 	private boolean ignoreTime;
+	private String rawRecurrence;
 	private Option<Recurrence> recurrence;
 	
 	public AppointmentModel() {
-		this("", Option.empty(), LocalDateTime.now(), LocalDateTime.now(), "", false, false, Option.empty());
+		this("", Option.empty(), LocalDateTime.now(), LocalDateTime.now(), "", false, false, "", Option.empty());
 	}
 	
 	private AppointmentModel(
@@ -35,6 +36,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		String description,
 		boolean ignoreDate,
 		boolean ignoreTime,
+		String rawRecurrence,
 		Option<Recurrence> recurrence
 	) {
 		this.name = name;
@@ -43,6 +45,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		this.description = description;
 		this.ignoreDate = ignoreDate;
 		this.ignoreTime = ignoreTime;
+		this.rawRecurrence = rawRecurrence;
 		this.recurrence = recurrence;
 	}
 	
@@ -99,6 +102,20 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	
 	public boolean ignoresTime() { return ignoreTime; }
 	
+	/** Constructs a builder from this appointment to create a derived appoinment. */
+	public Builder with() {
+		return new Builder(name)
+			.location(location)
+			.start(getStart())
+			.end(getEnd())
+			.excludes(recurrence.map(Recurrence::getExcludes).orElseGet(Collections::emptySet))
+			.description(description)
+			.ignoreDate(ignoreDate)
+			.ignoreTime(ignoreTime)
+			.recurrence(rawRecurrence)
+			.recurrenceEnd(recurrence.flatMap(Recurrence::getEnd));
+	}
+	
 	public LocalTimeInterval getTimeIntervalOn(LocalDate date) {
 		if (occursOn(date)) {
 			boolean repeats = repeatsOn(date).orElse(false);
@@ -128,7 +145,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		private Option<Location> location = Option.empty();
 		private LocalDateTime start = LocalDateTime.now();
 		private LocalDateTime end = LocalDateTime.now();
-		private Set<LocalDate> excludes = Collections.emptySet();
+		private Set<? extends LocalDate> excludes = Collections.emptySet();
 		private String description = "";
 		private boolean ignoreDate = false;
 		private boolean ignoreTime = false;
@@ -142,7 +159,11 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		}
 		
 		public Builder location(Location location) {
-			this.location = Option.of(location);
+			return location(Option.of(location));
+		}
+		
+		public Builder location(Option<Location> location) {
+			this.location = location;
 			return this;
 		}
 		
@@ -196,13 +217,17 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 			return this;
 		}
 
-		public Builder excludes(Set<LocalDate> excludes) {
+		public Builder excludes(Set<? extends LocalDate> excludes) {
 			this.excludes = excludes;
 			return this;
 		}
 		
 		public Builder recurrenceEnd(LocalDate recurrenceEnd) {
-			this.recurrenceEnd = Option.of(recurrenceEnd);
+			return recurrenceEnd(Option.of(recurrenceEnd));
+		}
+		
+		public Builder recurrenceEnd(Option<LocalDate> recurrenceEnd) {
+			this.recurrenceEnd = recurrenceEnd;
 			return this;
 		}
 		
