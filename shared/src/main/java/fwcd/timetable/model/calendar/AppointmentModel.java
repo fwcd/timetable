@@ -82,6 +82,8 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	
 	public Option<Recurrence> getRecurrence() { return recurrence; }
 	
+	public String getRawRecurrence() { return rawRecurrence; }
+	
 	@Override
 	public String getDescription() { return description; }
 	

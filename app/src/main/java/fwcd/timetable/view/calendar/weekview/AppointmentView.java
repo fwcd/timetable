@@ -10,7 +10,6 @@ import fwcd.fructose.time.LocalDateTimeInterval;
 import fwcd.timetable.model.calendar.AppointmentModel;
 import fwcd.timetable.model.calendar.CalendarModel;
 import fwcd.timetable.model.calendar.Location;
-import fwcd.timetable.model.utils.SubscriptionStack;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import fwcd.timetable.view.utils.FxUtils;
@@ -61,7 +60,7 @@ public class AppointmentView implements FxView, AutoCloseable {
 		timeLabel.setTextFill(fgColor);
 		node.getChildren().add(timeLabel);
 		
-		AppointmentDetailsView detailsView = new AppointmentDetailsView(calendar.getAppointments(), context.getLocalizer(), context.getFormatters(), viewModel);
+		AppointmentDetailsView detailsView = new AppointmentDetailsView(context.getLocalizer(), context.getFormatters(), calendar, viewModel);
 		PopOver popOver = FxUtils.newPopOver(detailsView);
 		detailsView.setOnDelete(popOver::hide);
 		node.setOnMouseClicked(e -> {
@@ -69,7 +68,7 @@ public class AppointmentView implements FxView, AutoCloseable {
 			e.consume();
 		});
 		
-		// Setup change listeners
+		// Setup view model listeners
 		
 		viewModelListener = vm -> {
 			AppointmentModel model = vm.getModel();
