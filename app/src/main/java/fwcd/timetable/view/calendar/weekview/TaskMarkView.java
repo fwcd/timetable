@@ -1,9 +1,10 @@
 package fwcd.timetable.view.calendar.weekview;
 
+import java.util.function.Consumer;
+
 import fwcd.timetable.model.calendar.task.TaskModel;
 import fwcd.timetable.view.FxView;
-import fwcd.timetable.model.utils.SubscriptionStack;
-
+import fwcd.timetable.viewmodel.calendar.task.TaskViewModel;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
@@ -14,9 +15,9 @@ import javafx.scene.text.Text;
 public class TaskMarkView implements FxView, AutoCloseable {
 	private final StackPane node;
 	
-	private final SubscriptionStack subscriptions = new SubscriptionStack();
+	private final Consumer<TaskViewModel> viewModelListener;
 	
-	public TaskMarkView(TaskModel model) {
+	public TaskMarkView(TaskViewModel viewModel) {
 		node = new StackPane();
 		
 		ObservableList<Node> childs = node.getChildren();
@@ -35,8 +36,16 @@ public class TaskMarkView implements FxView, AutoCloseable {
 		text.setManaged(false);
 		text.setLayoutX(0);
 		text.setLayoutY(0);
-		subscriptions.push(model.getName().subscribeAndFire(text::setText));
 		childs.add(text);
+		
+		// Setup view model listener
+		
+		viewModelListener = vm -> {
+			TaskModel model = vm.getModel();
+			text.setText(model.getName());
+		};
+		viewModelListener.accept(viewModel);
+		viewModel.getChangeListeners().addWeakListener(viewModelListener);
 	}
 	
 	@Override
@@ -44,6 +53,6 @@ public class TaskMarkView implements FxView, AutoCloseable {
 
 	@Override
 	public void close() {
-		subscriptions.unsubscribeAll();
+		// Listeners are automatically cleaned up since they are weak
 	}
 }
