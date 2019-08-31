@@ -1,8 +1,9 @@
 package fwcd.timetable.viewmodel.calendar;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import fwcd.fructose.EventListenerList;
 import fwcd.fructose.Option;
@@ -12,7 +13,7 @@ import fwcd.timetable.viewmodel.Responder;
 
 public class CalendarCrateViewModel implements Responder {
 	private final CalendarCrateModel model;
-	private final Set<CalendarModel> selectedCalendars = new LinkedHashSet<>();
+	private final Map<CalendarModel, CalendarViewModel> selectedCalendars = new HashMap<>();
 	
 	private final EventListenerList<CalendarCrateViewModel> changeListeners = new EventListenerList<>();
 	private Option<Responder> nextResponder = Option.empty();
@@ -34,11 +35,11 @@ public class CalendarCrateViewModel implements Responder {
 	
 	public void addAndSelect(CalendarModel calendar) {
 		model.getCalendars().add(calendar);
-		selectedCalendars.add(calendar);
+		selectedCalendars.put(calendar, new CalendarViewModel(calendar));
 		fire();
 	}
 	
 	public EventListenerList<CalendarCrateViewModel> getChangeListeners() { return changeListeners; }
 	
-	public Set<CalendarModel> getSelectedCalendars() { return Collections.unmodifiableSet(selectedCalendars); }
+	public Collection<CalendarViewModel> getSelectedCalendars() { return Collections.unmodifiableCollection(selectedCalendars.values()); }
 }

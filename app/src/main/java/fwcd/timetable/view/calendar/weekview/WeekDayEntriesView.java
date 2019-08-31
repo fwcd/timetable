@@ -2,21 +2,22 @@ package fwcd.timetable.view.calendar.weekview;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import fwcd.fructose.Option;
 import fwcd.fructose.structs.ArrayBiList;
 import fwcd.fructose.structs.BiList;
 import fwcd.fructose.time.LocalTimeInterval;
-import fwcd.timetable.model.calendar.AppointmentModel;
-import fwcd.timetable.model.calendar.CalendarModel;
 import fwcd.timetable.model.calendar.task.TaskModel;
 import fwcd.timetable.model.utils.CloseUtils;
-import fwcd.timetable.view.calendar.utils.Calendarized;
 import fwcd.timetable.view.FxView;
+import fwcd.timetable.view.calendar.utils.Calendarized;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
+import fwcd.timetable.viewmodel.calendar.AppointmentViewModel;
 import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
-
+import fwcd.timetable.viewmodel.calendar.CalendarViewModel;
+import fwcd.timetable.viewmodel.calendar.task.TaskViewModel;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -42,7 +43,7 @@ public class WeekDayEntriesView implements FxView {
 		node.setMinSize(0, 0);
 		node.setPickOnBounds(false);
 		
-		calendars.getStructuralChangeListeners().add(it -> updateView());
+		calendars.getChangeListeners().add(it -> updateView());
 	}
 	
 	public void setDate(LocalDate date) {
@@ -53,32 +54,34 @@ public class WeekDayEntriesView implements FxView {
 	private void updateView() {
 		clear();
 		currentDate.ifPresent(date -> {
+			Collection<CalendarViewModel> selectedCalendars = calendars.getSelectedCalendars();
+
 			// Add appointments
-			calendars.getSelectedCalendars().stream()
-				.flatMap(cal -> cal.getAppointments().stream()
+			selectedCalendars.stream()
+				.flatMap(cal -> cal.getModel().getAppointments().stream()
 					.filter(app -> app.occursOn(date))
-					.map(app -> new Calendarized<>(app, cal)))
+					.map(app -> new Calendarized<>(new AppointmentViewModel(app), cal)))
 				.forEach(it -> addAppointment(it, date));
 			
 			// Add tasks
-			calendars.getSelectedCalendars().stream()
-				.flatMap(cal -> cal.getTaskCrate().getLists().stream()
+			selectedCalendars.stream()
+				.flatMap(cal -> cal.getModel().getTaskCrate().getLists().stream()
 					.flatMap(task -> task.getTasks().stream())
 					.filter(task -> task.occursOn(date))
-					.map(it -> new Calendarized<>(it, cal)))
+					.map(it -> new Calendarized<>(new TaskViewModel(it), cal)))
 				.forEach(it -> addTask(it, date));
 		});
 	}
 
-	private void addAppointment(Calendarized<AppointmentModel> appWithCal, LocalDate viewedDate) {
-		AppointmentModel appointmentModel = appWithCal.getEntry();
-		CalendarModel calendar = appWithCal.getCalendar();
-		AppointmentView appointmentView = new AppointmentView(layouter, context, calendar, appointmentModel);
+	private void addAppointment(Calendarized<AppointmentViewModel> appWithCal, LocalDate viewedDate) {
+		AppointmentViewModel appointmentVM = appWithCal.getEntry();
+		CalendarViewModel calendar = appWithCal.getCalendar();
+		AppointmentView appointmentView = new AppointmentView(layouter, context, calendar, appointmentVM);
 		Pane child = appointmentView.getNode();
 		
 		childResources.add(appointmentView);
 		
-		LocalTimeInterval eventInterval = appointmentModel.getTimeIntervalOn(viewedDate);
+		LocalTimeInterval eventInterval = appointmentVM.getModel().getTimeIntervalOn(viewedDate);
 		AnchorPane.setTopAnchor(child, layouter.toPixelY(eventInterval.getStart()));
 		child.maxWidthProperty().bind(node.widthProperty());
 		child.setPrefHeight(layouter.toPixelHeight(eventInterval.getDuration()));
@@ -113,14 +116,14 @@ public class WeekDayEntriesView implements FxView {
 		overlappingBox.getChildren().add(anchor);
 	}
 	
-	private void addTask(Calendarized<TaskModel> taskWithCal, LocalDate viewedDate) {
-		TaskModel taskModel = taskWithCal.getEntry();
-		TaskMarkView taskView = new TaskMarkView(taskModel);
+	private void addTask(Calendarized<TaskViewModel> taskWithCal, LocalDate viewedDate) {
+		TaskViewModel taskVM = taskWithCal.getEntry();
+		TaskMarkView taskView = new TaskMarkView(taskVM);
 		Pane child = taskView.getNode();
 		
 		childResources.add(taskView);
 		
-		AnchorPane.setTopAnchor(child, layouter.toPixelY(taskModel.getDateTime().get()
+		AnchorPane.setTopAnchor(child, layouter.toPixelY(taskVM.getModel().getDateTime()
 			.unwrap("Tried to add a task without a datetime to a WeekDayEntriesView")
 			.toLocalTime()));
 		AnchorPane.setLeftAnchor(child, 0D);

@@ -1,18 +1,17 @@
 package fwcd.timetable.view.calendar.utils;
 
-import fwcd.timetable.model.calendar.CalendarEntryModel;
-import fwcd.timetable.model.calendar.CalendarModel;
+import fwcd.timetable.viewmodel.calendar.CalendarViewModel;
 
-public class Calendarized<E extends CalendarEntryModel> {
+public class Calendarized<E> {
 	private final E entry;
-	private final CalendarModel calendar;
+	private final CalendarViewModel calendar;
 	
-	public Calendarized(E entry, CalendarModel calendar) {
+	public Calendarized(E entry, CalendarViewModel calendar) {
 		this.entry = entry;
 		this.calendar = calendar;
 	}
 	
 	public E getEntry() { return entry; }
 	
-	public CalendarModel getCalendar() { return calendar; }
+	public CalendarViewModel getCalendar() { return calendar; }
 }
