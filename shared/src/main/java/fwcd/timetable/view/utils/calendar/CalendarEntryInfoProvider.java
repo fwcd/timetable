@@ -4,20 +4,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import fwcd.fructose.Observable;
-import fwcd.fructose.ReadOnlyObservable;
 import fwcd.timetable.model.calendar.AppointmentModel;
+import fwcd.timetable.model.calendar.CalendarEntryModel;
 import fwcd.timetable.model.calendar.CalendarEntryVisitor;
 import fwcd.timetable.model.calendar.Location;
-import fwcd.timetable.model.utils.SubscriptionStack;
 import fwcd.timetable.viewmodel.Localizer;
 import fwcd.timetable.viewmodel.TemporalFormatters;
 
-public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
+public class CalendarEntryInfoProvider implements CalendarEntryVisitor<String> {
 	private final Localizer localizer;
 	private final TemporalFormatters formatters;
-	private final Observable<String> info = new Observable<>("");
-	private final SubscriptionStack subscriptions = new SubscriptionStack();
 	
 	public CalendarEntryInfoProvider(Localizer localizer, TemporalFormatters formatters) {
 		this.localizer = localizer;
@@ -25,28 +21,21 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 	}
 	
 	@Override
-	public void visitAppointment(AppointmentModel appointment) {
-		Runnable updater = () -> info.set(getAppointmentInfo(appointment));
-		
-		subscriptions.push(appointment.getDateTimeInterval().subscribe(v -> updater.run()));
-		subscriptions.push(appointment.getLocation().subscribe(v -> updater.run()));
-		subscriptions.push(appointment.ignoresDate().subscribe(v -> updater.run()));
-		subscriptions.push(appointment.ignoresTime().subscribe(v -> updater.run()));
-		subscriptions.push(appointment.getRecurrence().getParsed().subscribe(v -> updater.run()));
-		
-		updater.run();
+	public String visitCalendarEntry(CalendarEntryModel entry) {
+		return "";
 	}
 	
-	private String getAppointmentInfo(AppointmentModel appointment) {
+	@Override
+	public String visitAppointment(AppointmentModel appointment) {
 		StringBuilder str = new StringBuilder();
-		boolean ignoreDate = appointment.ignoresDate().get();
-		boolean ignoreTime = appointment.ignoresTime().get();
+		boolean ignoreDate = appointment.ignoresDate();
+		boolean ignoreTime = appointment.ignoresTime();
 		
 		DateTimeFormatter dateFormatter = formatters.getDateFormatter();
 		DateTimeFormatter timeFormatter = formatters.getTimeFormatter();
 		DateTimeFormatter dateTimeFormatter = formatters.getDateTimeFormatter();
 		
-		appointment.getRecurrence().getParsed().get()
+		appointment.getRecurrence()
 			.map(it -> it.describeWith(localizer.getLanguage(), dateFormatter))
 			.ifPresent(recurrence -> str.append(recurrence).append(" - "));
 		
@@ -80,15 +69,11 @@ public class CalendarEntryInfoProvider implements CalendarEntryVisitor {
 				.append(timeFormatter.format(appointment.getEndTime()));
 		}
 		
-		appointment.getLocation().get()
+		appointment.getLocation()
 			.map(Location::getLabel)
 			.filter(it -> !it.isEmpty())
 			.ifPresent(location -> str.append(" - ").append(location));
 		
 		return str.toString();
 	}
-	
-	public ReadOnlyObservable<String> getInfo() { return info; }
-	
-	public SubscriptionStack getSubscriptions() { return subscriptions; }
 }

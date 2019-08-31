@@ -28,8 +28,20 @@ public class AppointmentViewModel implements Responder {
 	
 	public EventListenerList<AppointmentViewModel> getChangeListeners() { return changeListeners; }
 	
+	/**
+	 * Returns the underlying (immutable) model.
+	 */
 	public AppointmentModel getModel() { return model; }
 	
+	/**
+	 * Swaps the underlying model against a new one.
+	 * 
+	 * @param silent - Determines whether listeners should be notified.
+	 *                 Should only be false if the view calls this method
+	 *                 and would thus cause an infinite recursion.
+	 *                 TODO: Provide listener-level support for caller ids
+	 *                       and prevent feedback loops
+	 */
 	public void setModel(AppointmentModel model, Silent silent) {
 		this.model = model;
 		if (silent.isNot()) {

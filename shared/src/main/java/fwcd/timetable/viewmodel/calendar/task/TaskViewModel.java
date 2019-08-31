@@ -25,6 +25,9 @@ public class TaskViewModel implements Responder {
 		changeListeners.fire(this);
 	}
 	
+	/**
+	 * Returns the underlying (immutable) model.
+	 */
 	public TaskModel getModel() { return model; }
 	
 	public EventListenerList<TaskViewModel> getChangeListeners() { return changeListeners; }

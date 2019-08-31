@@ -13,7 +13,7 @@ import fwcd.timetable.view.sidebar.task.TaskDetailsView;
 import fwcd.timetable.viewmodel.Localizer;
 import fwcd.timetable.viewmodel.TemporalFormatters;
 
-public class CalendarEntryEditProvider implements CalendarEntryVisitor {
+public class CalendarEntryEditProvider implements CalendarEntryVisitor<Option<FxView>> {
 	private final Localizer localizer;
 	private final TemporalFormatters formatters;
 	private final Collection<? extends CalendarEntryModel> parent;
@@ -27,17 +27,22 @@ public class CalendarEntryEditProvider implements CalendarEntryVisitor {
 	}
 	
 	@Override
-	public void visitAppointment(AppointmentModel appointment) {
-		AppointmentDetailsView detailsView = new AppointmentDetailsView(parent, localizer, formatters, appointment);
-		detailsView.setOnDelete(() -> onDelete.run());
-		view = Option.of(detailsView);
+	public Option<FxView> visitCalendarEntry(CalendarEntryModel entry) {
+		return Option.empty();
 	}
 	
 	@Override
-	public void visitTask(TaskModel task) {
+	public Option<FxView> visitAppointment(AppointmentModel appointment) {
+		AppointmentDetailsView detailsView = new AppointmentDetailsView(parent, localizer, formatters, appointment);
+		detailsView.setOnDelete(() -> onDelete.run());
+		return Option.of(detailsView);
+	}
+	
+	@Override
+	public Option<FxView> visitTask(TaskModel task) {
 		TaskDetailsView detailsView = new TaskDetailsView(parent, localizer, formatters, task);
 		detailsView.setOnDelete(() -> onDelete.run());
-		view = Option.of(detailsView);
+		return Option.of(detailsView);
 	}
 	
 	public void setOnDelete(Runnable onDelete) { this.onDelete = onDelete; }

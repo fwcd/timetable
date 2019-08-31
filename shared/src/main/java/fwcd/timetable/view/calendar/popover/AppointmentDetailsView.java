@@ -45,46 +45,27 @@ public class AppointmentDetailsView implements FxView {
 		
 		DateTimePicker start = new DateTimePicker();
 		start.setFormat(formatters.getRawDateTimeFormat());
-			start.dateTimeValueProperty(),
-			interval -> interval.getStart(),
-			dateTime -> new LocalDateTimeInterval(dateTime, model.getEnd())
-		);
 		properties.addRow(rowIndex++, localizedPropertyLabel("appointmentstart", localizer), start);
 		
 		DateTimePicker end = new DateTimePicker();
 		end.setFormat(formatters.getRawDateTimeFormat());
-		FxUtils.bindBidirectionally(
-			model.getDateTimeInterval(),
-			end.dateTimeValueProperty(),
-			interval -> interval.getEnd(),
-			dateTime -> new LocalDateTimeInterval(model.getStart(), dateTime)
-		);
 		properties.addRow(rowIndex++, localizedPropertyLabel("appointmentend", localizer), end);
 		
 		TextField recurrence = new TextField();
-		FxUtils.bindBidirectionally(model.getRecurrence().getRaw(), recurrence.textProperty());
 		properties.addRow(rowIndex++, localizedPropertyLabel("recurrence", localizer), recurrence);
 		
 		DatePicker recurrenceEnd = new DatePicker();
 		FxUtils.setDateFormat(recurrenceEnd, formatters.getRawDateFormat());
-		FxUtils.bindBidirectionally(
-			model.getRecurrenceEnd(),
-			recurrenceEnd.valueProperty(),
-			optEnd -> optEnd.orElseNull(),
-			newEnd -> Option.ofNullable(newEnd)
-		);
 		properties.addRow(rowIndex++, localizedPropertyLabel("recurrenceend", localizer), recurrenceEnd);
 		
 		CheckBox ignoreDate = new CheckBox();
-		FxUtils.bindBidirectionally(model.ignoresDate(), ignoreDate.selectedProperty());
 		properties.addRow(rowIndex++, localizedPropertyLabel("ignoredate", localizer), ignoreDate);
 		
 		CheckBox ignoreTime = new CheckBox();
-		FxUtils.bindBidirectionally(model.ignoresTime(), ignoreTime.selectedProperty());
 		properties.addRow(rowIndex++, localizedPropertyLabel("ignoretime", localizer), ignoreTime);
 		
 		Button deleteButton = FxUtils.buttonOf(localizer.localized("deleteappointment"), () -> {
-			parent.remove(model);
+			calendar.remove(viewModel.getModel());
 			onDelete.run();
 		});
 		

@@ -36,7 +36,7 @@ public class RecurrenceParser implements Serializable {
 	
 	public RecurrenceParser() {}
 	
-	public Option<Recurrence> parse(String str, LocalDate start, Option<LocalDate> end, Set<LocalDate> excludes) {
+	public Option<Recurrence> parse(String str, LocalDate start, Option<LocalDate> end, Set<? extends LocalDate> excludes) {
 		Matcher matcher = RECURRENCE_PATTERN.matcher(str);
 		Option<Recurrence> result = Option.empty();
 		

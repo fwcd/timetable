@@ -234,7 +234,17 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		}
 		
 		public AppointmentModel build() {
-			return new AppointmentModel(name, location, start, end, description, ignoreDate, ignoreTime, recurrenceParser.parse(rawRecurrence, start.toLocalDate(), recurrenceEnd, excludes));
+			return new AppointmentModel(
+				name,
+				location,
+				start,
+				end,
+				description,
+				ignoreDate,
+				ignoreTime,
+				rawRecurrence,
+				recurrenceParser.parse(rawRecurrence, start.toLocalDate(), recurrenceEnd, excludes)
+			);
 		}
 	}
 }

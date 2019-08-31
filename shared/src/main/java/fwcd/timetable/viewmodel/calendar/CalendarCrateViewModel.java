@@ -39,6 +39,17 @@ public class CalendarCrateViewModel implements Responder {
 		fire();
 	}
 	
+	/**
+	 * Returns the underlying model. It is NOT intended to be mutated
+	 * (use viewmodels for this purpose).
+	 */
+	public CalendarCrateModel getModel() { return model; }
+	
+	public void remove(CalendarModel calendar) {
+		model.getCalendars().remove(calendar);
+		fire();
+	}
+	
 	public EventListenerList<CalendarCrateViewModel> getChangeListeners() { return changeListeners; }
 	
 	public Collection<CalendarViewModel> getSelectedCalendars() { return Collections.unmodifiableCollection(selectedCalendars.values()); }
