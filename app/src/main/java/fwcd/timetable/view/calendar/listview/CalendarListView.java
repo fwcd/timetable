@@ -1,6 +1,7 @@
 package fwcd.timetable.view.calendar.listview;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import fwcd.timetable.model.calendar.CalendarEntryModel;
@@ -24,7 +25,9 @@ public class CalendarListView implements FxNavigableView {
 	}
 	
 	private void updateEntries(Collection<CalendarEntryModel> entryModels, CalendarCrateViewModel crate) {
+		Set<Integer> selected = crate.getSelectedCalendarIds();
 		entries.getNode().getItems().setAll(entryModels.stream()
+			.filter(it -> selected.contains(it.getCalendarId()))
 			.flatMap(it -> it.accept(new AppointmentsOnly()).stream())
 			.sorted()
 			.collect(Collectors.toList())
