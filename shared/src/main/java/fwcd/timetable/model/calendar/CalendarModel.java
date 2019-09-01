@@ -13,8 +13,8 @@ import fwcd.fructose.draw.DrawColor;
  */
 public class CalendarModel implements Serializable {
 	private static final long serialVersionUID = 831554590083407654L;
-	private final String name;
-	private final DrawColor color;
+	private String name;
+	private DrawColor color;
 	
 	public CalendarModel() { this(""); }
 	
@@ -39,7 +39,5 @@ public class CalendarModel implements Serializable {
 	public CalendarModel withColor(DrawColor newColor) { return new CalendarModel(name, newColor); }
 	
 	@Override
-	public String toString() {
-		return "Calendar { name = " + name + ", color = " + color + " }";
-	}
+	public String toString() { return name; }
 }

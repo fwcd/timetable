@@ -140,9 +140,9 @@ public class CalendarManagerListCell extends ListCell<Identified<CalendarModel>>
 		checkBox.setSelected(viewModel.getSelectedCalendarIds().contains(calendarId));
 		checkBox.selectedProperty().addListener((obs, old, selected) -> {
 			if (selected) {
-				viewModel.select(calendarId);
+				viewModel.selectCalendar(calendarId);
 			} else {
-				viewModel.deselect(calendarId);
+				viewModel.deselectCalendar(calendarId);
 			}
 		});
 		checkBoxNode.getChildren().setAll(checkBox);

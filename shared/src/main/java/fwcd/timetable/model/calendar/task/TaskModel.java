@@ -23,7 +23,11 @@ public class TaskModel implements CalendarEntryModel, Serializable {
 	
 	/** Deserialization constructor. */
 	protected TaskModel() {
-		this("", 0, 0, "", Option.empty(), Option.empty(), Option.empty());
+		this("", 0, 0);
+	}
+	
+	public TaskModel(String name, int taskListId, int calendarId) {
+		this(name, taskListId, calendarId, "", Option.empty(), Option.empty(), Option.empty());
 	}
 	
 	public TaskModel(

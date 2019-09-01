@@ -4,35 +4,36 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import fwcd.timetable.model.calendar.CalendarEntryModel;
-import fwcd.timetable.model.calendar.task.TaskListModel;
-import fwcd.timetable.model.calendar.task.TaskModel;
+import fwcd.timetable.model.calendar.CalendarEntryVisitor.TasksOnly;
 import fwcd.timetable.model.utils.Contained;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.utils.calendar.CalendarEntryListView;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 
 public class TaskListView implements FxView {
-	private final ListView<Contained<CalendarEntryModel>> node;
-	private final TaskListModel model;
+	private final ListView<CalendarEntryModel> node;
+	private final int taskListId;
 	
-	public TaskListView(TimeTableAppContext context, TaskListModel model) {
-		this.model = model;
+	public TaskListView(TimeTableAppContext context, CalendarCrateViewModel crate, int taskListId) {
+		this.taskListId = taskListId;
 		node = new CalendarEntryListView(context.getLocalizer(), context.getFormatters()).getNode();
-		model.getTasks().listenAndFire(this::setVisibleTasks);
+		
+		// TODO: Update only when a task in this specific task list changes
+		updateVisibleTasks(crate.getEntries());
+		crate.getEntryListeners().add(this::updateVisibleTasks);
 	}
 	
-	private void setVisibleTasks(List<TaskModel> tasks) {
+	private void updateVisibleTasks(List<CalendarEntryModel> allEntries) {
 		node.getItems().setAll(
-			tasks.stream()
-				.map(it -> new Contained<CalendarEntryModel>(it, model.getTasks()))
+			allEntries.stream()
+				.flatMap(it -> it.accept(new TasksOnly()).stream())
+				.filter(it -> it.getTaskListId() == taskListId)
 				.collect(Collectors.toList())
 		);
 	}
-	
-	public TaskListModel getModel() { return model; }
 	
 	@Override
 	public Node getNode() { return node; }

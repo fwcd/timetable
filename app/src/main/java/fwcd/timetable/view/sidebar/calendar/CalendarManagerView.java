@@ -38,7 +38,7 @@ public class CalendarManagerView implements FxView {
 	}
 	
 	private void createCalendar() {
-		viewModel.select(viewModel.add(new CalendarModel("")));
+		viewModel.selectCalendar(viewModel.add(new CalendarModel("")));
 		calendarList.edit(calendarList.getItems().size() - 1);
 	}
 	

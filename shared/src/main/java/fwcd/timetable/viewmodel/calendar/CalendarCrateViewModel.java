@@ -31,14 +31,14 @@ public class CalendarCrateViewModel {
 
 	private final EventListenerList<Collection<Identified<CalendarModel>>> calendarListeners = new EventListenerList<>();
 	private final EventListenerList<Collection<Identified<TaskListModel>>> taskListListeners = new EventListenerList<>();
-	private final EventListenerList<Collection<CalendarEntryModel>> entryListeners = new EventListenerList<>();
+	private final EventListenerList<List<CalendarEntryModel>> entryListeners = new EventListenerList<>();
 	private final ListenerList changeListeners = new ListenerList();
 	
 	public EventListenerList<Collection<Identified<CalendarModel>>> getCalendarListeners() { return calendarListeners; }
 	
 	public EventListenerList<Collection<Identified<TaskListModel>>> getTaskListListeners() { return taskListListeners; }
 
-	public EventListenerList<Collection<CalendarEntryModel>> getEntryListeners() { return entryListeners; }
+	public EventListenerList<List<CalendarEntryModel>> getEntryListeners() { return entryListeners; }
 	
 	public ListenerList getChangeListeners() { return changeListeners; }
 	
@@ -86,16 +86,16 @@ public class CalendarCrateViewModel {
 		fireCalendarListeners();
 	}
 	
-	public void select(int calendarId) {
+	public void selectCalendar(int calendarId) {
 		selectedCalendarIds.add(calendarId);
 		fireCalendarListeners();
 	}
 	
-	public void deselect(int calendarId) {
+	public void deselectCalendar(int calendarId) {
 		selectedCalendarIds.remove(calendarId);
 		fireCalendarListeners();
 	}
-
+	
 	public int add(CalendarModel calendar) {
 		int id = crate.add(calendar);
 		fireCalendarListeners();
@@ -106,6 +106,16 @@ public class CalendarCrateViewModel {
 		int id = crate.add(taskList);
 		fireTaskListListeners();
 		return id;
+	}
+	
+	public void add(CalendarEntryModel entry) {
+		crate.add(entry);
+		fireEntryListeners();
+	}
+	
+	public void remove(CalendarEntryModel entry) {
+		crate.remove(entry);
+		fireEntryListeners();
 	}
 	
 	public void setCalendarById(int id, CalendarModel newCalendar) {

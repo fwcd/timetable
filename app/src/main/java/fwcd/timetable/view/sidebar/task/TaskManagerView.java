@@ -1,28 +1,28 @@
 package fwcd.timetable.view.sidebar.task;
 
-import fwcd.timetable.model.calendar.task.TaskCrateModel;
 import fwcd.timetable.model.calendar.task.TaskListModel;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.FxView;
+import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.utils.HideableView;
-
+import fwcd.timetable.viewmodel.TimeTableAppContext;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-public class TaskCrateView implements FxView {
+public class TaskManagerView implements FxView {
 	private final BorderPane node;
-	private final TaskCrateViewModel viewModel;
+	private final TaskManagerViewModel viewModel;
 	
-	public TaskCrateView(TimeTableAppContext context, TaskCrateModel model) {
-		if (model.size() == 0) {
-			model.getLists().add(new TaskListModel(context.localize("tasks")));
+	public TaskManagerView(TimeTableAppContext context, CalendarCrateViewModel crate, int calendarId) {
+		if (crate.getTaskLists().stream().noneMatch(it -> it.getValue().getCalendarId() == calendarId)) {
+			crate.add(new TaskListModel(context.localize("tasks"), calendarId));
+			// TODO: Select this task list already?
 		}
 		
 		node = new BorderPane();
-		viewModel = new TaskCrateViewModel(model);
+		viewModel = new TaskManagerViewModel(crate);
 		
 		NewTaskView newTaskView = new NewTaskView(context, viewModel);
 		HideableView hideableNewTaskView = new HideableView(newTaskView);

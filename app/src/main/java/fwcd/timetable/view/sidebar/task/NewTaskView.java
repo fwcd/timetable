@@ -3,12 +3,13 @@ package fwcd.timetable.view.sidebar.task;
 import fwcd.fructose.ListenerList;
 import fwcd.fructose.Observable;
 import fwcd.timetable.model.calendar.task.TaskModel;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.FxView;
-
+import fwcd.timetable.view.utils.FxUtils;
+import fwcd.timetable.viewmodel.TimeTableAppContext;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -19,17 +20,17 @@ public class NewTaskView implements FxView {
 	private final TextField nameTextField;
 	private final ListenerList addedTaskListeners = new ListenerList();
 	
-	private final TaskCrateViewModel crate;
+	private final TaskManagerViewModel viewModel;
 	private final Observable<String> editedTaskName;
 	
-	public NewTaskView(TimeTableAppContext context, TaskCrateViewModel crate) {
-		this.crate = crate;
+	public NewTaskView(TimeTableAppContext context, TaskManagerViewModel viewModel) {
+		this.viewModel = viewModel;
 		
 		editedTaskName = new Observable<>(newTaskName());
 		nameTextField = FxUtils.textFieldOf(editedTaskName);
 		node = new VBox(
-			new HBox(FxUtils.labelOf(context.localized("name"), ": "), nameTextField),
-			FxUtils.buttonOf(context.localized("addtaskbutton"), this::addTaskToList)
+			new HBox(new Label(context.localize("name") + ": "), nameTextField),
+			FxUtils.buttonOf(context.localize("addtaskbutton"), this::addTaskToList)
 		);
 		
 		nameTextField.setOnAction(e -> addTaskToList());
@@ -41,10 +42,12 @@ public class NewTaskView implements FxView {
 	}
 	
 	private void addTaskToList() {
-		crate.getSelectedList().get().ifPresent(list -> {
+		viewModel.getSelectedTaskListId().get().ifPresent(taskListId -> {
 			if (!editedTaskName.get().isEmpty()) {
-				list.getTasks().add(new TaskModel(editedTaskName.get()));
+				CalendarCrateViewModel crate = viewModel.getCrate();
+				int calendarId = crate.getTaskListById(taskListId).getCalendarId();
 				editedTaskName.set(newTaskName());
+				crate.add(new TaskModel(editedTaskName.get(), taskListId, calendarId));
 				addedTaskListeners.fire();
 			}
 		});

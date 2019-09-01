@@ -109,6 +109,40 @@ public class CalendarCrateModel implements Serializable {
 		return id;
 	}
 	
+	/** Adds an entry to the crate. */
+	public void add(CalendarEntryModel entry) {
+		validate(entry);
+		entries.add(entry);
+	}
+	
+	/** Removes an entry from the crate. */
+	public void remove(CalendarEntryModel entry) { entries.remove(entry); }
+	
+	/** Tests whether the IDs referenced by the entry are valid. */
+	private void validate(CalendarEntryModel entry) {
+		entry.accept(new CalendarEntryVisitor<Void>() {
+			@Override
+			public Void visitCalendarEntry(CalendarEntryModel entry) {
+				if (!calendars.containsKey(entry.getCalendarId())) {
+					throw new IllegalArgumentException("The calendar entry " + entry + " references the non-existing calendar id " + entry.getCalendarId());
+				}
+				return null;
+			}
+
+			@Override
+			public Void visitTask(TaskModel task) {
+				CalendarEntryVisitor.super.visitTask(task);
+				if (!taskLists.containsKey(task.getTaskListId())) {
+					throw new IllegalArgumentException("The task " + task + " references the non-existing task list id " + task.getTaskListId());
+				}
+				if (task.getCalendarId() != getTaskListById(task.getTaskListId()).getCalendarId()) {
+					throw new IllegalArgumentException("The task " + task + " references a different calendar id than its task list");
+				}
+				return null;
+			}
+		});
+	}
+	
 	/** Replaces an existing calendar by id. */
 	public void setCalendarById(int id, CalendarModel calendar) {
 		if (!calendars.containsKey(id)) {
