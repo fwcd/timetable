@@ -77,6 +77,7 @@ public class TaskModel implements CalendarEntryModel, Serializable, Comparable<T
 	
 	public String getRawRecurrence() { return rawRecurrence; }
 	
+	@Override
 	public boolean occursOn(LocalDate date) {
 		return dateTime.map(it -> it.toLocalDate().equals(date) || repeatsOn(date).orElse(false)).orElse(false);
 	}

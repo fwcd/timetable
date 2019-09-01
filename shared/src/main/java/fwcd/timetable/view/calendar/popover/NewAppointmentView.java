@@ -19,7 +19,7 @@ public class NewAppointmentView implements FxView {
 	private final CalendarCrateViewModel crate;
 	private Runnable onDelete = () -> {};
 	
-	public NewAppointmentView(Localizer localizer, CalendarCrateViewModel crate, TemporalFormatters formatters, LocalDateTime start) {
+	public NewAppointmentView(Localizer localizer, TemporalFormatters formatters, CalendarCrateViewModel crate, LocalDateTime start) {
 		this.start = start;
 		this.crate = crate;
 		

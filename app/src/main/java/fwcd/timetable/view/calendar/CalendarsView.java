@@ -1,20 +1,18 @@
 package fwcd.timetable.view.calendar;
 
-import fwcd.fructose.Option;
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+
 import fwcd.timetable.model.calendar.AppointmentModel;
-import fwcd.timetable.model.calendar.CalendarModel;
 import fwcd.timetable.model.calendar.CalendarSerializationUtils;
-import fwcd.timetable.viewmodel.TimeTableAppContext;
+import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.calendar.listview.CalendarListView;
 import fwcd.timetable.view.calendar.monthview.MonthView;
 import fwcd.timetable.view.calendar.tableview.CalendarTableView;
 import fwcd.timetable.view.calendar.weekview.WeekView;
-import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.utils.NavigableTabPane;
+import fwcd.timetable.viewmodel.TimeTableAppContext;
 import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
-import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
-
 import javafx.scene.Node;
 import javafx.scene.input.TransferMode;
 
@@ -49,12 +47,8 @@ public class CalendarsView implements FxView {
 					e.setDropCompleted(false);
 				} else {
 					AppointmentModel appointment = GSON.fromJson(raw, AppointmentModel.class);
-					// TODO: Let the user select a calendar
-					Option<CalendarModel> calendar = Option.of(viewModel.getSelectedCalendars().stream().findAny());
-					if (calendar.isPresent()) {
-						calendar.unwrap().getAppointments().add(appointment);
-					}
-					e.setDropCompleted(calendar.isPresent());
+					viewModel.add(appointment);
+					e.setDropCompleted(true);
 				}
 			} catch (JsonParseException f) {
 				// Ignore any dragboard contents that are not a valid

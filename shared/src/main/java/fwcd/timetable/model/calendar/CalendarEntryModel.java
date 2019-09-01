@@ -1,5 +1,7 @@
 package fwcd.timetable.model.calendar;
 
+import java.time.LocalDate;
+
 /**
  * An entry in the calenndar such as an appointment
  * or a task. It holds an ID reference to its parent
@@ -18,6 +20,8 @@ public interface CalendarEntryModel {
 	String getDescription();
 	
 	int getCalendarId();
+	
+	boolean occursOn(LocalDate date);
 	
 	<T> T accept(CalendarEntryVisitor<T> visitor);
 }
