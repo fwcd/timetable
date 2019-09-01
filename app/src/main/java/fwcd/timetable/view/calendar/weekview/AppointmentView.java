@@ -1,21 +1,18 @@
 package fwcd.timetable.view.calendar.weekview;
 
 import java.time.format.DateTimeFormatter;
-import java.util.function.Consumer;
 
 import org.controlsfx.control.PopOver;
 
-import fwcd.fructose.Option;
+import fwcd.fructose.draw.DrawColor;
 import fwcd.fructose.time.LocalDateTimeInterval;
 import fwcd.timetable.model.calendar.AppointmentModel;
-import fwcd.timetable.model.calendar.CalendarModel;
 import fwcd.timetable.model.calendar.Location;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
-import fwcd.timetable.viewmodel.calendar.AppointmentViewModel;
-import fwcd.timetable.viewmodel.calendar.CalendarViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -27,16 +24,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class AppointmentView implements FxView, AutoCloseable {
+public class AppointmentView implements FxView {
 	private final Pane node;
 	private final Label nameLabel;
 	private final Label locationLabel;
 	private final Label timeLabel;
 	
-	private final Consumer<AppointmentViewModel> viewModelListener;
-	private final Consumer<CalendarViewModel> calendarListener;
-	
-	public AppointmentView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarViewModel calendar, AppointmentViewModel viewModel) {
+	public AppointmentView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarCrateViewModel crate, AppointmentModel model) {
 		Color fgColor = Color.BLACK;
 		
 		node = new VBox();
@@ -52,6 +46,8 @@ public class AppointmentView implements FxView, AutoCloseable {
 		locationLabel = new Label();
 		locationLabel.setFont(Font.font(11));
 		locationLabel.setTextFill(fgColor);
+		model.getLocation().map(Location::getLabel).ifPresent(locationLabel::setText);
+		locationLabel.setVisible(model.getLocation().isPresent());
 		locationLabel.managedProperty().bind(locationLabel.visibleProperty()); // Do not occupy space if the label is not visible
 		node.getChildren().add(locationLabel);
 		
@@ -60,34 +56,17 @@ public class AppointmentView implements FxView, AutoCloseable {
 		timeLabel.setTextFill(fgColor);
 		node.getChildren().add(timeLabel);
 		
-		AppointmentDetailsView detailsView = new AppointmentDetailsView(context.getLocalizer(), context.getFormatters(), calendar, viewModel);
+		AppointmentDetailsView detailsView = new AppointmentDetailsView(context.getLocalizer(), context.getFormatters(), crate, model);
 		PopOver popOver = FxUtils.newPopOver(detailsView);
 		detailsView.setOnDelete(popOver::hide);
 		node.setOnMouseClicked(e -> {
 			FxUtils.showIndependentPopOver(popOver, node);
 			e.consume();
 		});
-		
-		// Setup view model listeners
-		
-		viewModelListener = vm -> {
-			AppointmentModel model = vm.getModel();
-			nameLabel.setText(model.getName());
-			timeLabel.setText(formatTimeInterval(model.getDateTimeInterval(), context.getTimeFormatter().get()));
-
-			Option<String> location = model.getLocation().map(Location::getLabel).filter(s -> !s.isEmpty());
-			location.ifPresent(locationLabel::setText);
-			locationLabel.setVisible(location.isPresent());
-		};
-		viewModelListener.accept(viewModel);
-		viewModel.getChangeListeners().addWeakListener(viewModelListener);
-
-		calendarListener = calVM -> {
-			CalendarModel calModel = calVM.getModel();
-			node.setBackground(new Background(new BackgroundFill(brightColor(FxUtils.toFxColor(calModel.getColor())), new CornerRadii(3), Insets.EMPTY)));
-		};
-		calendarListener.accept(calendar);
-		calendar.getChangeListeners().addWeakListener(calendarListener);
+	}
+	
+	public void updateBackground(DrawColor color) {
+		node.setBackground(new Background(new BackgroundFill(brightColor(FxUtils.toFxColor(color)), new CornerRadii(3), Insets.EMPTY)));
 	}
 	
 	private String formatTimeInterval(LocalDateTimeInterval interval, DateTimeFormatter formatter) {
@@ -109,9 +88,4 @@ public class AppointmentView implements FxView, AutoCloseable {
 
 	@Override
 	public Pane getNode() { return node; }
-	
-	@Override
-	public void close() {
-		// Weak listeners will be automatically dropped
-	}
 }
