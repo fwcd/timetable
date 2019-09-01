@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 import fwcd.fructose.Option;
 import fwcd.fructose.ReadOnlyObservable;
-import fwcd.timetable.model.calendar.CalendarCrateModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 
 /**
  * An API that exposes details about the current
@@ -20,7 +20,7 @@ public interface TimeTableAppApi {
 	/**
 	 * Provides the calendar crate.
 	 */
-	CalendarCrateModel getCalendarCrate();
+	CalendarCrateViewModel getCalendarCrate();
 	
 	/**
 	 * Provides a facility that converts unlocalized
