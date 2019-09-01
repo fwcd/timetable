@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 
 public class TimeTableMain extends Application {
 	private static final String NAME = "TimeTable";
-	private static final String VERSION = "0.1";
+	private static final String VERSION = "0.2.0";
 	private static final String BASE_TITLE = NAME + " " + VERSION;
 	
 	private final TimeTableAppContext context = new TimeTableAppContext();
