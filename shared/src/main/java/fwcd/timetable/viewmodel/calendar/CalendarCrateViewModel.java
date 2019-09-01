@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import com.google.gson.Gson;
 
 import fwcd.fructose.EventListenerList;
+import fwcd.fructose.ListenerList;
 import fwcd.timetable.model.calendar.CalendarCrateModel;
 import fwcd.timetable.model.calendar.CalendarEntryModel;
 import fwcd.timetable.model.calendar.CalendarModel;
@@ -26,6 +27,7 @@ public class CalendarCrateViewModel {
 	private final EventListenerList<Collection<CalendarModel>> calendarListeners = new EventListenerList<>();
 	private final EventListenerList<Collection<TaskListModel>> taskListListeners = new EventListenerList<>();
 	private final EventListenerList<Collection<CalendarEntryModel>> entryListeners = new EventListenerList<>();
+	private final ListenerList changeListeners = new ListenerList();
 	
 	public EventListenerList<Collection<CalendarModel>> getCalendarListeners() { return calendarListeners; }
 	
@@ -33,17 +35,33 @@ public class CalendarCrateViewModel {
 
 	public EventListenerList<Collection<CalendarEntryModel>> getEntryListeners() { return entryListeners; }
 	
-	private void fireCalendarListeners() { calendarListeners.fire(crate.getCalendars()); }
+	public ListenerList getChangeListeners() { return changeListeners; }
 	
-	private void fireTaskListListeners() { taskListListeners.fire(crate.getTaskLists()); }
+	private void fireCalendarListeners() {
+		calendarListeners.fire(crate.getCalendars());
+		changeListeners.fire();
+	}
 	
-	private void fireEntryListeners() { entryListeners.fire(crate.getEntries()); }
+	private void fireTaskListListeners() {
+		taskListListeners.fire(crate.getTaskLists());
+		changeListeners.fire();
+	}
+	
+	private void fireEntryListeners() {
+		entryListeners.fire(crate.getEntries());
+		changeListeners.fire();
+	}
 	
 	public CalendarModel getCalendarById(int id) { return crate.getCalendarById(id); }
 	
 	public TaskListModel getTaskListById(int id) { return crate.getTaskListById(id); }
 	
 	public Stream<CalendarEntryModel> streamEntries() { return crate.streamEntries(); }
+	
+	public void createDefaultCalendars() {
+		crate.createDefaultCalendars();
+		fireCalendarListeners();
+	}
 
 	public int add(CalendarModel calendar) {
 		int id = crate.add(calendar);

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fwcd.fructose.Option;
-import fwcd.timetable.model.calendar.CalendarCrateModel;
 import fwcd.timetable.view.plugin.PluginManagerView;
 import fwcd.timetable.view.print.CalendarPrinter;
 import fwcd.timetable.view.settings.SettingsView;
@@ -16,8 +15,8 @@ import fwcd.timetable.view.utils.RetentionFileChooser;
 import fwcd.timetable.viewmodel.TimeTableAppApi;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
 import fwcd.timetable.viewmodel.TimeTableAppViewModel;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 import fwcd.timetable.viewmodel.utils.FileSaveManager;
-
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -46,11 +45,11 @@ public class MenuBarView implements FxView {
 		printer = new CalendarPrinter(context);
 		fileSaveManager = new FileSaveManager(
 			reader -> {
-				CalendarCrateModel crate = viewModel.getCalendars().getModel();
-				crate.loadFromJsonIn(reader);
+				CalendarCrateViewModel crate = viewModel.getCalendars();
+				crate.loadCrate(reader);
 				return crate.getChangeListeners();
 			},
-			writer -> viewModel.getCalendars().getModel().saveAsJsonTo(writer),
+			writer -> viewModel.getCalendars().saveCrate(writer),
 			this::showSaveDialog,
 			this::showOpenDialog,
 			context.getFileSaveState(),
@@ -107,7 +106,7 @@ public class MenuBarView implements FxView {
 	}
 	
 	private void createNew() {
-		viewModel.getCalendars().getModel().createDefaultCalendars();
+		viewModel.getCalendars().createDefaultCalendars();
 	}
 	
 	private void open() {
