@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class IdGenerator implements Serializable {
 	private static final long serialVersionUID = 4796411062520985923L;
+	public static final int MISSING_ID = -1;
 	private int current;
 	
 	public IdGenerator() {

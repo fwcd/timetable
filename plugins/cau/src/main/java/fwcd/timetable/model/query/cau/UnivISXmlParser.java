@@ -134,7 +134,7 @@ public class UnivISXmlParser {
 		Option<LocalDate> endDate = childValueByPath(node, "enddate").map(this::parseDate);
 		Option<LocalTime> startTime = childValueByPath(termNode, "starttime").map(this::parseTime);
 		Option<LocalTime> endTime = childValueByPath(termNode, "endtime").map(this::parseTime);
-		AppointmentModel.Builder builder = new AppointmentModel.Builder(name);
+		AppointmentModel.Builder builder = new AppointmentModel.Builder(name, calendarId);
 		
 		if (startDate.isPresent() && endDate.isPresent()) {
 			builder

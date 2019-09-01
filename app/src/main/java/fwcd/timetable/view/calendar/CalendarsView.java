@@ -1,5 +1,7 @@
 package fwcd.timetable.view.calendar;
 
+import java.util.Set;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
@@ -47,7 +49,13 @@ public class CalendarsView implements FxView {
 					e.setDropCompleted(false);
 				} else {
 					AppointmentModel appointment = GSON.fromJson(raw, AppointmentModel.class);
-					viewModel.add(appointment);
+					Set<Integer> selectedCalendarIds = viewModel.getSelectedCalendarIds();
+
+					if (!selectedCalendarIds.isEmpty()) {
+						int calendarId = selectedCalendarIds.iterator().next();
+						viewModel.add(appointment.with().calendarId(calendarId).build());
+					}
+
 					e.setDropCompleted(true);
 				}
 			} catch (JsonParseException f) {

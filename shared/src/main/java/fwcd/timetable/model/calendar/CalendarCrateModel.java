@@ -125,6 +125,9 @@ public class CalendarCrateModel implements Serializable {
 	
 	/** Tests whether the IDs referenced by the entry are valid. */
 	private void validate(CalendarEntryModel entry) {
+		if (entry.getCalendarId() == IdGenerator.MISSING_ID) {
+			throw new IllegalArgumentException("The calendar entry " + entry + " is missing a calendar ID");
+		}
 		entry.accept(new CalendarEntryVisitor<Void>() {
 			@Override
 			public Void visitCalendarEntry(CalendarEntryModel entry) {

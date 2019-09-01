@@ -100,7 +100,7 @@ public abstract class UnivISQueryOutputNode implements QueryOutputNode {
 	public static class Leaf extends UnivISQueryOutputNode {
 		public Leaf(AppointmentModel appointment) { this(appointment, /* exposesTitle */ true); }
 		
-		public Leaf(AppointmentModel appointment, boolean exposesTitle) { super(appointment.getName().get(), /* highlighted */ false, exposesTitle, Option.of(appointment)); }
+		public Leaf(AppointmentModel appointment, boolean exposesTitle) { super(appointment.getName(), /* highlighted */ false, exposesTitle, Option.of(appointment)); }
 		
 		@Override
 		public Collection<? extends QueryOutputNode> getChilds() { return Collections.emptySet(); }
