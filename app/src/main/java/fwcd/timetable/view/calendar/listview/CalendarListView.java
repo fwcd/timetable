@@ -1,34 +1,32 @@
 package fwcd.timetable.view.calendar.listview;
 
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import fwcd.timetable.model.calendar.CalendarEntryModel;
-import fwcd.timetable.model.utils.Contained;
+import fwcd.timetable.model.calendar.CalendarEntryVisitor.AppointmentsOnly;
 import fwcd.timetable.view.utils.FxNavigableView;
 import fwcd.timetable.view.utils.calendar.CalendarEntryListView;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
 import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
-
 import javafx.scene.Node;
 
 public class CalendarListView implements FxNavigableView {
 	private final Node node;
 	private final CalendarEntryListView entries;
 	
-	public CalendarListView(TimeTableAppContext context, CalendarCrateViewModel calendars) {
-		entries = new CalendarEntryListView(context.getLocalizer(), context.getFormatters());
+	public CalendarListView(TimeTableAppContext context, CalendarCrateViewModel crate) {
+		entries = new CalendarEntryListView(context.getLocalizer(), context.getFormatters(), crate);
 		node = entries.getNode();
 		
-		calendars.getChangeListeners().add(it -> updateEntries(calendars));
-		updateEntries(calendars);
+		crate.getEntryListeners().add(it -> updateEntries(it, crate));
+		updateEntries(crate.getEntries(), crate);
 	}
 	
-	private void updateEntries(CalendarCrateViewModel calendars) {
-		entries.getNode().getItems().setAll(calendars.getSelectedCalendars()
-			.stream()
-			.flatMap(cal -> cal.getAppointments().stream()
-				.sorted()
-				.map(app -> new Contained<CalendarEntryModel>(app, cal.getAppointments())))
+	private void updateEntries(Collection<CalendarEntryModel> entryModels, CalendarCrateViewModel crate) {
+		entries.getNode().getItems().setAll(entryModels.stream()
+			.flatMap(it -> it.accept(new AppointmentsOnly()).stream())
+			.sorted()
 			.collect(Collectors.toList())
 		);
 	}

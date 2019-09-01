@@ -13,7 +13,7 @@ import fwcd.timetable.model.calendar.Location;
 import fwcd.timetable.model.calendar.recurrence.Recurrence;
 import fwcd.timetable.model.calendar.recurrence.RecurrenceParser;
 
-public class TaskModel implements CalendarEntryModel, Serializable {
+public class TaskModel implements CalendarEntryModel, Serializable, Comparable<TaskModel> {
 	private static final long serialVersionUID = -1219052993628334319L;
 	private String name;
 	private int taskListId;
@@ -88,6 +88,16 @@ public class TaskModel implements CalendarEntryModel, Serializable {
 
 	@Override
 	public String getType() { return CommonEntryType.TASK; }
+	
+	@Override
+	public int compareTo(TaskModel o) {
+		int dateTimeComparison = dateTime.flatMapToInt(dt1 -> o.dateTime.mapToInt(dt2 -> dt1.compareTo(dt2))).orElse(0);
+		if (dateTimeComparison == 0) {
+			return name.compareTo(o.name);
+		} else {
+			return dateTimeComparison;
+		}
+	}
 	
 	public static class Builder {
 		private String name;

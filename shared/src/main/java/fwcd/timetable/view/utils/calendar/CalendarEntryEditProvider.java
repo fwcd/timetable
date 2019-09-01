@@ -19,7 +19,6 @@ public class CalendarEntryEditProvider implements CalendarEntryVisitor<Option<Fx
 	private final TemporalFormatters formatters;
 	private final CalendarCrateViewModel crate;
 	private Runnable onDelete = () -> {};
-	private Option<FxView> view = Option.empty();
 	
 	public CalendarEntryEditProvider(Localizer localizer, TemporalFormatters formatters, CalendarCrateViewModel crate) {
 		this.localizer = localizer;
@@ -47,6 +46,4 @@ public class CalendarEntryEditProvider implements CalendarEntryVisitor<Option<Fx
 	}
 	
 	public void setOnDelete(Runnable onDelete) { this.onDelete = onDelete; }
-	
-	public Option<FxView> getView() { return view; }
 }

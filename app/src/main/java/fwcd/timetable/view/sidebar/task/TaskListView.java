@@ -31,6 +31,7 @@ public class TaskListView implements FxView {
 			allEntries.stream()
 				.flatMap(it -> it.accept(new TasksOnly()).stream())
 				.filter(it -> it.getTaskListId() == taskListId)
+				.sorted()
 				.collect(Collectors.toList())
 		);
 	}
