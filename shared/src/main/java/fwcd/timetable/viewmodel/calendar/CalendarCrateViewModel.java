@@ -64,7 +64,7 @@ public class CalendarCrateViewModel {
 	public Stream<CalendarEntryModel> streamEntries() { return crate.streamEntries(); }
 	
 	/** @return a read-only view of the entries. */
-	public List<CalendarEntryModel> getEntries() { return crate.getEntries(); }
+	public Collection<CalendarEntryModel> getEntries() { return crate.getEntries(); }
 	
 	/** @return a read-only view of the calendars. */
 	public Collection<Identified<CalendarModel>> getCalendars() { return crate.getCalendars(); }

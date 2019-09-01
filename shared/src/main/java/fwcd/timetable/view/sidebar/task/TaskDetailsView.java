@@ -1,10 +1,12 @@
 package fwcd.timetable.view.sidebar.task;
 
 import java.time.LocalDateTime;
+import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 import fwcd.fructose.Option;
 import fwcd.timetable.model.calendar.Location;
+import fwcd.timetable.model.calendar.recurrence.Recurrence;
 import fwcd.timetable.model.calendar.task.TaskModel;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.utils.FxUtils;
@@ -25,7 +27,7 @@ import javafx.scene.layout.VBox;
 import tornadofx.control.DateTimePicker;
 
 public class TaskDetailsView implements FxView {
-	private final Pane node;
+	private Pane node;
 	
 	private final CalendarCrateViewModel crate;
 	private TaskModel model;
@@ -41,31 +43,30 @@ public class TaskDetailsView implements FxView {
 		TextField title = new TextField();
 		title.setPromptText(localizer.localize("title"));
 		title.setText(model.getName());
-		title.textProperty().addListener((obs, oldText, newText) -> changeModel(task));
-		FxUtils.bindBidirectionally(model.getName(), title.textProperty());
-		localizer.localized("title").listenAndFire(title::setPromptText);
+		title.textProperty().addListener((obs, oldText, newText) -> changeModel(task -> task.with().name(newText).build()));
 		title.getStyleClass().add("title-label");
 		
 		TextField location = new TextField();
-		FxUtils.bindBidirectionally(
-			model.getLocation(),
-			location.textProperty(),
-			optLocation -> optLocation.map(Location::getLabel).orElse(""),
-			newLocation -> Option.of(newLocation).filter(it -> !it.isEmpty()).map(Location::new)
+		location.setPromptText(localizer.localize("location"));
+		location.setText(model.getLocation().map(Location::getLabel).orElse(""));
+		location.textProperty().addListener((obs, oldText, newText) ->
+			changeModel(task -> task.with()
+				.location(Option.of(newText)
+				.filter(it -> !it.isEmpty())
+				.map(Location::new))
+				.build())
 		);
-		localizer.localized("location").listenAndFire(location::setPromptText);
 		location.getStyleClass().add("location-label");
 		
 		BorderPane dateTimeGrid = new BorderPane();
 		
 		CheckBox hasDateTime = new CheckBox();
-		FxUtils.bindBidirectionally(
-			model.getDateTime(),
-			hasDateTime.selectedProperty(),
-			optDT -> optDT.isPresent(),
-			selected -> selected
-				? model.getDateTime().get().or(() -> Option.of(LocalDateTime.now()))
-				: Option.empty()
+		hasDateTime.setSelected(model.getDateTime().isPresent());
+		hasDateTime.selectedProperty().addListener((obs, wasSelected, isSelected) ->
+			changeModel(task -> task.with()
+				.dateTime(model.getDateTime().or(() -> Option.of(LocalDateTime.now()))
+				.filter(it -> isSelected))
+				.build())
 		);
 		dateTimeGrid.setTop(new HBox(localizedPropertyLabel("hasdatetime", localizer), hasDateTime));
 		
@@ -73,38 +74,33 @@ public class TaskDetailsView implements FxView {
 		int rowIndex = 0;
 		
 		DateTimePicker dateTimePicker = new DateTimePicker();
-		FxUtils.bindBidirectionally(
-			model.getDateTime(),
-			dateTimePicker.dateTimeValueProperty(),
-			optDT -> optDT.orElseNull(),
-			newDT -> Option.ofNullable(newDT)
-		);
+		dateTimePicker.setDateTimeValue(model.getDateTime().orElse(null));
+		dateTimePicker.dateTimeValueProperty().addListener((obs, oldDT, newDT) -> changeModel(task -> task.with().dateTime(Option.ofNullable(newDT)).build()));
 		properties.addRow(rowIndex++, localizedPropertyLabel("datetime", localizer), dateTimePicker);
 		
 		TextField recurrence = new TextField();
-		FxUtils.bindBidirectionally(model.getRecurrence().getRaw(), recurrence.textProperty());
+		recurrence.setText(model.getRawRecurrence());
+		recurrence.textProperty().addListener((obs, oldText, newText) -> changeModel(task -> task.with().recurrence(newText).build()));
 		properties.addRow(rowIndex++, localizedPropertyLabel("recurrence", localizer), recurrence);
 		
 		DatePicker recurrenceEnd = new DatePicker();
 		FxUtils.setDateFormat(recurrenceEnd, formatters.getDateFormatter());
-		FxUtils.bindBidirectionally(
-			model.getRecurrenceEnd(),
-			recurrenceEnd.valueProperty(),
-			optEnd -> optEnd.orElseNull(),
-			newEnd -> Option.ofNullable(newEnd)
-		);
+		recurrenceEnd.setValue(model.getRecurrence().flatMap(Recurrence::getEnd).orElse(null));
+		recurrenceEnd.valueProperty().addListener((obs, oldValue, newValue) -> changeModel(task -> task.with().recurrenceEnd(Option.ofNullable(newValue)).build()));
 		properties.addRow(rowIndex++, localizedPropertyLabel("recurrenceend", localizer), recurrenceEnd);
 		
-		model.getDateTime().listenAndFire(dateTime -> {
-			if (dateTime.isPresent()) {
+		Consumer<Boolean> hasDateTimeListener = hasDT -> {
+			if (hasDT) {
 				dateTimeGrid.setCenter(properties);
 			} else {
 				dateTimeGrid.setCenter(null);
 			}
-		});
+		};
+		hasDateTime.selectedProperty().addListener((obs, wasSelected, isSelected) -> hasDateTimeListener.accept(isSelected));
+		hasDateTimeListener.accept(hasDateTime.isSelected());
 		
 		Button deleteButton = FxUtils.buttonOf(localizer.localized("deletetask"), () -> {
-			parent.remove(model);
+			crate.remove(model);
 			onDelete.run();
 		});
 		
@@ -124,7 +120,7 @@ public class TaskDetailsView implements FxView {
 	}
 
 	private Label localizedPropertyLabel(String unlocalized, Localizer localizer) {
-		return FxUtils.labelOf(localizer.localized(unlocalized), ": ");
+		return new Label(localizer.localize(unlocalized) + ": ");
 	}
 
 	public void setOnDelete(Runnable onDelete) { this.onDelete = onDelete; }
