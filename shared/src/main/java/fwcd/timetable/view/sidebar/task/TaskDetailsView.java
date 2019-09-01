@@ -1,16 +1,16 @@
 package fwcd.timetable.view.sidebar.task;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.function.UnaryOperator;
 
 import fwcd.fructose.Option;
-import fwcd.timetable.model.calendar.CalendarEntryModel;
 import fwcd.timetable.model.calendar.Location;
 import fwcd.timetable.model.calendar.task.TaskModel;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.viewmodel.Localizer;
 import fwcd.timetable.viewmodel.TemporalFormatters;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -26,10 +26,22 @@ import tornadofx.control.DateTimePicker;
 
 public class TaskDetailsView implements FxView {
 	private final Pane node;
+	
+	private final CalendarCrateViewModel crate;
+	private TaskModel model;
 	private Runnable onDelete = () -> {};
 	
-	public TaskDetailsView(Collection<? extends CalendarEntryModel> parent, Localizer localizer, TemporalFormatters formatters, TaskModel model) {
+	public TaskDetailsView(Localizer localizer, TemporalFormatters formatters, CalendarCrateViewModel crate, TaskModel model) {
+		this.crate = crate;
+		this.model = model;
+		createNode(localizer, formatters);
+	}
+	
+	private void createNode(Localizer localizer, TemporalFormatters formatters) {
 		TextField title = new TextField();
+		title.setPromptText(localizer.localize("title"));
+		title.setText(model.getName());
+		title.textProperty().addListener((obs, oldText, newText) -> changeModel(task));
 		FxUtils.bindBidirectionally(model.getName(), title.textProperty());
 		localizer.localized("title").listenAndFire(title::setPromptText);
 		title.getStyleClass().add("title-label");
@@ -103,6 +115,12 @@ public class TaskDetailsView implements FxView {
 			deleteButton
 		);
 		node.getStyleClass().add("details-view");
+	}
+	
+	private void changeModel(UnaryOperator<TaskModel> transform) {
+		TaskModel newModel = transform.apply(model);
+		crate.replace(model, newModel);
+		model = newModel;
 	}
 
 	private Label localizedPropertyLabel(String unlocalized, Localizer localizer) {

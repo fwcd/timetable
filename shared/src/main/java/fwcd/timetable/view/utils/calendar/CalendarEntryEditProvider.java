@@ -34,14 +34,14 @@ public class CalendarEntryEditProvider implements CalendarEntryVisitor<Option<Fx
 	
 	@Override
 	public Option<FxView> visitAppointment(AppointmentModel appointment) {
-		AppointmentDetailsView detailsView = new AppointmentDetailsView(crate, localizer, formatters, appointment);
+		AppointmentDetailsView detailsView = new AppointmentDetailsView(localizer, formatters, crate, appointment);
 		detailsView.setOnDelete(() -> onDelete.run());
 		return Option.of(detailsView);
 	}
 	
 	@Override
 	public Option<FxView> visitTask(TaskModel task) {
-		TaskDetailsView detailsView = new TaskDetailsView(crate, localizer, formatters, task);
+		TaskDetailsView detailsView = new TaskDetailsView(localizer, formatters, crate, task);
 		detailsView.setOnDelete(() -> onDelete.run());
 		return Option.of(detailsView);
 	}

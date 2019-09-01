@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import fwcd.fructose.Option;
 import fwcd.timetable.model.calendar.CalendarEntryModel;
 import fwcd.timetable.model.calendar.CalendarSerializationUtils;
-import fwcd.timetable.model.utils.SubscriptionStack;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.viewmodel.Localizer;
 import fwcd.timetable.viewmodel.TemporalFormatters;
@@ -25,7 +24,6 @@ public class CalendarEntryCell implements FxView {
 	private final Label subtitleLabel = new Label();
 	private final VBox node;
 	
-	private final SubscriptionStack itemSubscriptions = new SubscriptionStack();
 	private Option<CalendarEntryModel> currentItem = Option.empty();
 	private boolean showTitle = true;
 	private boolean showSubtitle = true;
@@ -60,29 +58,25 @@ public class CalendarEntryCell implements FxView {
 	
 	public void updateItem(CalendarEntryModel item) {
 		currentItem = Option.of(item);
-		itemSubscriptions.unsubscribeAll();
 		
 		if (item == null) {
 			node.getChildren().clear();
 		} else {
 			CalendarEntryInfoProvider infoProvider = new CalendarEntryInfoProvider(localizer, formatters);
-			item.accept(infoProvider);
+			String info = item.accept(infoProvider);
 			
-			itemSubscriptions.push(item.getName().subscribeAndFire(name -> titleLabel.setText(titlePrefixOf(item) + name)));
-			itemSubscriptions.push(infoProvider.getInfo().subscribeAndFire(info -> {
-				subtitleLabel.setText(info);
-				
-				if (showTitle) {
-					if (showSubtitle && !info.isEmpty()) {
-						node.getChildren().setAll(titleLabel, subtitleLabel);
-					} else {
-						node.getChildren().setAll(titleLabel);
-					}
-				} else if (showSubtitle) {
-					node.getChildren().setAll(subtitleLabel);
+			titleLabel.setText(titlePrefixOf(item) + item.getName());
+			subtitleLabel.setText(info);
+			
+			if (showTitle) {
+				if (showSubtitle && !info.isEmpty()) {
+					node.getChildren().setAll(titleLabel, subtitleLabel);
+				} else {
+					node.getChildren().setAll(titleLabel);
 				}
-			}));
-			itemSubscriptions.takeAll(infoProvider.getSubscriptions());
+			} else if (showSubtitle) {
+				node.getChildren().setAll(subtitleLabel);
+			}
 		}
 	}
 	
