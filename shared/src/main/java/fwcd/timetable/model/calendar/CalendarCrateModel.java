@@ -1,11 +1,10 @@
 package fwcd.timetable.model.calendar;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,7 +29,7 @@ public class CalendarCrateModel implements Serializable {
 	/** Contains the mappings from IDs to task list metadata. */
 	private final Map<Integer, TaskListModel> taskLists = new LinkedHashMap<>();
 	/** Stores all entries in this calendar. */
-	private final List<CalendarEntryModel> entries = new ArrayList<>();
+	private final Set<CalendarEntryModel> entries = new HashSet<>();
 	
 	public CalendarModel getCalendarById(int id) { return calendars.get(id); }
 	
@@ -60,8 +59,8 @@ public class CalendarCrateModel implements Serializable {
 	
 	public Stream<CalendarEntryModel> streamEntries() { return entries.stream(); }
 	
-	/** @return a read-only list of the entries. */
-	public List<CalendarEntryModel> getEntries() { return Collections.unmodifiableList(entries); }
+	/** @return a read-only collection of the entries. */
+	public Collection<CalendarEntryModel> getEntries() { return Collections.unmodifiableCollection(entries); }
 	
 	/** @return a read-only view of the calendars. */
 	public Collection<Identified<CalendarModel>> getCalendars() {
@@ -117,6 +116,12 @@ public class CalendarCrateModel implements Serializable {
 	
 	/** Removes an entry from the crate. */
 	public void remove(CalendarEntryModel entry) { entries.remove(entry); }
+	
+	/** Replaces an entry. */
+	public void replace(CalendarEntryModel oldEntry, CalendarEntryModel newEntry) {
+		entries.remove(oldEntry);
+		entries.add(newEntry);
+	}
 	
 	/** Tests whether the IDs referenced by the entry are valid. */
 	private void validate(CalendarEntryModel entry) {

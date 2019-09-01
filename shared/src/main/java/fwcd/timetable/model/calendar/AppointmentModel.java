@@ -149,8 +149,8 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	}
 	
 	public static class Builder {
-		private final String name;
-		private final int calendarId;
+		private String name;
+		private int calendarId;
 		private Option<Location> location = Option.empty();
 		private LocalDateTime start = LocalDateTime.now();
 		private LocalDateTime end = LocalDateTime.now();
@@ -166,6 +166,16 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		public Builder(String name, int calendarId) {
 			this.name = name;
 			this.calendarId = calendarId;
+		}
+		
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+		
+		public Builder calendarId(int calendarId) {
+			this.calendarId = calendarId;
+			return this;
 		}
 		
 		public Builder location(Location location) {

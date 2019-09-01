@@ -31,14 +31,14 @@ public class CalendarCrateViewModel {
 
 	private final EventListenerList<Collection<Identified<CalendarModel>>> calendarListeners = new EventListenerList<>();
 	private final EventListenerList<Collection<Identified<TaskListModel>>> taskListListeners = new EventListenerList<>();
-	private final EventListenerList<List<CalendarEntryModel>> entryListeners = new EventListenerList<>();
+	private final EventListenerList<Collection<CalendarEntryModel>> entryListeners = new EventListenerList<>();
 	private final ListenerList changeListeners = new ListenerList();
 	
 	public EventListenerList<Collection<Identified<CalendarModel>>> getCalendarListeners() { return calendarListeners; }
 	
 	public EventListenerList<Collection<Identified<TaskListModel>>> getTaskListListeners() { return taskListListeners; }
 
-	public EventListenerList<List<CalendarEntryModel>> getEntryListeners() { return entryListeners; }
+	public EventListenerList<Collection<CalendarEntryModel>> getEntryListeners() { return entryListeners; }
 	
 	public ListenerList getChangeListeners() { return changeListeners; }
 	
@@ -116,6 +116,11 @@ public class CalendarCrateViewModel {
 	public void remove(CalendarEntryModel entry) {
 		crate.remove(entry);
 		fireEntryListeners();
+	}
+	
+	public void replace(CalendarEntryModel oldEntry, CalendarEntryModel newEntry) {
+		crate.replace(oldEntry, newEntry);
+		
 	}
 	
 	public void setCalendarById(int id, CalendarModel newCalendar) {
