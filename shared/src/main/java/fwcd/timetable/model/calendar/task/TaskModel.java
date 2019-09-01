@@ -14,23 +14,30 @@ import fwcd.timetable.model.calendar.recurrence.Recurrence;
 public class TaskModel implements CalendarEntryModel, Serializable {
 	private static final long serialVersionUID = -1219052993628334319L;
 	private String name;
+	private int taskListId;
+	private int calendarId;
 	private String description;
 	private Option<Location> location;
 	private Option<LocalDateTime> dateTime;
 	private Option<Recurrence> recurrence;
 	
-	public TaskModel() {
-		this("", "", Option.empty(), Option.empty(), Option.empty());
+	/** Deserialization constructor. */
+	protected TaskModel() {
+		this("", 0, 0, "", Option.empty(), Option.empty(), Option.empty());
 	}
 	
 	public TaskModel(
 		String name,
+		int taskListId,
+		int calendarId,
 		String description,
 		Option<Location> location,
 		Option<LocalDateTime> dateTime,
 		Option<Recurrence> recurrence
 	) {
 		this.name = name;
+		this.taskListId = taskListId;
+		this.calendarId = calendarId;
 		this.description = description;
 		this.location = location;
 		this.dateTime = dateTime;
@@ -38,9 +45,15 @@ public class TaskModel implements CalendarEntryModel, Serializable {
 	}
 
 	@Override
-	public void accept(CalendarEntryVisitor visitor) { visitor.visitTask(this); }
+	public <T> T accept(CalendarEntryVisitor<T> visitor) { return visitor.visitTask(this); }
 	
+	@Override
 	public String getName() { return name; }
+	
+	public int getTaskListId() { return taskListId; }
+	
+	@Override
+	public int getCalendarId() { return calendarId; }
 	
 	public Option<LocalDateTime> getDateTime() { return dateTime; }
 	

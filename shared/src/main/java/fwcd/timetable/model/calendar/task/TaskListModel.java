@@ -1,13 +1,15 @@
 package fwcd.timetable.model.calendar.task;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Metadata information about a task list. The entries
+ * are stored in a calendar crate and refer to a task
+ * list by its ID.
+ */
 public class TaskListModel implements Serializable {
 	private static final long serialVersionUID = 3478629580505983160L;
 	private String name;
-	private List<TaskModel> tasks = new ArrayList<>();
 	
 	protected TaskListModel() {}
 	
@@ -16,6 +18,4 @@ public class TaskListModel implements Serializable {
 	}
 	
 	public String getName() { return name; }
-	
-	public List<TaskModel> getTasks() { return tasks; }
 }

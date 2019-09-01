@@ -16,6 +16,7 @@ import fwcd.timetable.model.calendar.recurrence.RecurrenceParser;
 public class AppointmentModel implements Serializable, CalendarEntryModel, Comparable<AppointmentModel> {
 	private static final long serialVersionUID = 6135909125862494477L;
 	private String name;
+	private int calendarId;
 	private Option<Location> location;
 	private LocalDateTimeInterval dateTimeInterval;
 	private String description;
@@ -24,12 +25,14 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	private String rawRecurrence;
 	private Option<Recurrence> recurrence;
 	
-	public AppointmentModel() {
-		this("", Option.empty(), LocalDateTime.now(), LocalDateTime.now(), "", false, false, "", Option.empty());
+	/** Deserialization constructor. */
+	protected AppointmentModel() {
+		this("", 0, Option.empty(), LocalDateTime.now(), LocalDateTime.now(), "", false, false, "", Option.empty());
 	}
 	
 	private AppointmentModel(
 		String name,
+		int calendarId,
 		Option<Location> location,
 		LocalDateTime startInclusive,
 		LocalDateTime endExclusive,
@@ -50,13 +53,16 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	}
 	
 	@Override
-	public void accept(CalendarEntryVisitor visitor) { visitor.visitAppointment(this); }
+	public <T> T accept(CalendarEntryVisitor<T> visitor) { return visitor.visitAppointment(this); }
 	
 	@Override
 	public String getType() { return CommonEntryType.APPOINTMENT; }
 	
 	@Override
 	public String getName() { return name; }
+	
+	@Override
+	public int getCalendarId() { return calendarId; }
 	
 	public Option<Location> getLocation() { return location; }
 	
@@ -106,7 +112,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	
 	/** Constructs a builder from this appointment to create a derived appoinment. */
 	public Builder with() {
-		return new Builder(name)
+		return new Builder(name, calendarId)
 			.location(location)
 			.start(getStart())
 			.end(getEnd())
@@ -144,6 +150,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 	
 	public static class Builder {
 		private final String name;
+		private final int calendarId;
 		private Option<Location> location = Option.empty();
 		private LocalDateTime start = LocalDateTime.now();
 		private LocalDateTime end = LocalDateTime.now();
@@ -156,8 +163,9 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		
 		private RecurrenceParser recurrenceParser = new RecurrenceParser();
 		
-		public Builder(String name) {
+		public Builder(String name, int calendarId) {
 			this.name = name;
+			this.calendarId = calendarId;
 		}
 		
 		public Builder location(Location location) {
@@ -236,6 +244,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		public AppointmentModel build() {
 			return new AppointmentModel(
 				name,
+				calendarId,
 				location,
 				start,
 				end,

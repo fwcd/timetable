@@ -20,7 +20,7 @@ public class CalendarCrateViewModel implements Responder {
 	
 	public CalendarCrateViewModel(CalendarCrateModel model) {
 		this.model = model;
-		model.createNewCalendars();
+		model.createDefaultCalendars();
 	}
 	
 	@Override

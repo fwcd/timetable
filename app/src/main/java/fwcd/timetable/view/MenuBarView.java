@@ -107,7 +107,7 @@ public class MenuBarView implements FxView {
 	}
 	
 	private void createNew() {
-		viewModel.getCalendars().getModel().createNewCalendars();
+		viewModel.getCalendars().getModel().createDefaultCalendars();
 	}
 	
 	private void open() {
