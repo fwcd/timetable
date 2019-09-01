@@ -1,14 +1,13 @@
 package fwcd.timetable.view.sidebar.calendar;
 
 import fwcd.fructose.Option;
-import fwcd.fructose.ReadOnlyObservable;
+import fwcd.fructose.OptionInt;
 import fwcd.fructose.draw.DrawColor;
 import fwcd.timetable.model.calendar.CalendarModel;
+import fwcd.timetable.model.utils.Identified;
 import fwcd.timetable.view.utils.FxUtils;
-import fwcd.timetable.model.utils.SubscriptionStack;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
 import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
-
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
@@ -23,7 +22,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.TextAlignment;
 
-public class CalendarManagerListCell extends ListCell<CalendarModel> {
+public class CalendarManagerListCell extends ListCell<Identified<CalendarModel>> {
 	private static final int ICON_RADIUS = 5;
 	private final CalendarCrateViewModel viewModel;
 	
@@ -34,8 +33,6 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 	private final Label label;
 	private final TextField textField;
 	
-	private final SubscriptionStack itemSubscriptions = new SubscriptionStack();
-	
 	public CalendarManagerListCell(TimeTableAppContext context, CalendarCrateViewModel viewModel) {
 		this.viewModel = viewModel;
 		
@@ -44,7 +41,7 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		label.setTextAlignment(TextAlignment.LEFT);
 		
 		textField = new TextField();
-		textField.setOnAction(e -> commitEdit(getItem()));
+		textField.setOnAction(e -> commitEdit(getItem().map(item -> item.withName(textField.getText()))));
 		textField.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
 			if (e.getCode() == KeyCode.ESCAPE) {
 				cancelEdit();
@@ -66,8 +63,14 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		node.setAlignment(Pos.CENTER_LEFT);
 		
 		setContextMenu(new ContextMenu(
-			FxUtils.menuItemOf(context.localized("delete"), () -> getCalendar().ifPresent(viewModel.getModel().getCalendars()::remove)),
-			FxUtils.menuItemOf(context.localized("changecolor"), () -> getCalendar().ifPresent(it -> FxUtils.showColorPicker(this, it.getColor())))
+			FxUtils.menuItemOf(context.localized("delete"), () -> getCalendarId().ifPresent(viewModel::removeCalendarById)),
+			FxUtils.menuItemOf(context.localized("changecolor"), () -> getIdentifiedCalendar().ifPresent(cal ->
+				FxUtils.showColorPicker(
+					this,
+					cal.getValue().getColor(),
+					newColor -> viewModel.setCalendarById(cal.getId(), cal.getValue().withColor(newColor))
+				)
+			))
 		));
 		
 		setGraphic(node);
@@ -75,27 +78,24 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		setEditModeEnabled(false);
 	}
 	
-	private Option<CalendarModel> getCalendar() {
-		return Option.ofNullable(getItem());
-	}
+	private Option<Identified<CalendarModel>> getIdentifiedCalendar() { return Option.ofNullable(getItem()); }
+	
+	private OptionInt getCalendarId() { return getIdentifiedCalendar().mapToInt(Identified::getId); }
 	
 	@Override
-	public void updateItem(CalendarModel item, boolean empty) {
+	public void updateItem(Identified<CalendarModel> item, boolean empty) {
 		super.updateItem(item, empty);
-		itemSubscriptions.unsubscribeAll();
 		
 		if ((item == null) || empty) {
 			clearContents();
 		} else {
-			showCheckBox(item);
-			setIconColor(item.getColor());
+			showCheckBox(item.getId());
+			showIconColor(item.getValue().getColor());
+			setEditModeEnabled(isEditing());
 			if (isEditing()) {
-				itemSubscriptions.push(item.getName().subscribeAndFire(textField::setText));
-				textField.setText("");
-				setEditModeEnabled(true);
+				textField.setText(item.getValue().getName());
 			} else {
-				itemSubscriptions.push(item.getName().subscribeAndFire(label::setText));
-				setEditModeEnabled(false);
+				label.setText(item.getValue().getName());
 			}
 		}
 	}
@@ -104,7 +104,7 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 	public void startEdit() {
 		super.startEdit();
 		
-		textField.setText(getItem().getName().get());
+		textField.setText(getItem().getValue().getName());
 		setEditModeEnabled(true);
 		
 		textField.selectAll();
@@ -115,23 +115,19 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 	public void cancelEdit() {
 		super.cancelEdit();
 		
-		label.setText(getItem().getName().get());
+		label.setText(getItem().getValue().getName());
 		setEditModeEnabled(false);
 	}
 	
 	@Override
-	public void commitEdit(CalendarModel newValue) {
+	public void commitEdit(Identified<CalendarModel> newValue) {
 		super.commitEdit(newValue);
-		
-		String text = textField.getText();
-		newValue.getName().set(text);
-		label.setText(text);
 		setEditModeEnabled(false);
 	}
 	
-	private void setIconColor(ReadOnlyObservable<DrawColor> color) {
+	private void showIconColor(DrawColor color) {
 		Circle circle = new Circle(ICON_RADIUS, ICON_RADIUS, ICON_RADIUS);
-		itemSubscriptions.push(color.subscribeAndFire(it -> circle.setFill(FxUtils.toFxColor(it))));
+		circle.setFill(FxUtils.toFxColor(color));
 		iconNode.getChildren().setAll(circle);
 	}
 	
@@ -139,16 +135,14 @@ public class CalendarManagerListCell extends ListCell<CalendarModel> {
 		iconNode.getChildren().clear();
 	}
 	
-	private void showCheckBox(CalendarModel calendar) {
+	private void showCheckBox(int calendarId) {
 		CheckBox checkBox = new CheckBox();
-		itemSubscriptions.push(viewModel.getSelectedCalendars().subscribeAndFire(it -> {
-			checkBox.setSelected(it.contains(calendar));
-		}));
+		checkBox.setSelected(viewModel.getSelectedCalendarIds().contains(calendarId));
 		checkBox.selectedProperty().addListener((obs, old, selected) -> {
 			if (selected) {
-				viewModel.getSelectedCalendars().add(calendar);
+				viewModel.select(calendarId);
 			} else {
-				viewModel.getSelectedCalendars().remove(calendar);
+				viewModel.deselect(calendarId);
 			}
 		});
 		checkBoxNode.getChildren().setAll(checkBox);

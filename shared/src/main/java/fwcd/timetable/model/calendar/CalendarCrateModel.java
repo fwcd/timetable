@@ -7,11 +7,14 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import fwcd.timetable.model.calendar.task.TaskListModel;
 import fwcd.timetable.model.calendar.task.TaskModel;
 import fwcd.timetable.model.utils.IdGenerator;
+import fwcd.timetable.model.utils.Identified;
 
 /**
  * A collection of calendars together with their
@@ -57,14 +60,30 @@ public class CalendarCrateModel implements Serializable {
 	
 	public Stream<CalendarEntryModel> streamEntries() { return entries.stream(); }
 	
-	/** Returns a read-only list of the entries. */
+	/** @return a read-only list of the entries. */
 	public List<CalendarEntryModel> getEntries() { return Collections.unmodifiableList(entries); }
 	
-	/** Returns a read-only view of the calendars. */
-	public Collection<CalendarModel> getCalendars() { return Collections.unmodifiableCollection(calendars.values()); }
+	/** @return a read-only view of the calendars. */
+	public Collection<Identified<CalendarModel>> getCalendars() {
+		return calendars.keySet()
+			.stream()
+			.map(id -> new Identified<>(getCalendarById(id), id))
+			.collect(Collectors.toList());
+	}
 	
-	/** Returns a read-only view of the task lists. */
-	public Collection<TaskListModel> getTaskLists() { return Collections.unmodifiableCollection(taskLists.values()); }
+	/** @return a read-only view of the task lists. */
+	public Collection<Identified<TaskListModel>> getTaskLists() {
+		return taskLists.keySet()
+			.stream()
+			.map(id -> new Identified<>(getTaskListById(id), id))
+			.collect(Collectors.toList());
+	}
+	
+	/** @return a read-only view of the calendar ids. */
+	public Set<Integer> getCalendarIds() { return Collections.unmodifiableSet(calendars.keySet()); }
+	
+	/** @return a read-only view of the task list ids. */
+	public Set<Integer> getTaskListIds() { return Collections.unmodifiableSet(taskLists.keySet()); }
 	
 	/**
 	 * Adds a calendar to this crate.
@@ -88,6 +107,22 @@ public class CalendarCrateModel implements Serializable {
 		int id = idGenerator.next();
 		taskLists.put(id, taskList);
 		return id;
+	}
+	
+	/** Replaces an existing calendar by id. */
+	public void setCalendarById(int id, CalendarModel calendar) {
+		if (!calendars.containsKey(id)) {
+			throw new IllegalArgumentException("Calendar with id " + id + " does not exist!");
+		}
+		calendars.put(id, calendar);
+	}
+	
+	/** Replaces an existing task list by id. */
+	public void setTaskListById(int id, TaskListModel taskList) {
+		if (!taskLists.containsKey(id)) {
+			throw new IllegalArgumentException("Task list with id " + id + " does not exist!");
+		}
+		taskLists.put(id, taskList);
 	}
 	
 	/**

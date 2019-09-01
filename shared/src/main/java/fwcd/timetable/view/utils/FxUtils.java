@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -307,9 +308,10 @@ public final class FxUtils {
 		});
 	}
 	
-	public static void showColorPicker(Node node, Observable<DrawColor> color) {
+	public static void showColorPicker(Node node, DrawColor initialColor, Consumer<DrawColor> colorListener) {
 		ColorPicker colorPicker = new ColorPicker();
-		FxUtils.bindBidirectionally(color, colorPicker.valueProperty(), FxUtils::toFxColor, FxUtils::toDrawColor);
+		colorPicker.setValue(toFxColor(initialColor));
+		colorPicker.valueProperty().addListener((obs, oldV, newV) -> colorListener.accept(toDrawColor(newV)));
 		FxUtils.showIndependentPopOver(FxUtils.newPopOver(colorPicker), node);
 	}
 	

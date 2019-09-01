@@ -14,24 +14,29 @@ import fwcd.fructose.draw.DrawColor;
 public class CalendarModel implements Serializable {
 	private static final long serialVersionUID = 831554590083407654L;
 	private final String name;
-	private final DrawColor color = randomColor();
+	private final DrawColor color;
 	
-	public CalendarModel() {
-		name = "";
-	}
+	public CalendarModel() { this(""); }
 	
-	public CalendarModel(String name) {
+	public CalendarModel(String name) { this(name, randomColor()); }
+	
+	public CalendarModel(String name, DrawColor color) {
 		this.name = name;
+		this.color = color;
 	}
 	
 	public DrawColor getColor() { return color; }
 	
 	public String getName() { return name; }
 	
-	private DrawColor randomColor() {
+	private static DrawColor randomColor() {
 		Random random = ThreadLocalRandom.current();
 		return new DrawColor(random.nextInt(256), random.nextInt(256), random.nextInt(256));
 	}
+	
+	public CalendarModel withName(String newName) { return new CalendarModel(newName, color); }
+	
+	public CalendarModel withColor(DrawColor newColor) { return new CalendarModel(name, newColor); }
 	
 	@Override
 	public String toString() {
