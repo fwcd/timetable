@@ -43,6 +43,7 @@ public class AppointmentModel implements Serializable, CalendarEntryModel, Compa
 		Option<Recurrence> recurrence
 	) {
 		this.name = name;
+		this.calendarId = calendarId;
 		this.location = location;
 		dateTimeInterval = new LocalDateTimeInterval(startInclusive, endExclusive);
 		this.description = description;
