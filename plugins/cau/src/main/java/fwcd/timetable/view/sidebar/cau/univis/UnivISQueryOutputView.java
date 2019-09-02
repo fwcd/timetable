@@ -1,9 +1,10 @@
 package fwcd.timetable.view.sidebar.cau.univis;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import fwcd.fructose.Option;
-import fwcd.timetable.model.calendar.CalendarCrateModel;
+import fwcd.timetable.model.calendar.AppointmentModel;
 import fwcd.timetable.model.calendar.CalendarModel;
 import fwcd.timetable.model.query.Query;
 import fwcd.timetable.model.query.QueryOutputNode;
@@ -13,6 +14,7 @@ import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.view.utils.calendar.QueryOutputTreeView;
 import fwcd.timetable.viewmodel.Localizer;
 import fwcd.timetable.viewmodel.TemporalFormatters;
+import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
@@ -27,11 +29,11 @@ public class UnivISQueryOutputView implements FxView {
 	private final WebView webView;
 	private final QueryOutputTreeView treeView;
 	
-	private final CalendarCrateModel calendars;
-	private Option<CalendarModel> currentCalendar = Option.empty();
+	private final CalendarCrateViewModel crate;
+	private Option<List<AppointmentModel>> currentResults = Option.empty();
 	
-	public UnivISQueryOutputView(Localizer localizer, TemporalFormatters formatters, CalendarCrateModel calendars) {
-		this.calendars = calendars;
+	public UnivISQueryOutputView(Localizer localizer, TemporalFormatters formatters, CalendarCrateViewModel crate) {
+		this.crate = crate;
 		
 		node = new BorderPane();
 		progressBar = new ProgressBar();
@@ -41,7 +43,7 @@ public class UnivISQueryOutputView implements FxView {
 		progressBar.setProgress(0D);
 		progressBar.setMaxWidth(Double.MAX_VALUE);
 		
-		node.setBottom(new HBox(FxUtils.buttonOf(localizer.localized("addtocalendars"), this::addToCalendars)));
+		node.setBottom(new HBox(FxUtils.buttonOf(localizer.localized("addtocrate"), this::addToCalendars)));
 	}
 
 	public void perform(Query query) {
@@ -59,12 +61,8 @@ public class UnivISQueryOutputView implements FxView {
 							webView.getEngine().loadContent(raw.unwrap());
 							node.setCenter(new ScrollPane(webView));
 						} else {
-							CalendarModel calendar = new CalendarModel("UnivIS Query");
-							currentCalendar = Option.of(calendar);
-							
 							QueryOutputNode outputTree = queryResult.getOutputTree();
-							calendar.getAppointments()
-								.set(outputTree.streamAppointments().collect(Collectors.toList()));
+							currentResults = Option.of(outputTree.streamAppointments().collect(Collectors.toList()));
 							
 							treeView.setRoot(outputTree);
 							FxUtils.expandSingleNodes(treeView.getNode());
@@ -80,7 +78,12 @@ public class UnivISQueryOutputView implements FxView {
 	}
 	
 	private void addToCalendars() {
-		currentCalendar.ifPresent(calendars.getCalendars()::add);
+		currentResults.ifPresent(results -> {
+			int calendarId = crate.add(new CalendarModel("UnivIS Query"));
+			for (AppointmentModel appointment : results) {
+				results.add(appointment.with().calendarId(calendarId).build());
+			}
+		});
 	}
 	
 	@Override

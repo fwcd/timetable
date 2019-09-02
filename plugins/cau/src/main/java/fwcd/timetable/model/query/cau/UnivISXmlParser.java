@@ -21,6 +21,7 @@ import fwcd.fructose.Option;
 import fwcd.fructose.exception.Rethrow;
 import fwcd.timetable.model.calendar.AppointmentModel;
 import fwcd.timetable.model.calendar.Location;
+import fwcd.timetable.model.utils.IdGenerator;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -134,7 +135,7 @@ public class UnivISXmlParser {
 		Option<LocalDate> endDate = childValueByPath(node, "enddate").map(this::parseDate);
 		Option<LocalTime> startTime = childValueByPath(termNode, "starttime").map(this::parseTime);
 		Option<LocalTime> endTime = childValueByPath(termNode, "endtime").map(this::parseTime);
-		AppointmentModel.Builder builder = new AppointmentModel.Builder(name, calendarId);
+		AppointmentModel.Builder builder = new AppointmentModel.Builder(name, IdGenerator.MISSING_ID);
 		
 		if (startDate.isPresent() && endDate.isPresent()) {
 			builder
@@ -172,7 +173,7 @@ public class UnivISXmlParser {
 			.filter(it -> !it.equals("vac")) // TODO: Handle vacations
 			.map(this::parseDate)
 			.collect(Collectors.toSet());
-		AppointmentModel.Builder builder = new AppointmentModel.Builder(name);
+		AppointmentModel.Builder builder = new AppointmentModel.Builder(name, IdGenerator.MISSING_ID);
 		
 		// TODO: Show SWS and details as tooltip
 		
