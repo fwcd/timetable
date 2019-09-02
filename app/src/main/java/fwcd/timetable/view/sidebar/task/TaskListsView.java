@@ -10,13 +10,14 @@ import javafx.scene.control.TitledPane;
 
 public class TaskListsView implements FxView {
 	private final Accordion node;
+	private final int calendarId;
 	private final TaskManagerViewModel manager;
-	
 	private final TimeTableAppContext context;
 	
-	public TaskListsView(TimeTableAppContext context, TaskManagerViewModel manager) {
+	public TaskListsView(TimeTableAppContext context, TaskManagerViewModel manager, int calendarId) {
 		this.manager = manager;
 		this.context = context;
+		this.calendarId = calendarId;
 		
 		node = new Accordion();
 		setVisibleLists(manager.getCrate().getTaskLists());
@@ -31,13 +32,15 @@ public class TaskListsView implements FxView {
 		node.getPanes().clear();
 		
 		for (Identified<TaskListModel> list : lists) {
-			TitledPane titledPane = wrapListInTitledPane(new TaskListView(context, manager.getCrate(), list.getId(), list.getValue().getCalendarId()), list.getValue().getName());
-			node.expandedPaneProperty().addListener((obs, old, newValue) -> {
-				if ((newValue != null) && newValue.equals(titledPane)) {
-					manager.select(list.getId());
-				}
-			});
-			node.getPanes().add(titledPane);
+			if (list.getValue().getCalendarId() == calendarId) {
+				TitledPane titledPane = wrapListInTitledPane(new TaskListView(context, manager.getCrate(), list.getId(), list.getValue().getCalendarId()), list.getValue().getName());
+				node.expandedPaneProperty().addListener((obs, old, newValue) -> {
+					if ((newValue != null) && newValue.equals(titledPane)) {
+						manager.select(list.getId());
+					}
+				});
+				node.getPanes().add(titledPane);
+			}
 		}
 	}
 	

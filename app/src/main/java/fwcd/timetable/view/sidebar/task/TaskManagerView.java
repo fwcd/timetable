@@ -38,7 +38,7 @@ public class TaskManagerView implements FxView {
 		top.setPadding(new Insets(4, 4, 4, 4));
 		node.setTop(top);
 		
-		TaskListsView lists = new TaskListsView(context, viewModel);
+		TaskListsView lists = new TaskListsView(context, viewModel, calendarId);
 		node.setCenter(lists.getNode());
 	}
 	
