@@ -95,6 +95,8 @@ public class CalendarCrateViewModel {
 	 */
 	public int resetToDefaultCalendar() {
 		int id = crate.resetToDefaultCalendar();
+		selectedCalendarIds.clear();
+		selectedCalendarIds.add(id);
 		fireCalendarListeners();
 		fireAllEntryListeners();
 		fireChangeListeners();
