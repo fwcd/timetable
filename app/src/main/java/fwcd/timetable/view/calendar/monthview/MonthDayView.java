@@ -57,6 +57,7 @@ public class MonthDayView implements FxView, AutoCloseable {
 		node.setCenter(content);
 		
 		crate.getVisibleEntryListeners().add(it -> updateView());
+		updateView();
 	}
 	
 	private void updateView() {
