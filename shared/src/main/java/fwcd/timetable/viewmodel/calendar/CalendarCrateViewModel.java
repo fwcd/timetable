@@ -4,7 +4,6 @@ import java.io.Reader;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -33,6 +32,7 @@ public class CalendarCrateViewModel {
 	private final EventListenerList<Collection<Identified<CalendarModel>>> calendarListeners = new EventListenerList<>();
 	private final EventListenerList<Collection<Identified<TaskListModel>>> taskListListeners = new EventListenerList<>();
 	private final EventListenerList<Collection<CalendarEntryModel>> entryListeners = new EventListenerList<>();
+	private final EventListenerList<Collection<CalendarEntryModel>> visibleEntryListeners = new EventListenerList<>();
 	private final EventListenerList<Pair<CalendarEntryModel, CalendarEntryModel>> replaceListeners = new EventListenerList<>();
 	private final ListenerList changeListeners = new ListenerList();
 	
@@ -42,6 +42,8 @@ public class CalendarCrateViewModel {
 
 	public EventListenerList<Collection<CalendarEntryModel>> getEntryListeners() { return entryListeners; }
 	
+	public EventListenerList<Collection<CalendarEntryModel>> getVisibleEntryListeners() { return visibleEntryListeners; }
+	
 	public EventListenerList<Pair<CalendarEntryModel, CalendarEntryModel>> getReplaceListeners() { return replaceListeners; }
 	
 	public ListenerList getChangeListeners() { return changeListeners; }
@@ -50,7 +52,13 @@ public class CalendarCrateViewModel {
 	
 	private void fireTaskListListeners() { taskListListeners.fire(crate.getTaskLists()); }
 	
-	private void fireEntryListeners() { entryListeners.fire(crate.getEntries()); }
+	private void fireAllEntryListeners() {
+		Collection<CalendarEntryModel> entries = crate.getEntries();
+		visibleEntryListeners.fire(entries);
+		entryListeners.fire(entries);
+	}
+
+	private void fireVisibleEntryListeners() { visibleEntryListeners.fire(crate.getEntries()); }
 	
 	private void fireReplaceListeners(CalendarEntryModel oldEntry, CalendarEntryModel newEntry) { replaceListeners.fire(new Pair<>(oldEntry, newEntry)); }
 	
@@ -88,20 +96,22 @@ public class CalendarCrateViewModel {
 	public int resetToDefaultCalendar() {
 		int id = crate.resetToDefaultCalendar();
 		fireCalendarListeners();
+		fireAllEntryListeners();
 		fireChangeListeners();
-		fireEntryListeners();
 		return id;
 	}
 	
 	public void selectCalendar(int calendarId) {
 		selectedCalendarIds.add(calendarId);
 		fireCalendarListeners();
+		fireVisibleEntryListeners();
 		fireChangeListeners();
 	}
 	
 	public void deselectCalendar(int calendarId) {
 		selectedCalendarIds.remove(calendarId);
 		fireCalendarListeners();
+		fireVisibleEntryListeners();
 		fireChangeListeners();
 	}
 	
@@ -121,20 +131,20 @@ public class CalendarCrateViewModel {
 	
 	public void add(CalendarEntryModel entry) {
 		crate.add(entry);
-		fireEntryListeners();
+		fireAllEntryListeners();
 		fireChangeListeners();
 	}
 	
 	public void remove(CalendarEntryModel entry) {
 		crate.remove(entry);
-		fireEntryListeners();
+		fireAllEntryListeners();
 		fireChangeListeners();
 	}
 	
 	public void replace(CalendarEntryModel oldEntry, CalendarEntryModel newEntry) {
 		crate.replace(oldEntry, newEntry);
 		fireReplaceListeners(oldEntry, newEntry);
-		fireEntryListeners();
+		fireAllEntryListeners();
 		fireChangeListeners();
 	}
 	
@@ -170,7 +180,7 @@ public class CalendarCrateViewModel {
 		crate = GSON.fromJson(reader, CalendarCrateModel.class);
 		fireCalendarListeners();
 		fireTaskListListeners();
-		fireEntryListeners();
+		fireAllEntryListeners();
 		fireChangeListeners();
 	}
 }

@@ -35,7 +35,7 @@ public class AppointmentView implements FxView {
 	private final Label timeLabel;
 	
 	/** Strongly refers to a calendar listener that is dropped together with this view. */
-	private final Consumer<Collection<Identified<CalendarModel>>> calendarListener;
+	private Consumer<Collection<Identified<CalendarModel>>> calendarListener;
 	
 	public AppointmentView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarCrateViewModel crate, AppointmentModel model) {
 		Color fgColor = Color.BLACK;
@@ -73,7 +73,15 @@ public class AppointmentView implements FxView {
 			e.consume();
 		});
 		
-		calendarListener = it -> updateBackground(crate.getCalendarById(model.getCalendarId()).getColor());
+		calendarListener = it -> {
+			CalendarModel calendar = crate.getCalendarById(model.getCalendarId());
+			if (calendar == null) {
+				// Remove listener once calendar has been deleted
+				crate.getCalendarListeners().removeWeakListener(calendarListener);
+			} else {
+				updateBackground(calendar.getColor());
+			}
+		};
 		crate.getCalendarListeners().addWeakListener(calendarListener);
 		calendarListener.accept(crate.getCalendars());
 	}

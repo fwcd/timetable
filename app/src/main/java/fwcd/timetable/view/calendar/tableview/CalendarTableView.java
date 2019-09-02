@@ -18,7 +18,7 @@ public class CalendarTableView implements FxNavigableView {
 	
 	public CalendarTableView(TimeTableAppContext context, CalendarCrateViewModel crate) {
 		node = new TableView<>();
-		crate.getEntryListeners().add(it -> updateEntries(it, crate));
+		crate.getVisibleEntryListeners().add(it -> updateEntries(it, crate));
 	}
 	
 	private void updateEntries(Collection<CalendarEntryModel> entryModels, CalendarCrateViewModel crate) {

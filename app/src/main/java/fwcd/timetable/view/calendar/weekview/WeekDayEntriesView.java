@@ -37,7 +37,7 @@ public class WeekDayEntriesView implements FxView {
 		node.setMinSize(0, 0);
 		node.setPickOnBounds(false);
 		
-		crate.getEntryListeners().add(it -> updateView());
+		crate.getVisibleEntryListeners().add(it -> updateView());
 	}
 	
 	public void setDate(LocalDate date) {

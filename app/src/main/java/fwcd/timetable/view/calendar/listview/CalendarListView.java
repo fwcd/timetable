@@ -20,7 +20,7 @@ public class CalendarListView implements FxNavigableView {
 		entries = new CalendarEntryListView(context.getLocalizer(), context.getFormatters(), crate);
 		node = entries.getNode();
 		
-		crate.getEntryListeners().add(it -> updateEntries(it, crate));
+		crate.getVisibleEntryListeners().add(it -> updateEntries(it, crate));
 		updateEntries(crate.getEntries(), crate);
 	}
 	

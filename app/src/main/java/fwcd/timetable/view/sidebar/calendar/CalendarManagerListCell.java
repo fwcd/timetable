@@ -41,7 +41,11 @@ public class CalendarManagerListCell extends ListCell<Identified<CalendarModel>>
 		label.setTextAlignment(TextAlignment.LEFT);
 		
 		textField = new TextField();
-		textField.setOnAction(e -> commitEdit(getItem().map(item -> item.withName(textField.getText()))));
+		textField.setOnAction(e -> {
+			Identified<CalendarModel> newItem = getItem().map(item -> item.withName(textField.getText()));
+			viewModel.setCalendarById(newItem.getId(), newItem.getValue());
+			commitEdit(newItem);
+		});
 		textField.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
 			if (e.getCode() == KeyCode.ESCAPE) {
 				cancelEdit();
