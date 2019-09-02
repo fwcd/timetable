@@ -80,10 +80,17 @@ public class CalendarCrateViewModel {
 	/** @return a read-only view of the selected calendar ids. */
 	public Set<Integer> getSelectedCalendarIds() { return Collections.unmodifiableSet(selectedCalendarIds); }
 	
-	public void createDefaultCalendars() {
-		crate.createDefaultCalendars();
+	/**
+	 * Removes all calendars and creates a default one.
+	 * 
+	 * @return the ID of the new default calendar
+	 */
+	public int resetToDefaultCalendar() {
+		int id = crate.resetToDefaultCalendar();
 		fireCalendarListeners();
 		fireChangeListeners();
+		fireEntryListeners();
+		return id;
 	}
 	
 	public void selectCalendar(int calendarId) {

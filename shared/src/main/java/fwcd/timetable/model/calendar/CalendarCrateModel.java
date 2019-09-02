@@ -171,8 +171,8 @@ public class CalendarCrateModel implements Serializable {
 	 * Removes all calendars and adds an empty
 	 * default calendar named "Calendar".
 	 */
-	public void createDefaultCalendars() {
+	public int resetToDefaultCalendar() {
 		calendars.clear();
-		add(new CalendarModel("Calendar"));
+		return add(new CalendarModel("Calendar"));
 	}
 }
