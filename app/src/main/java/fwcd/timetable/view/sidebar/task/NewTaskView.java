@@ -46,8 +46,8 @@ public class NewTaskView implements FxView {
 			if (!editedTaskName.get().isEmpty()) {
 				CalendarCrateViewModel crate = viewModel.getCrate();
 				int calendarId = crate.getTaskListById(taskListId).getCalendarId();
-				editedTaskName.set(newTaskName());
 				crate.add(new TaskModel.Builder(editedTaskName.get(), taskListId, calendarId).build());
+				editedTaskName.set(newTaskName());
 				addedTaskListeners.fire();
 			}
 		});

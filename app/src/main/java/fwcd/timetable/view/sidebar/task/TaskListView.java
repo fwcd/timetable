@@ -15,9 +15,11 @@ import javafx.scene.control.ListView;
 public class TaskListView implements FxView {
 	private final ListView<CalendarEntryModel> node;
 	private final int taskListId;
+	private final int calendarId;
 	
-	public TaskListView(TimeTableAppContext context, CalendarCrateViewModel crate, int taskListId) {
+	public TaskListView(TimeTableAppContext context, CalendarCrateViewModel crate, int taskListId, int calendarId) {
 		this.taskListId = taskListId;
+		this.calendarId = calendarId;
 		node = new CalendarEntryListView(context.getLocalizer(), context.getFormatters(), crate).getNode();
 		
 		// TODO: Update only when a task in this specific task list changes
@@ -29,7 +31,7 @@ public class TaskListView implements FxView {
 		node.getItems().setAll(
 			allEntries.stream()
 				.flatMap(it -> it.accept(new TasksOnly()).stream())
-				.filter(it -> it.getTaskListId() == taskListId)
+				.filter(it -> it.getTaskListId() == taskListId && it.getCalendarId() == calendarId)
 				.sorted()
 				.collect(Collectors.toList())
 		);

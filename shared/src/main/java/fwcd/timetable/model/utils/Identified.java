@@ -24,7 +24,7 @@ public class Identified<E> {
 	
 	@Override
 	public String toString() {
-		return "Identified { value = " + value + ", id = " + id + " }";
+		return value.toString();
 	}
 	
 	@Override

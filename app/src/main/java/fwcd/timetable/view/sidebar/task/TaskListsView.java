@@ -31,7 +31,7 @@ public class TaskListsView implements FxView {
 		node.getPanes().clear();
 		
 		for (Identified<TaskListModel> list : lists) {
-			TitledPane titledPane = wrapListInTitledPane(new TaskListView(context, manager.getCrate(), list.getId()), list.getValue().getName());
+			TitledPane titledPane = wrapListInTitledPane(new TaskListView(context, manager.getCrate(), list.getId(), list.getValue().getCalendarId()), list.getValue().getName());
 			node.expandedPaneProperty().addListener((obs, old, newValue) -> {
 				if ((newValue != null) && newValue.equals(titledPane)) {
 					manager.select(list.getId());

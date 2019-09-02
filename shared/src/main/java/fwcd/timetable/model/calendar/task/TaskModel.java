@@ -104,9 +104,9 @@ public class TaskModel implements CalendarEntryModel, Serializable, Comparable<T
 		private String name;
 		private int taskListId;
 		private int calendarId;
-		private String description;
-		private Option<Location> location;
-		private Option<LocalDateTime> dateTime;
+		private String description = "";
+		private Option<Location> location = Option.empty();
+		private Option<LocalDateTime> dateTime = Option.empty();
 		private String rawRecurrence = "";
 		private Option<LocalDate> recurrenceEnd = Option.empty();
 		

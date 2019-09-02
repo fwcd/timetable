@@ -42,7 +42,7 @@ public class TasksView implements FxView {
 		});
 		
 		HBox top = new HBox(
-			FxUtils.labelOf(context.localized("calendar").mapStrongly(it -> it + ": ")),
+			FxUtils.labelOf(context.localized("calendar"), ": "),
 			comboBox
 		);
 		top.setAlignment(Pos.CENTER_LEFT);
