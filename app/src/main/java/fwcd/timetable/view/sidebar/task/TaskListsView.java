@@ -1,7 +1,5 @@
 package fwcd.timetable.view.sidebar.task;
 
-import java.util.List;
-
 import fwcd.timetable.model.calendar.task.TaskListModel;
 import fwcd.timetable.model.utils.Identified;
 import fwcd.timetable.view.FxView;

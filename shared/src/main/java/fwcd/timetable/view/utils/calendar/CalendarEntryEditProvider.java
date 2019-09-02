@@ -1,7 +1,5 @@
 package fwcd.timetable.view.utils.calendar;
 
-import java.util.Collection;
-
 import fwcd.fructose.Option;
 import fwcd.timetable.model.calendar.AppointmentModel;
 import fwcd.timetable.model.calendar.CalendarEntryModel;
