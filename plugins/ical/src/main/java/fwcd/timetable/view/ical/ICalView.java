@@ -10,7 +10,6 @@ public class ICalView implements FxView {
 	
 	public ICalView() {
 		node = new Pane();
-		
 	}
 	
 	@Override
