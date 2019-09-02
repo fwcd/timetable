@@ -43,7 +43,7 @@ public class UnivISQueryOutputView implements FxView {
 		progressBar.setProgress(0D);
 		progressBar.setMaxWidth(Double.MAX_VALUE);
 		
-		node.setBottom(new HBox(FxUtils.buttonOf(localizer.localized("addtocrate"), this::addToCalendars)));
+		node.setBottom(new HBox(FxUtils.buttonOf(localizer.localized("addtocalendars"), this::addToCalendars)));
 	}
 
 	public void perform(Query query) {
