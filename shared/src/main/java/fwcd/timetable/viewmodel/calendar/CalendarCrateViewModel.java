@@ -134,6 +134,7 @@ public class CalendarCrateViewModel {
 	public void replace(CalendarEntryModel oldEntry, CalendarEntryModel newEntry) {
 		crate.replace(oldEntry, newEntry);
 		fireReplaceListeners(oldEntry, newEntry);
+		fireEntryListeners();
 		fireChangeListeners();
 	}
 	

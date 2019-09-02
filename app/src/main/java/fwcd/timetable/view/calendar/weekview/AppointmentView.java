@@ -1,13 +1,17 @@
 package fwcd.timetable.view.calendar.weekview;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
+import java.util.function.Consumer;
 
 import org.controlsfx.control.PopOver;
 
 import fwcd.fructose.draw.DrawColor;
 import fwcd.fructose.time.LocalDateTimeInterval;
 import fwcd.timetable.model.calendar.AppointmentModel;
+import fwcd.timetable.model.calendar.CalendarModel;
 import fwcd.timetable.model.calendar.Location;
+import fwcd.timetable.model.utils.Identified;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.calendar.popover.AppointmentDetailsView;
 import fwcd.timetable.view.utils.FxUtils;
@@ -30,6 +34,9 @@ public class AppointmentView implements FxView {
 	private final Label locationLabel;
 	private final Label timeLabel;
 	
+	/** Strongly refers to a calendar listener that is dropped together with this view. */
+	private final Consumer<Collection<Identified<CalendarModel>>> calendarListener;
+	
 	public AppointmentView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarCrateViewModel crate, AppointmentModel model) {
 		Color fgColor = Color.BLACK;
 		
@@ -41,6 +48,7 @@ public class AppointmentView implements FxView {
 		nameLabel.setFont(Font.font(null, FontWeight.BOLD, 12));
 		nameLabel.setTextFill(fgColor);
 		nameLabel.setWrapText(true);
+		nameLabel.setText(model.getName());
 		node.getChildren().add(nameLabel);
 		
 		locationLabel = new Label();
@@ -54,6 +62,7 @@ public class AppointmentView implements FxView {
 		timeLabel = new Label();
 		timeLabel.setFont(Font.font(11));
 		timeLabel.setTextFill(fgColor);
+		timeLabel.setText(formatTimeInterval(model.getDateTimeInterval(), context.getDateTimeFormatter().get()));
 		node.getChildren().add(timeLabel);
 		
 		AppointmentDetailsView detailsView = new AppointmentDetailsView(context.getLocalizer(), context.getFormatters(), crate, model);
@@ -63,9 +72,13 @@ public class AppointmentView implements FxView {
 			FxUtils.showIndependentPopOver(popOver, node);
 			e.consume();
 		});
+		
+		calendarListener = it -> updateBackground(crate.getCalendarById(model.getCalendarId()).getColor());
+		crate.getCalendarListeners().addWeakListener(calendarListener);
+		calendarListener.accept(crate.getCalendars());
 	}
 	
-	public void updateBackground(DrawColor color) {
+	private void updateBackground(DrawColor color) {
 		node.setBackground(new Background(new BackgroundFill(brightColor(FxUtils.toFxColor(color)), new CornerRadii(3), Insets.EMPTY)));
 	}
 	
