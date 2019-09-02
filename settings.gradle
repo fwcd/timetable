@@ -1,3 +1,3 @@
 rootProject.name = 'timetable'
 
-include 'app', 'shared', 'plugins:git', 'plugins:timer', 'plugins:cau'
+include 'app', 'shared', 'plugins:git', 'plugins:ical', 'plugins:timer', 'plugins:cau'

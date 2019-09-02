@@ -22,6 +22,7 @@ The application consists of multiple modules, some of which are bundled at compi
 | Plugin | Type | Description |
 | ------ | ---- | ----------- |
 | git | Bundled (compile-time) | A Git history browser |
+| ical | Bundled (compile-time) | An iCalendar importer & exporter |
 | cau | Runtime JAR | A lecture browser for the University of Kiel |
 | timer | Bundled (compile-time) | WIP |
 

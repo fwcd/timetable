@@ -3,6 +3,7 @@ package fwcd.timetable;
 import fwcd.timetable.model.utils.ObservableUtils;
 import fwcd.timetable.plugin.PluginManager;
 import fwcd.timetable.plugin.git.GitPlugin;
+import fwcd.timetable.plugin.ical.ICalPlugin;
 import fwcd.timetable.plugin.timer.TimerPlugin;
 import fwcd.timetable.view.TimeTableAppView;
 import fwcd.timetable.view.utils.FxParentView;
@@ -10,7 +11,6 @@ import fwcd.timetable.viewmodel.TimeTableApiBackend;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
 import fwcd.timetable.viewmodel.TimeTableAppViewModel;
 import fwcd.timetable.viewmodel.utils.FileSaveState;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -56,6 +56,7 @@ public class TimeTableMain extends Application {
 		PluginManager pluginManager = context.getPluginManager();
 		pluginManager.setupPluginJarListeners(api);
 		pluginManager.add(new GitPlugin(), api);
+		pluginManager.add(new ICalPlugin(), api);
 		pluginManager.add(new TimerPlugin(), api);
 	}
 	
