@@ -173,6 +173,8 @@ public class CalendarCrateModel implements Serializable {
 	 */
 	public int resetToDefaultCalendar() {
 		calendars.clear();
+		taskLists.clear();
+		entries.clear();
 		return add(new CalendarModel("Calendar"));
 	}
 }
