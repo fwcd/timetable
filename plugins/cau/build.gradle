@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.fwcd:Fructose:1.0.0'
+    implementation 'com.github.fwcd:fructose:1.0.0'
 	implementation project(':shared')
 }
 

@@ -8,7 +8,14 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.fwcd:Fructose:1.0.0'
-	implementation 'org.mnode.ical4j:ical4j:3.0.9'
+    implementation 'com.github.fwcd:fructose:1.0.0'
+	implementation 'com.github.ical4j:ical4j:ical4j-3.0.9'
+	// TODO: The version of iCal4J deployed to Maven central does not include transitive dependencies
+	// implementation 'org.mnode.ical4j:ical4j:3.0.9'
+
+	// Required by iCal4J
+	implementation 'javax.cache:cache-api:1.1.1'
+	implementation 'org.jsr107.ri:cache-ri-impl:1.1.1'
+
 	implementation project(':shared')
 }
