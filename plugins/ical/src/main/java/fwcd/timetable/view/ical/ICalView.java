@@ -15,6 +15,7 @@ import fwcd.timetable.viewmodel.TimeTableAppApi;
 import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
@@ -29,7 +30,8 @@ public class ICalView implements FxView {
 	private Localizer localizer;
 	
 	public ICalView() {
-		node = new Pane();
+		node = new VBox();
+		node.getStyleClass().add("padded-view");
 	}
 	
 	public void initialize(TimeTableAppApi api) {
