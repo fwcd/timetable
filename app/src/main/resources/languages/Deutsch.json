@@ -92,5 +92,6 @@
 	"plugins": "Plugins",
 	"addplugins": "Plugins hinzufügen",
 	"pluginmanager": "Pluginverwalter",
-	"new": "Neu"
+	"new": "Neu",
+	"importfile": "Datei importieren"
 }

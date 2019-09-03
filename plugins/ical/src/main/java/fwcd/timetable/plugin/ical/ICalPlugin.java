@@ -6,6 +6,7 @@ import java.util.List;
 import fwcd.timetable.plugin.TimeTableAppPlugin;
 import fwcd.timetable.view.NamedFxView;
 import fwcd.timetable.view.ical.ICalView;
+import fwcd.timetable.view.utils.FxUtils;
 import fwcd.timetable.viewmodel.TimeTableAppApi;
 
 /**
@@ -19,7 +20,7 @@ public class ICalPlugin implements TimeTableAppPlugin {
 	
 	@Override
 	public void initialize(TimeTableAppApi api) {
-		
+		FxUtils.runAndWait(() -> view.initialize(api));
 	}
 	
 	@Override
