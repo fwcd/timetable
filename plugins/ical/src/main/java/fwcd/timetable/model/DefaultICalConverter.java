@@ -16,8 +16,15 @@ import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.property.CalScale;
+import net.fortuna.ical4j.model.property.ProdId;
+import net.fortuna.ical4j.model.property.Version;
+import net.fortuna.ical4j.util.RandomUidGenerator;
+import net.fortuna.ical4j.util.UidGenerator;
 
 public class DefaultICalConverter implements ICalConverter {
+	private final UidGenerator uidGenerator = new RandomUidGenerator();
+
 	@Override
 	public Collection<CalendarEntryModel> toTimeTableEntries(Calendar iCal, int calendarId) {
 		return iCal.<VEvent>getComponents(Component.VEVENT).stream()
@@ -43,6 +50,10 @@ public class DefaultICalConverter implements ICalConverter {
 	@Override
 	public Calendar toiCalCalendar(Collection<? extends CalendarEntryModel> entries) {
 		Calendar iCal = new Calendar();
+		PropertyList<Property> properties = iCal.getProperties();
+		properties.add(Version.VERSION_2_0);
+		properties.add(new ProdId("TimeTable"));
+		properties.add(CalScale.GREGORIAN);
 		entries.stream()
 			.flatMap(it -> it.accept(new AppointmentsOnly()).stream())
 			.map(this::toiCalEvent)
@@ -54,6 +65,7 @@ public class DefaultICalConverter implements ICalConverter {
 		// TODO: Recurrences
 		VEvent event = new VEvent(toDate(appointment.getStart()), toDate(appointment.getEnd()), appointment.getName());
 		PropertyList<Property> properties = event.getProperties();
+		properties.add(uidGenerator.generateUid());
 		appointment.getLocation().map(Location::getLabel).map(net.fortuna.ical4j.model.property.Location::new).ifPresent(properties::add);
 		return event;
 	}
