@@ -93,5 +93,7 @@
 	"addplugins": "Add Plugins",
 	"pluginmanager": "Plugin Manager",
 	"new": "New",
-	"importfile": "Import File"
+	"importics": "Import iCalendar",
+	"exportics": "Export as iCalendar",
+	"choosecalendar": "Choose Calendar"
 }
