@@ -81,7 +81,7 @@ public class UnivISQueryOutputView implements FxView {
 		currentResults.ifPresent(results -> {
 			int calendarId = crate.add(new CalendarModel("UnivIS Query"));
 			for (AppointmentModel appointment : results) {
-				results.add(appointment.with().calendarId(calendarId).build());
+				crate.add(appointment.with().calendarId(calendarId).build());
 			}
 		});
 	}
