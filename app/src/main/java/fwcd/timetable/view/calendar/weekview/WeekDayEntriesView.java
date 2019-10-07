@@ -13,9 +13,12 @@ import fwcd.timetable.model.calendar.task.TaskModel;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.viewmodel.TimeTableAppContext;
 import fwcd.timetable.viewmodel.calendar.CalendarCrateViewModel;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
 public class WeekDayEntriesView implements FxView {
@@ -25,7 +28,7 @@ public class WeekDayEntriesView implements FxView {
 	private final TimeTableAppContext context;
 	private final CalendarCrateViewModel crate;
 	
-	private final BiList<LocalTimeInterval, StackPane> overlapBoxes = new ArrayBiList<>();
+	private final BiList<LocalTimeInterval, HBox> overlapBoxes = new ArrayBiList<>();
 	private Option<LocalDate> currentDate = Option.empty();
 	
 	public WeekDayEntriesView(WeekDayTimeLayouter layouter, TimeTableAppContext context, CalendarCrateViewModel crate) {
@@ -74,15 +77,15 @@ public class WeekDayEntriesView implements FxView {
 		
 		LocalTimeInterval eventInterval = appointmentModel.getTimeIntervalOn(viewedDate);
 		AnchorPane.setTopAnchor(child, layouter.toPixelY(eventInterval.getStart()));
-		child.maxWidthProperty().bind(node.widthProperty());
+		// child.maxWidthProperty().bind(node.widthProperty());
 		child.setPrefHeight(layouter.toPixelHeight(eventInterval.getDuration()));
 		
-		StackPane overlappingBox = null;
+		HBox overlappingBox = null;
 		int overlapBoxCount = overlapBoxes.size();
 		
 		for (int i = 0; i < overlapBoxCount; i++) {
 			LocalTimeInterval interval = overlapBoxes.getLeft(i);
-			StackPane box = overlapBoxes.getRight(i);
+			HBox box = overlapBoxes.getRight(i);
 			
 			if (interval.overlaps(eventInterval)) {
 				overlapBoxes.setLeft(i, interval.merge(eventInterval));
@@ -92,18 +95,19 @@ public class WeekDayEntriesView implements FxView {
 		}
 		
 		if (overlappingBox == null) {
-			overlappingBox = new StackPane();
+			overlappingBox = new HBox();
+			overlappingBox.setFillHeight(false);
 			overlappingBox.setPickOnBounds(false);
+			overlappingBox.maxWidthProperty().bind(node.widthProperty());
 			
 			overlapBoxes.add(eventInterval, overlappingBox);
 			node.getChildren().add(overlappingBox);
 		}
 		
-		int overlaps = overlappingBox.getChildren().size();
-		double indent = overlaps * 10;
+		child.maxWidthProperty().bind(node.widthProperty().divide(Bindings.size(overlappingBox.getChildren())));
+
 		AnchorPane anchor = new AnchorPane(child);
 		anchor.setPickOnBounds(false);
-		AnchorPane.setLeftAnchor(child, indent);
 		overlappingBox.getChildren().add(anchor);
 	}
 	
