@@ -3,8 +3,8 @@ package fwcd.timetable.model.calendar;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,7 +29,7 @@ public class CalendarCrateModel implements Serializable {
 	/** Contains the mappings from IDs to task list metadata. */
 	private final Map<Integer, TaskListModel> taskLists = new LinkedHashMap<>();
 	/** Stores all entries in this calendar. */
-	private final Set<CalendarEntryModel> entries = new HashSet<>();
+	private final Set<CalendarEntryModel> entries = new LinkedHashSet<>();
 	
 	public CalendarModel getCalendarById(int id) { return calendars.get(id); }
 	
