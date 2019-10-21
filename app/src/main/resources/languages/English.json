@@ -96,5 +96,6 @@
 	"importics": "Import iCalendar",
 	"exportics": "Export as iCalendar",
 	"choosecalendar": "Choose Calendar",
-	"prettyprintjson": "Pretty-print JSON"
+	"prettyprintjson": "Pretty-print JSON",
+	"printingfailed": "The printing job failed"
 }

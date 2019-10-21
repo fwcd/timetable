@@ -20,8 +20,7 @@ public class CalendarPrinter {
 	}
 	
 	public void showPrintDialog(Window window, CalendarCrateViewModel calendars) {
-		// TODO: Ability to choose a different printer
-		PrinterJob job = createJob();
+		PrinterJob job = PrinterJob.createPrinterJob();
 		
 		if (job == null) {
 			Alert alert = new Alert(AlertType.WARNING);
@@ -30,21 +29,13 @@ public class CalendarPrinter {
 			alert.show();
 		} else {
 			if (job.showPrintDialog(window)) {
-				job.printPage(new WeekView(context, calendars).getContentNode());
+				if (!job.printPage(new WeekView(context, calendars).getContentNode())) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle(context.localize("error"));
+					alert.setContentText(context.localize("printingfailed"));
+					alert.show();
+				}
 			}
 		}
-	}
-	
-	private PrinterJob createJob() {
-		PrinterJob job = PrinterJob.createPrinterJob();
-		if (job == null) {
-			Set<Printer> printers = Printer.getAllPrinters();
-			if (printers.isEmpty()) {
-				return null;
-			} else {
-				return PrinterJob.createPrinterJob(printers.iterator().next());
-			}
-		}
-		return job;
 	}
 }
