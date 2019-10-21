@@ -6,7 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
 import fwcd.timetable.model.calendar.AppointmentModel;
-import fwcd.timetable.model.calendar.CalendarSerializationUtils;
+import fwcd.timetable.model.calendar.CalendarGsonConfigurator;
+import fwcd.timetable.model.json.GsonUtils;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.view.calendar.listview.CalendarListView;
 import fwcd.timetable.view.calendar.monthview.MonthView;
@@ -19,7 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.input.TransferMode;
 
 public class CalendarsView implements FxView {
-	private static final Gson GSON = CalendarSerializationUtils.newGson();
+	private static final Gson CLIPBOARD_GSON = GsonUtils.DEFAULT_CONFIGURATOR.andThen(new CalendarGsonConfigurator()).create();
 	private final Node node;
 	private final WeekView weekView;
 	private final MonthView monthView;
@@ -48,7 +49,7 @@ public class CalendarsView implements FxView {
 				if (raw == null) {
 					e.setDropCompleted(false);
 				} else {
-					AppointmentModel appointment = GSON.fromJson(raw, AppointmentModel.class);
+					AppointmentModel appointment = CLIPBOARD_GSON.fromJson(raw, AppointmentModel.class);
 					Set<Integer> selectedCalendarIds = viewModel.getSelectedCalendarIds();
 
 					if (!selectedCalendarIds.isEmpty()) {

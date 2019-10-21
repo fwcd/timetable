@@ -6,6 +6,8 @@ import java.util.Collections;
 
 import fwcd.fructose.Observable;
 import fwcd.fructose.ReadOnlyObservable;
+import fwcd.timetable.model.json.GsonConfigurator;
+import fwcd.timetable.model.json.GsonUtils;
 import fwcd.timetable.model.language.Language;
 import fwcd.timetable.model.language.LanguageManager;
 import fwcd.timetable.plugin.PluginJarList;
@@ -15,19 +17,21 @@ import fwcd.timetable.viewmodel.theme.Theme;
 import fwcd.timetable.viewmodel.theme.ThemeManager;
 import fwcd.timetable.viewmodel.utils.FileSaveState;
 import fwcd.timetable.viewmodel.utils.PersistentStorage;
+import fwcd.timetable.viewmodel.utils.SettingsBasedGsonConfigurator;
 
 /**
  * An aggregate of application-specific managers and state.
  */
 public class TimeTableAppContext {
-	private final LanguageManager languageManager = new LanguageManager();
-	private final ThemeManager themeManager = new ThemeManager();
-	private final PersistentStorage persistentStorage = new PersistentStorage(Paths.get(System.getProperty("user.home"), ".timetable"));
-	private final PluginManager pluginManager = new PluginManager();
-	
 	private final Observable<TimeTableAppSettings> settings = new Observable<>(new TimeTableAppSettings.Builder().build());
 	private final Observable<Language> language = new Observable<>(new Language("", Collections.emptyMap()));
 	private final Observable<Theme> theme = new Observable<>(new Theme("", ""));
+	
+	private final LanguageManager languageManager = new LanguageManager();
+	private final ThemeManager themeManager = new ThemeManager();
+	private final GsonConfigurator gsonConfigurator = GsonUtils.DEFAULT_CONFIGURATOR.andThen(new SettingsBasedGsonConfigurator(settings));
+	private final PersistentStorage persistentStorage = new PersistentStorage(Paths.get(System.getProperty("user.home"), ".timetable"), gsonConfigurator);
+	private final PluginManager pluginManager = new PluginManager();
 	
 	private final FileSaveState fileSaveState = new FileSaveState();
 	private final Localizer localizer = new LocalizerBackend(language);
@@ -70,6 +74,8 @@ public class TimeTableAppContext {
 	public ReadOnlyObservable<DateTimeFormatter> getDateTimeFormatter() { return formatters.getObservableDateTimeFormatter(); }
 	
 	public ReadOnlyObservable<DateTimeFormatter> getYearMonthFormatter() { return formatters.getObservableYearMonthFormatter(); }
+	
+	public GsonConfigurator getGsonConfigurator() { return gsonConfigurator; }
 	
 	public FileSaveState getFileSaveState() { return fileSaveState; }
 	

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fwcd.fructose.Option;
+import fwcd.timetable.model.calendar.CalendarGsonConfigurator;
 import fwcd.timetable.view.plugin.PluginManagerView;
 import fwcd.timetable.view.print.CalendarPrinter;
 import fwcd.timetable.view.settings.SettingsView;
@@ -46,10 +47,10 @@ public class MenuBarView implements FxView {
 		fileSaveManager = new FileSaveManager(
 			reader -> {
 				CalendarCrateViewModel crate = viewModel.getCalendars();
-				crate.loadCrate(reader);
+				crate.loadCrate(context.getGsonConfigurator().andThen(new CalendarGsonConfigurator()).create(), reader);
 				return crate.getChangeListeners();
 			},
-			writer -> viewModel.getCalendars().saveCrate(writer),
+			writer -> viewModel.getCalendars().saveCrate(context.getGsonConfigurator().andThen(new CalendarGsonConfigurator()).create(), writer),
 			this::showSaveDialog,
 			this::showOpenDialog,
 			context.getFileSaveState(),

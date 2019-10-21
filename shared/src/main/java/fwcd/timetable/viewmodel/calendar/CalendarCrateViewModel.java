@@ -15,7 +15,6 @@ import fwcd.fructose.Pair;
 import fwcd.timetable.model.calendar.CalendarCrateModel;
 import fwcd.timetable.model.calendar.CalendarEntryModel;
 import fwcd.timetable.model.calendar.CalendarModel;
-import fwcd.timetable.model.calendar.CalendarSerializationUtils;
 import fwcd.timetable.model.calendar.task.TaskListModel;
 import fwcd.timetable.model.utils.Identified;
 
@@ -25,7 +24,6 @@ import fwcd.timetable.model.utils.Identified;
  * interactions with the crate.
  */
 public class CalendarCrateViewModel {
-	private static final Gson GSON = CalendarSerializationUtils.newGson();
 	private CalendarCrateModel crate = new CalendarCrateModel();
 	private final Set<Integer> selectedCalendarIds = new HashSet<>();
 
@@ -174,12 +172,12 @@ public class CalendarCrateViewModel {
 		fireCalendarListeners();
 	}
 
-	public void saveCrate(Appendable writer) {
-		GSON.toJson(crate, writer);
+	public void saveCrate(Gson gson, Appendable writer) {
+		gson.toJson(crate, writer);
 	}
 	
-	public void loadCrate(Reader reader) {
-		crate = GSON.fromJson(reader, CalendarCrateModel.class);
+	public void loadCrate(Gson gson, Reader reader) {
+		crate = gson.fromJson(reader, CalendarCrateModel.class);
 		fireCalendarListeners();
 		fireTaskListListeners();
 		fireAllEntryListeners();

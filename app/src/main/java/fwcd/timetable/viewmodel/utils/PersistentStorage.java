@@ -11,14 +11,14 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 
-import fwcd.fructose.Observable;
-import fwcd.fructose.Option;
-import fwcd.timetable.model.json.GsonUtils;
-import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
+import fwcd.fructose.Observable;
+import fwcd.fructose.Option;
+import fwcd.timetable.model.json.GsonConfigurator;
+
 public class PersistentStorage {
-	private static final Gson GSON = GsonUtils.newGson();
+	private final GsonConfigurator gsonFactory;
 	private final Path folderPath;
 	private final Map<String, TypedObservable<?>> observables = new HashMap<>();
 	private boolean autoSaveEnabled = false;
@@ -34,8 +34,9 @@ public class PersistentStorage {
 		}
 	}
 	
-	public PersistentStorage(Path folderPath) {
+	public PersistentStorage(Path folderPath, GsonConfigurator gsonFactory) {
 		this.folderPath = folderPath;
+		this.gsonFactory = gsonFactory;
 	}
 	
 	public void loadFromDisk() {
@@ -62,7 +63,7 @@ public class PersistentStorage {
 		try {
 			Files.createDirectories(folderPath);
 			try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
-				GSON.toJson(value, writer);
+				gsonFactory.create().toJson(value, writer);
 			}
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
@@ -72,7 +73,7 @@ public class PersistentStorage {
 	private <T> Option<T> read(Path path, Class<T> objClass) {
 		if (Files.exists(path)) {
 			try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-				return Option.of(GSON.fromJson(reader, objClass));
+				return Option.of(gsonFactory.create().fromJson(reader, objClass));
 			} catch (JsonParseException | IOException e) {
 				e.printStackTrace();
 			}

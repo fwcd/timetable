@@ -4,7 +4,8 @@ import com.google.gson.Gson;
 
 import fwcd.fructose.Option;
 import fwcd.timetable.model.calendar.CalendarEntryModel;
-import fwcd.timetable.model.calendar.CalendarSerializationUtils;
+import fwcd.timetable.model.calendar.CalendarGsonConfigurator;
+import fwcd.timetable.model.json.GsonUtils;
 import fwcd.timetable.view.FxView;
 import fwcd.timetable.viewmodel.Localizer;
 import fwcd.timetable.viewmodel.TemporalFormatters;
@@ -16,7 +17,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 
 public class CalendarEntryCell implements FxView {
-	private static final Gson GSON = CalendarSerializationUtils.newGson();
+	private static final Gson CLIPBOARD_GSON = GsonUtils.DEFAULT_CONFIGURATOR.andThen(new CalendarGsonConfigurator()).create();
 	private final Localizer localizer;
 	private final TemporalFormatters formatters;
 	
@@ -41,7 +42,7 @@ public class CalendarEntryCell implements FxView {
 			if (currentItem.isPresent()) {
 				Dragboard dragboard = node.startDragAndDrop(TransferMode.COPY);
 				ClipboardContent content = new ClipboardContent();
-				String json = GSON.toJson(currentItem.unwrap());
+				String json = CLIPBOARD_GSON.toJson(currentItem.unwrap());
 				content.putString(json);
 				dragboard.setContent(content);
 			}

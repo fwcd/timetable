@@ -5,21 +5,13 @@ import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 
 import fwcd.fructose.Observable;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class GsonUtils {
+	public static GsonConfigurator DEFAULT_CONFIGURATOR = builder -> builder
+		.registerTypeAdapter(Observable.class, new ObservableSerializer<>())
+		.registerTypeAdapterFactory(new GsonPostDeserializationFactory());
+
 	private GsonUtils() {}
-	
-	public static GsonBuilder buildGson() {
-		return new GsonBuilder()
-			.registerTypeAdapter(Observable.class, new ObservableSerializer<>())
-			.registerTypeAdapterFactory(new GsonPostDeserializationFactory());
-	}
-	
-	public static Gson newGson() {
-		return buildGson().create();
-	}
 	
 	/**
 	 * Uses reflection to determine the generic type
