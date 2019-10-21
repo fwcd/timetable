@@ -95,5 +95,6 @@
 	"new": "Neu",
 	"importics": "iCalendar importieren",
 	"exportics": "Als iCalendar exportieren",
-	"choosecalendar": "Kalender wählen"
+	"choosecalendar": "Kalender wählen",
+	"prettyprintjson": "JSON pretty-printen"
 }

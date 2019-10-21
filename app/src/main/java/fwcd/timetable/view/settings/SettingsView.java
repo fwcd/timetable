@@ -11,6 +11,7 @@ import fwcd.timetable.viewmodel.settings.TimeTableAppSettings;
 import fwcd.timetable.viewmodel.settings.TimeTableAppSettings.Builder;
 
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -31,6 +32,7 @@ public class SettingsView implements FxView {
 		node.addRow(rowIndex++, localizedPropertyLabel("timeformat", context), boundTextField(TimeTableAppSettings::getTimeFormat, Builder::timeFormat));
 		node.addRow(rowIndex++, localizedPropertyLabel("datetimeformat", context), boundTextField(TimeTableAppSettings::getDateTimeFormat, Builder::dateTimeFormat));
 		node.addRow(rowIndex++, localizedPropertyLabel("yearmonthformat", context), boundTextField(TimeTableAppSettings::getYearMonthFormat, Builder::yearMonthFormat));
+		node.addRow(rowIndex++, localizedPropertyLabel("prettyprintjson", context), boundCheckBox(TimeTableAppSettings::shouldPrettyPrintJson, Builder::prettyPrintJson));
 		node.addRow(rowIndex++, FxUtils.buttonOf(context.localized("reset"), context::resetSettings));
 	}
 	
@@ -38,6 +40,12 @@ public class SettingsView implements FxView {
 		TextField field = new TextField();
 		FxUtils.bindBidirectionally(model, field.textProperty(), getter, newVal -> setter.apply(model.get().with(), newVal).build());
 		return field;
+	}
+	
+	private CheckBox boundCheckBox(Function<TimeTableAppSettings, Boolean> getter, BiFunction<Builder, Boolean, Builder> setter) {
+		CheckBox box = new CheckBox();
+		FxUtils.bindBidirectionally(model, box.selectedProperty(), getter, newVal -> setter.apply(model.get().with(), newVal).build());
+		return box;
 	}
 
 	private Label localizedPropertyLabel(String unlocalized, TimeTableAppContext context) {

@@ -17,6 +17,7 @@ public class TimeTableAppSettings implements Serializable {
 	private String dateTimeFormat = dateFormat + " " + timeFormat;
 	private String yearMonthFormat = "MM.yyyy";
 	private String theme = ThemeKey.LIGHT;
+	private boolean prettyPrintJson = false;
 	
 	public TimeTableAppSettings() {}
 	
@@ -32,6 +33,8 @@ public class TimeTableAppSettings implements Serializable {
 	
 	public String getTheme() { return theme; }
 	
+	public boolean shouldPrettyPrintJson() { return prettyPrintJson; }
+	
 	public Builder with() { return new Builder(this); }
 	
 	public static class Builder {
@@ -44,6 +47,7 @@ public class TimeTableAppSettings implements Serializable {
 			instance.dateTimeFormat = copied.dateTimeFormat;
 			instance.yearMonthFormat = copied.yearMonthFormat;
 			instance.theme = copied.theme;
+			instance.prettyPrintJson = copied.prettyPrintJson;
 		}
 		
 		public Builder() {}
@@ -75,6 +79,11 @@ public class TimeTableAppSettings implements Serializable {
 		
 		public Builder theme(String theme) {
 			instance.theme = theme;
+			return this;
+		}
+		
+		public Builder prettyPrintJson(boolean prettyPrintJson) {
+			instance.prettyPrintJson = prettyPrintJson;
 			return this;
 		}
 		
