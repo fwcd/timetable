@@ -8,8 +8,8 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 mainClassName = 'fwcd.timetable.TimeTableMain'
 
 dependencies {
