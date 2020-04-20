@@ -4,8 +4,7 @@ A lightweight calendar application.
 ![Screenshot](screenshot.png)
 
 ## Requirements
-* Java 1.8+
-* JavaFX
+* Java 1.11+
 
 ## Running
 * `./gradlew :app:run`
