@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 repositories {
@@ -10,7 +11,19 @@ repositories {
 
 sourceCompatibility = 11
 targetCompatibility = 11
-mainClassName = 'fwcd.timetable.TimeTableMain'
+
+application {
+    mainClassName = 'fwcd.timetable.TimeTableMain'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+javafx {
+	modules = ['javafx.controls', 'javafx.web']
+}
 
 dependencies {
     implementation 'com.github.fwcd:fructose:1.0.0'

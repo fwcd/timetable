@@ -1,11 +1,16 @@
 plugins {
 	id 'java-library'
 	id 'com.github.harbby.gradle.serviceloader' version '1.1.5'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 repositories {
 	jcenter()
 	maven { url 'https://jitpack.io' }
+}
+
+javafx {
+	modules = ['javafx.controls', 'javafx.web']
 }
 
 dependencies {

@@ -1,10 +1,15 @@
 plugins {
 	id 'java-library'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
+}
+
+javafx {
+    modules = ['javafx.controls']
 }
 
 dependencies {
