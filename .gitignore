@@ -7,6 +7,7 @@ bin
 build
 target
 .DS_Store
+*.swp
 
 .vscode/*
 !.vscode/snippets.code-snippets
